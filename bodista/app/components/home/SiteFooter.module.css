@@ -1,0 +1,234 @@
+/* ==========================================================================
+   SiteFooter — custom site footer (1:1 Figma).
+   Base (typografie, kleuren) komt uit global.css. Layout via het gedeelde
+   12-koloms .layout-grid. Component zit OP volle viewport-breedte buiten
+   `main`, dus .layout-grid verzorgt de --grid-margin inset direct.
+   Staat op de warme pagina-achtergrond (geen eigen bg). Tekst = --color-ink.
+   Waardes in em → Osmo scaling; px alleen voor hairlines/borders en de
+   focus-ring; rem voor de tap-target ondergrond van input/submit.
+   ========================================================================== */
+
+.footer {
+  padding-bottom: 1.5em;
+  color: var(--color-ink);
+}
+
+.footer .layout-grid {
+  row-gap: 0;
+  align-items: start;
+}
+
+/* ---- Horizontale dividers ------------------------------------------------- */
+
+.topDivider,
+.midDivider,
+.bottomDivider {
+  grid-column: 1 / -1;
+  width: 100%;
+  height: 0;
+  margin: 0;
+  border: 0;
+  border-top: 1px solid rgba(43, 33, 32, 0.5);
+}
+
+/* ---- Wordmark ------------------------------------------------------------- */
+
+.wordmark {
+  grid-column: 1 / -1;
+  justify-self: center;
+  width: 28.625em; /* 458px Figma-breedte; aspect 161:30 houdt de hoogte */
+  max-width: 100%;
+  height: auto;
+  margin: 1.75em 0;
+  color: var(--color-gold);
+}
+
+/* ---- Link-kolommen -------------------------------------------------------- */
+
+.columns {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+}
+
+/* Kolom-padding maakt ruimte voor de verticale divider in de gutter; die
+   loopt zo van de midDivider tot de bottomDivider over de volle hoogte. */
+.column {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-height: 13.5em;
+  padding: 1.6875em 1.875em 0;
+}
+
+.column:first-child {
+  padding-left: 0;
+}
+
+.column + .column {
+  border-left: 1px solid rgba(43, 33, 32, 0.5);
+}
+
+.heading {
+  margin: 0 0 1.75em;
+  font-size: 0.75em; /* 12px */
+  font-weight: 400;
+  line-height: 1.2;
+  color: var(--color-ink);
+  opacity: 0.5;
+}
+
+.links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25em;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.links li {
+  margin: 0;
+}
+
+.link {
+  font-size: 0.875em; /* 14px */
+  line-height: 1.5;
+  color: var(--color-ink);
+}
+
+.linkArrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35em;
+}
+
+/* Onderste "meer"-link zakt naar de voet van de kolom (lijnt over kolommen). */
+.muted {
+  margin-top: auto;
+  padding-top: 2em;
+  font-size: 0.75em; /* 12px */
+  line-height: 1.5;
+  color: var(--color-ink);
+  opacity: 0.5;
+}
+
+.mutedArrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35em;
+}
+
+.arrow {
+  width: 1em;
+  height: 1em;
+}
+
+/* ---- Newsletter ----------------------------------------------------------- */
+
+.signup {
+  width: 100%;
+  max-width: none;
+}
+
+.pill {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  width: 100%;
+  padding: 0.375em 0.375em 0.375em 1em;
+  border: 1px solid var(--color-ink);
+  border-radius: var(--radius-pill);
+}
+
+.input {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 2.75rem; /* a11y tap-target ondergrens */
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  font-family: inherit;
+  font-size: 0.75em; /* 12px */
+  color: var(--color-ink);
+}
+
+.input::placeholder {
+  color: #313437;
+}
+
+.input:focus {
+  outline: none;
+}
+
+.submit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: 1.5em; /* ~24px gouden cirkel */
+  height: 1.5em;
+  min-width: 1.5rem;
+  min-height: 1.5rem;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--color-gold);
+  color: var(--color-light);
+  cursor: pointer;
+}
+
+.pill:focus-within {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 2px;
+}
+
+.submit:focus-visible {
+  outline: 2px solid var(--color-light);
+  outline-offset: 2px;
+}
+
+/* ---- Bottom bar ----------------------------------------------------------- */
+
+.copyright {
+  grid-column: 1 / -1;
+  margin: 0.5em 0 0;
+  font-size: 0.875em; /* 14px */
+  line-height: 1.5;
+  text-align: left;
+  color: var(--color-ink);
+  opacity: 0.3;
+}
+
+/* ---- Responsive ----------------------------------------------------------- */
+
+@media (max-width: 767px) {
+  .wordmark {
+    width: 16em;
+  }
+
+  .columns {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .column {
+    min-height: auto;
+    padding: 1.6875em 1em 0;
+  }
+
+  .column:first-child {
+    padding-left: 0;
+  }
+
+  /* Op 2 kolommen alleen een divider voor de rechterkolom van elk paar. */
+  .column:nth-child(odd) {
+    padding-left: 0;
+    border-left: 0;
+  }
+
+  .column:nth-child(even) {
+    border-left: 1px solid rgba(43, 33, 32, 0.5);
+  }
+}

@@ -1,0 +1,180 @@
+/* ==========================================================================
+   TheFacial — "Universāl Protocols" / The Facial-sectie
+   Base uit global.css; layout via 12-koloms .layout-grid (links beeld 1/7,
+   rechts stappen 7/13). Waardes in em (Osmo), px alleen voor hairlines.
+   ========================================================================== */
+
+.facial {
+  margin-left: -1em;
+  margin-right: -1em;
+}
+
+.inner {
+  row-gap: 1.5em;
+  align-items: start;
+}
+
+.label {
+  grid-column: 1 / -1;
+  font-size: 0.875em; /* 14px */
+  letter-spacing: 0.08em;
+  color: var(--color-gold);
+}
+
+.divider {
+  grid-column: 1 / -1;
+  width: 100%;
+  height: 0;
+  margin: 0;
+  border: 0;
+  border-top: 1px solid var(--color-hairline);
+}
+
+/* ---- Beeld-kolom (links) -------------------------------------------------- */
+
+.media {
+  grid-column: 1 / 7;
+  position: relative;
+  aspect-ratio: 718 / 555;
+  overflow: hidden;
+  border-radius: 0.25em;
+  background:
+    radial-gradient(120% 120% at 50% 20%, #3a3128, var(--color-charcoal));
+}
+
+.cleansing {
+  position: absolute;
+  top: 2.125em;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  font-size: 0.75em; /* 12px */
+  letter-spacing: 0.32em;
+  text-transform: lowercase;
+  color: var(--color-light);
+}
+
+.dissolve {
+  position: absolute;
+  top: 38%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 4.0625em; /* 65px */
+  line-height: 1;
+  color: var(--color-light);
+}
+
+.oilButton {
+  position: absolute;
+  bottom: 1.875em;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 0.75em;
+  min-height: 2.875em; /* 46px */
+  padding: 0 0.375em 0 0.5em;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  background: transparent;
+  cursor: pointer;
+}
+
+.oilThumb {
+  width: 1.8125em; /* 29px */
+  height: 1.8125em;
+  border-radius: 50%;
+  background-color: var(--color-warm);
+}
+
+.oilLabel {
+  font-size: 1.125em; /* 18px */
+  line-height: 1;
+  color: var(--color-light);
+}
+
+.oilPlus {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.8125em;
+  height: 1.8125em;
+  border-radius: 50%;
+  background-color: var(--color-gold);
+  color: var(--color-charcoal);
+}
+
+/* ---- Stappen-kolom (rechts) ----------------------------------------------- */
+
+.steps {
+  grid-column: 7 / 13;
+  display: flex;
+  flex-direction: column;
+}
+
+.heading {
+  margin: 0;
+  font-size: 4.5em; /* 72px */
+  font-weight: 400;
+  font-style: italic;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  color: var(--color-gold);
+}
+
+.intro {
+  margin: 1em 0 2em;
+  max-width: 30em;
+  font-size: 1.125em; /* 18px */
+  line-height: 1.333;
+  color: var(--color-charcoal);
+}
+
+.stepList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.step {
+  padding: 0.875em 0;
+  border-top: 1px solid var(--color-hairline);
+}
+
+.step:first-child {
+  border-top: 0;
+}
+
+.stepLabel {
+  display: block;
+  font-size: 1.125em; /* 18px */
+  letter-spacing: -0.01em;
+  color: var(--color-charcoal);
+}
+
+.stepText {
+  margin: 0.75em 0 0;
+  font-size: 0.875em; /* 14px */
+  line-height: 1.714;
+  color: var(--color-charcoal);
+}
+
+/* ---- Responsive ----------------------------------------------------------- */
+
+@media (max-width: 767px) {
+  .media {
+    grid-column: 1 / -1;
+  }
+
+  .steps {
+    grid-column: 1 / -1;
+  }
+
+  .heading {
+    font-size: 3em;
+  }
+
+  .dissolve {
+    font-size: 3em;
+  }
+}

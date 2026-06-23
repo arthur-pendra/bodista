@@ -1,0 +1,247 @@
+/* ==========================================================================
+   TheCollection — component-specifieke styling
+   Base (typografie, kleuren, section-padding) komt uit global.css.
+   Layout via het gedeelde 12-koloms .layout-grid (zie CLAUDE.md).
+   Waardes in em → schalen mee met het Osmo scaling system;
+   px alleen voor hairlines (1px divider/border) per de stijlregels.
+   ========================================================================== */
+
+.collection {
+  /* Full-bleed: breek uit de 1em zijmarge van `body > main` zodat
+     .layout-grid exact op de GridOverlay (viewport-rand + --grid-margin) lijnt. */
+  margin-left: -1em;
+  margin-right: -1em;
+}
+
+.inner {
+  row-gap: 1.75em;
+  align-items: start;
+}
+
+/* ---- Header: intro links, filters rechts ---------------------------------- */
+
+.header {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 2em;
+  flex-wrap: wrap;
+}
+
+.intro {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9375em; /* 15px */
+}
+
+.label {
+  font-size: 0.875em; /* 14px */
+  line-height: 1.2;
+  color: var(--color-gold);
+}
+
+.heading {
+  margin: 0;
+  font-size: 2.1875em; /* 35px */
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  color: var(--color-charcoal);
+}
+
+.filters {
+  display: flex;
+  align-items: center;
+  gap: 1em;
+  font-size: 1.15em; /* 18.4px */
+  line-height: 1;
+}
+
+.filter {
+  padding: 0;
+  background: none;
+  border: none;
+  font: inherit;
+  color: var(--color-charcoal);
+  opacity: 0.5;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.filter:hover {
+  opacity: 1;
+}
+
+.filterToggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25em;
+  padding: 0;
+  background: none;
+  border: none;
+  font: inherit;
+  color: var(--color-charcoal);
+  cursor: pointer;
+}
+
+.filterPlus {
+  font-size: 1.3em;
+}
+
+/* ---- Divider -------------------------------------------------------------- */
+
+.divider {
+  grid-column: 1 / -1;
+  width: 100%;
+  height: 0;
+  margin: 0;
+  border: 0;
+  border-top: 1px solid var(--color-hairline);
+}
+
+/* ---- Product grid --------------------------------------------------------- */
+
+.grid {
+  grid-column: 1 / -1;
+  display: grid;
+  /* 4-up op desktop (12 koloms), 2-up op mobiel (6 koloms): span 3 past beide. */
+  grid-template-columns: repeat(var(--grid-columns), 1fr);
+  column-gap: var(--grid-gutter);
+  row-gap: 2.5em;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.card {
+  grid-column: span 3;
+}
+
+.cardLink {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+.media {
+  position: relative;
+  aspect-ratio: 348 / 465;
+  overflow: hidden;
+  border-radius: 0.25em;
+  background-color: var(--color-warm);
+}
+
+.image,
+.imagePlaceholder {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Brand-caption en add-to-cart verschijnen op hover/focus (card 1 in Figma = hover-state). */
+.caption {
+  position: absolute;
+  top: 1.875em;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  font-size: 0.5em; /* 8px */
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--color-light);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.addToCart {
+  position: absolute;
+  bottom: 1.25em;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 0.625em;
+  height: 2.375em; /* 38px */
+  padding: 0 0.3125em 0 0.3125em;
+  border-radius: 999px;
+  border: 1px solid var(--color-charcoal);
+  background-color: rgba(197, 165, 90, 0.2); /* --color-gold @ 20% */
+  backdrop-filter: blur(8px);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.addThumb {
+  flex-shrink: 0;
+  width: 1.8125em; /* 29px */
+  height: 1.8125em;
+  border-radius: 50%;
+  object-fit: cover;
+  background-color: var(--color-warm);
+}
+
+.addLabel {
+  font-size: 1.125em; /* 18px */
+  line-height: 1;
+  color: var(--color-charcoal);
+}
+
+.addPlus {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 1.8125em;
+  height: 1.8125em;
+  border-radius: 50%;
+  background-color: var(--color-gold);
+  color: var(--color-charcoal);
+  font-size: 0.9em;
+}
+
+.cardLink:hover .caption,
+.cardLink:hover .addToCart,
+.cardLink:focus-visible .caption,
+.cardLink:focus-visible .addToCart {
+  opacity: 1;
+}
+
+/* ---- Meta: naam links, prijs rechts --------------------------------------- */
+
+.meta {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1em;
+  margin-top: 0.75em;
+}
+
+.name {
+  margin: 0;
+  font-size: 0.875em; /* 14px */
+  font-weight: 400;
+  line-height: 1.214;
+  letter-spacing: -0.017em;
+  color: var(--color-charcoal);
+}
+
+.price {
+  margin: 0;
+  font-size: 0.875em;
+  line-height: 1.214;
+  color: var(--color-charcoal);
+}
+
+/* ---- Responsive ----------------------------------------------------------- */
+
+@media (max-width: 767px) {
+  .heading {
+    font-size: 1.75em;
+  }
+
+  .filters {
+    font-size: 1em;
+  }
+}

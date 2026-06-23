@@ -1,0 +1,133 @@
+/* ==========================================================================
+   OurPhilosophy — component-specifieke styling
+   Base (typografie, kleuren, section-padding) komt uit global.css.
+   Layout via het gedeelde 12-koloms .layout-grid (zie CLAUDE.md):
+   tekst-kolom 1/6, media-kolom 6/13 op desktop; gestapeld op mobiel.
+   Waardes in em → Osmo scaling; px alleen voor de hairline-divider.
+   ========================================================================== */
+
+.philosophy {
+  /* Full-bleed: breek uit de 1em zijmarge van `body > main` zodat
+     .layout-grid exact op de GridOverlay (viewport-rand + --grid-margin) lijnt. */
+  margin-left: -1em;
+  margin-right: -1em;
+}
+
+.inner {
+  row-gap: 2em;
+  align-items: start;
+}
+
+.label {
+  grid-column: 1 / -1;
+  font-size: 0.875em; /* 14px */
+  letter-spacing: 0.08em;
+  color: var(--color-gold);
+}
+
+.divider {
+  grid-column: 1 / -1;
+  width: 100%;
+  height: 0;
+  margin: 0;
+  border: 0;
+  border-top: 1px solid var(--color-hairline);
+}
+
+/* ---- Tekst-kolom (links) -------------------------------------------------- */
+
+.text {
+  grid-column: 1 / 6;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.875em;
+}
+
+.paragraph {
+  margin: 0;
+  font-size: 2em; /* 32px */
+  line-height: 1.05;
+  color: var(--color-charcoal);
+}
+
+.readMore {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  font-size: 1.125em; /* 18px */
+  line-height: 1;
+  color: var(--color-charcoal);
+  text-decoration: none;
+  border-bottom: 1px solid currentColor;
+  padding-bottom: 0.25em;
+}
+
+.readMore:hover {
+  text-decoration: none;
+}
+
+.arrow {
+  width: 1.2em;
+  height: 1.2em;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.875em;
+  margin: 0.625em 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.375em; /* 38px */
+  padding: 0 1.375em;
+  border-radius: 999px;
+  font-size: 1.125em; /* 18px */
+  line-height: 1;
+  color: var(--color-light);
+  background-color: var(--color-charcoal);
+}
+
+/* ---- Media-kolom (rechts) ------------------------------------------------- */
+
+.media {
+  grid-column: 6 / 13;
+}
+
+.portrait {
+  width: 100%;
+  /* Verhouding uit Figma (837 × 393). Placeholder tot de echte foto er is. */
+  aspect-ratio: 837 / 393;
+  border-radius: 12em; /* stadion-vorm, zoals het ovale portret in het ontwerp */
+  background:
+    radial-gradient(
+      120% 140% at 70% 30%,
+      var(--color-warm),
+      var(--color-silver)
+    );
+}
+
+/* ---- Responsive ----------------------------------------------------------- */
+
+@media (max-width: 767px) {
+  .text {
+    grid-column: 1 / -1;
+  }
+
+  .media {
+    grid-column: 1 / -1;
+  }
+
+  .paragraph {
+    font-size: 1.5em;
+  }
+
+  .portrait {
+    border-radius: 6em;
+  }
+}

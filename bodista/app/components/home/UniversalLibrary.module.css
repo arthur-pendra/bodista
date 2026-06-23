@@ -1,0 +1,121 @@
+/* ==========================================================================
+   UniversalLibrary — label + grote tekst + "How the skin works"-accordion +
+   portret. Zelfde 2-koloms ritme als OurPhilosophy. Statisch (1:1 Figma).
+   ========================================================================== */
+
+.library {
+  margin-left: -1em;
+  margin-right: -1em;
+}
+
+.inner {
+  row-gap: 2em;
+  align-items: start;
+}
+
+.label {
+  grid-column: 1 / -1;
+  font-size: 0.875em; /* 14px */
+  letter-spacing: 0.08em;
+  color: var(--color-gold);
+}
+
+.divider {
+  grid-column: 1 / -1;
+  width: 100%;
+  height: 0;
+  margin: 0;
+  border: 0;
+  border-top: 1px solid var(--color-hairline);
+}
+
+/* ---- Tekst-kolom (links) -------------------------------------------------- */
+
+.text {
+  grid-column: 1 / 6;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.heading {
+  margin: 0;
+  font-size: 2em; /* 32px */
+  font-weight: 400;
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  color: var(--color-charcoal);
+}
+
+.intro {
+  margin: 1.5em 0 2.5em;
+  max-width: 30em;
+  font-size: 0.875em; /* 14px */
+  line-height: 1.714;
+  color: var(--color-charcoal);
+}
+
+.accordion {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.entry {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1em;
+  padding: 1.125em 0;
+  border-top: 1px solid var(--color-hairline);
+}
+
+.entry:last-child {
+  border-bottom: 1px solid var(--color-hairline);
+}
+
+.entryLabel {
+  font-size: 1.125em; /* 18px */
+  color: var(--color-charcoal);
+}
+
+.arrow {
+  flex-shrink: 0;
+  width: 1.125em;
+  height: 1.125em;
+  color: var(--color-charcoal);
+}
+
+/* ---- Media-kolom (rechts) ------------------------------------------------- */
+
+.media {
+  grid-column: 6 / 13;
+}
+
+.portrait {
+  width: 100%;
+  aspect-ratio: 837 / 393;
+  border-radius: 12em; /* stadion-vorm, zoals het ovale portret in het ontwerp */
+  background:
+    radial-gradient(120% 140% at 70% 30%, var(--color-warm), var(--color-silver));
+}
+
+/* ---- Responsive ----------------------------------------------------------- */
+
+@media (max-width: 767px) {
+  .text {
+    grid-column: 1 / -1;
+  }
+
+  .media {
+    grid-column: 1 / -1;
+  }
+
+  .heading {
+    font-size: 1.5em;
+  }
+
+  .portrait {
+    border-radius: 6em;
+  }
+}

@@ -1,0 +1,40 @@
+/* Dev-only kolom-grid overlay. Waarden in em zodat de grid meeschaalt met
+   het Osmo scaling system, net als de rest van de site. */
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  column-gap: var(--grid-gutter);
+  padding: 0 var(--grid-margin);
+}
+
+.col {
+  position: relative;
+  height: 100%;
+  background: rgba(255, 0, 0, 0.1);
+}
+
+.num {
+  position: absolute;
+  top: 0.5em;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-family: monospace;
+  font-size: 0.75em;
+  color: rgba(255, 0, 0, 0.7);
+}
+
+/* Mobile — 6 kolommen (margin/gutter komen uit de gedeelde tokens). */
+@media (max-width: 767px) {
+  .overlay {
+    grid-template-columns: repeat(6, 1fr);
+  }
+
+  .col:nth-child(n + 7) {
+    display: none;
+  }
+}

@@ -1,4 +1,4 @@
-import type {Route} from './+types/sitemap-overview';
+import type {Route} from './+types/($locale).sitemap-overview';
 import styles from '~/styles/sitemap.module.css';
 
 export const meta: Route.MetaFunction = () => {

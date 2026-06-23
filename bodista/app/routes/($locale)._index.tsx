@@ -1,10 +1,14 @@
 import {Await, useLoaderData} from 'react-router';
-import type {Route} from './+types/_index';
+import type {Route} from './+types/($locale)._index';
 import {Suspense} from 'react';
 import {HeroHeader} from '~/components/home/HeroHeader';
-import {AboutSection} from '~/components/home/AboutSection';
-import {RoutineSection} from '~/components/home/RoutineSection';
-import {ProductHighlights} from '~/components/home/ProductHighlights';
+import {TheCollection} from '~/components/home/TheCollection';
+import {OurPhilosophy} from '~/components/home/OurPhilosophy';
+import {TheFacial} from '~/components/home/TheFacial';
+import {InThisProtocol} from '~/components/home/InThisProtocol';
+import {WhatsInside} from '~/components/home/WhatsInside';
+import {FriendsOfBodista} from '~/components/home/FriendsOfBodista';
+import {UniversalLibrary} from '~/components/home/UniversalLibrary';
 
 export const meta: Route.MetaFunction = () => {
   return [{title: 'Bodista | Begin Your Ritual'}];
@@ -44,16 +48,20 @@ export default function Homepage() {
   return (
     <div className="home">
       <HeroHeader />
-      <AboutSection />
       <Suspense fallback={<div />}>
         <Await resolve={data.recommendedProducts}>
           {(response) => {
             const products = response?.products.nodes ?? [];
-            return <ProductHighlights products={products} />;
+            return <TheCollection products={products} />;
           }}
         </Await>
       </Suspense>
-      <RoutineSection />
+      <OurPhilosophy />
+      <TheFacial />
+      <InThisProtocol />
+      <WhatsInside />
+      <FriendsOfBodista />
+      <UniversalLibrary />
     </div>
   );
 }
@@ -86,8 +94,6 @@ const RECOMMENDED_PRODUCTS_QUERY = `#graphql
     id
     title
     handle
-    description
-    productType
     priceRange {
       minVariantPrice {
         amount
@@ -100,17 +106,6 @@ const RECOMMENDED_PRODUCTS_QUERY = `#graphql
       altText
       width
       height
-    }
-    variants(first: 10) {
-      nodes {
-        id
-        title
-        availableForSale
-        price {
-          amount
-          currencyCode
-        }
-      }
     }
   }
   query RecommendedProducts ($country: CountryCode, $language: LanguageCode)

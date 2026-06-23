@@ -16,8 +16,6 @@ import {FOOTER_QUERY, HEADER_QUERY} from '~/lib/fragments';
 import globalStyles from '~/styles/global.css?url';
 import {PageLayout} from './components/PageLayout';
 import {SmoothScroll} from './components/SmoothScroll';
-import {PlasterOverlay} from './components/webgl/PlasterOverlay';
-import {WebGLTextProvider} from './components/webgl/WebGLTextProvider';
 
 export type RootLoader = typeof loader;
 
@@ -157,8 +155,6 @@ export function Layout({children}: {children?: React.ReactNode}) {
       </head>
       <body>
         <SmoothScroll />
-        <WebGLTextProvider />
-        <PlasterOverlay />
         {children}
         <ScrollRestoration nonce={nonce} />
         <Scripts nonce={nonce} />

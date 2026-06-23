@@ -1,0 +1,727 @@
+/* ==========================================================================
+   BrandGuide — Typography System (desktop-only specimen-pagina)
+   Base (fonts, kleuren) komt uit global.css.
+
+   Lokale Osmo-schaal: het Figma-frame is 2737px breed i.p.v. de standaard
+   1440 desktop-ideal. We overschrijven --size-container-ideal lokaal zodat
+   --size-font opnieuw rekent en het héle frame proportioneel meeschaalt met
+   de viewport. Alle waarden daarna = Figma-px / 16 in em (Osmo-conventie).
+   ========================================================================== */
+
+.guide {
+  --ink: #222;
+  --grey: #5c594f;
+  --gold: #c5a55a;
+  --silver: #b5b0a4;
+  --warm: #f4eee2;
+  --hair: #e8e2d5;
+
+  font-family: 'Novela Display', Georgia, serif;
+  color: var(--ink);
+  background: #fff;
+  /* Full-bleed: breek uit de 1em side-margin van `body > main`. Blijft op
+     root-schaal (geen font-size override hier) zodat -1em exact 16px is. */
+  margin: 0 -1em;
+}
+
+.inner {
+  /* Lokale Osmo-schaal op de inner: design-frame 2737px i.p.v. 1440. Alle
+     kind-waarden zijn vanaf hier Figma-px / 16 in em. */
+  --size-container-ideal: 2737;
+  --size-font: calc(var(--size-container) / (2737 / 16));
+  font-size: var(--size-font);
+
+  max-width: 171.0625em; /* 2737px */
+  margin: 0 auto;
+  /* 160px side; ruime top zodat de fixed MegaNav vrij blijft. */
+  padding: 14em 10em 9em;
+  display: flex;
+  flex-direction: column;
+  gap: 6em; /* 96px tussen secties */
+}
+
+/* ------------------------------------------------------------ Generiek --- */
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 2em;
+  width: 100%;
+}
+
+.hairline {
+  width: 100%;
+  height: 1px;
+  background: var(--hair);
+}
+
+.display {
+  font-family: 'Novela Display', Georgia, serif;
+}
+
+.semibold {
+  font-weight: 600;
+}
+
+/* -------------------------------------------------------------- Header --- */
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5em;
+  width: 100%;
+}
+
+.eyebrowRow {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.875em;
+  letter-spacing: 0.08em;
+}
+
+.eyebrowRow .ink {
+  color: var(--ink);
+}
+
+.eyebrowRow .muted {
+  color: var(--grey);
+}
+
+.title {
+  font-family: 'Novela Display', Georgia, serif;
+  font-size: 8.75em;
+  line-height: 1.07;
+  color: var(--ink);
+  margin: 0;
+}
+
+.lede {
+  font-family: 'Novela Display', Georgia, serif;
+  font-size: 2em;
+  line-height: 1.31;
+  color: var(--grey);
+  margin: 0;
+  max-width: 100em;
+}
+
+/* ---------------------------------------------------- Section-head (B) --- */
+
+.head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 3em;
+  width: 100%;
+}
+
+.headLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25em;
+}
+
+.headEyebrow {
+  font-size: 0.875em;
+  letter-spacing: 0.08em;
+  color: var(--grey);
+}
+
+.headTitle {
+  font-family: 'Novela Display', Georgia, serif;
+  font-size: 3.5em;
+  line-height: 1;
+  color: var(--ink);
+  margin: 0;
+}
+
+.headAside {
+  font-size: 1.125em;
+  line-height: 1.4;
+  color: var(--grey);
+  max-width: 50em;
+  text-align: right;
+}
+
+/* ------------------------------------------------------- Register-head --- */
+
+.regHead {
+  display: flex;
+  gap: 3em;
+  width: 100%;
+}
+
+.regNum {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25em;
+  width: 32.5em;
+  flex: none;
+}
+
+.regNumLabel {
+  font-size: 0.875em;
+  letter-spacing: 0.08em;
+  color: var(--grey);
+}
+
+.regNumTitle {
+  font-family: 'Novela Display', Georgia, serif;
+  font-size: 4.5em;
+  line-height: 1.11;
+  color: var(--ink);
+  margin: 0;
+}
+
+/* Register 03 ("UPPERCASE.") iets zwaarder via faux-weight op Novela Display. */
+.regNumTitleSemibold {
+  font-family: 'Novela Display', Georgia, serif;
+  font-weight: 600;
+}
+
+.regPurpose {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75em;
+  padding-top: 1.75em;
+}
+
+.regLead {
+  font-family: 'Novela Display', Georgia, serif;
+  font-size: 1.5em;
+  line-height: 1.33;
+  color: var(--ink);
+  margin: 0;
+  max-width: 115.5em;
+}
+
+.regSub {
+  font-size: 1em;
+  line-height: 1.625;
+  color: var(--grey);
+  margin: 0;
+  max-width: 115.5em;
+}
+
+/* ------------------------------------------------------ Examples-panel --- */
+
+.examples {
+  background: var(--warm);
+  padding: 5em;
+  display: flex;
+  flex-direction: column;
+  gap: 3.5em;
+  width: 100%;
+}
+
+.ex {
+  display: flex;
+  gap: 4em;
+  width: 100%;
+}
+
+.exSample {
+  width: 87.46em;
+  flex: none;
+}
+
+.exLabel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+  padding-top: 1em;
+}
+
+.exLabelEyebrow {
+  font-size: 0.75em;
+  letter-spacing: 0.08em;
+  color: var(--grey);
+}
+
+.exLabelDesc {
+  font-size: 1em;
+  line-height: 1.5;
+  color: var(--ink);
+}
+
+/* Sample-typografie per register-voorbeeld */
+.sample {
+  margin: 0;
+  line-height: 1.05;
+  color: var(--ink);
+}
+
+.logotype {
+  height: 9.4375em;
+  width: auto;
+  display: block;
+}
+
+.s56 {
+  font-size: 3.5em;
+}
+
+.s64 {
+  font-size: 4em;
+}
+
+.s40 {
+  font-size: 2.5em;
+}
+
+.s36 {
+  font-size: 2.25em;
+}
+
+.s88 {
+  font-size: 5.5em;
+}
+
+.s32 {
+  font-size: 2em;
+}
+
+/* --------------------------------------------------------------- Rules --- */
+
+.rules {
+  display: flex;
+  gap: 3em;
+  width: 100%;
+}
+
+.rulesLabel {
+  font-size: 0.875em;
+  letter-spacing: 0.08em;
+  color: var(--grey);
+  width: 22.5em;
+  flex: none;
+}
+
+.rulesList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.875em;
+}
+
+.rulesList p {
+  font-size: 1em;
+  line-height: 1.625;
+  color: var(--ink);
+  margin: 0;
+}
+
+/* ------------------------------------------------------------ Colours --- */
+
+.swatchRow {
+  display: flex;
+  gap: 1.25em;
+  width: 100%;
+}
+
+.swatch {
+  flex: 1;
+  height: 17.5em;
+  padding: 1.75em;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  color: var(--ink);
+}
+
+.swatchDark {
+  color: #fff;
+}
+
+.swatchName {
+  font-family: 'Novela Display', Georgia, serif;
+  font-size: 1.75em;
+  margin: 0;
+}
+
+.swatchMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+  font-size: 0.75em;
+}
+
+.swatchUse {
+  line-height: 1.33;
+  margin: 0;
+}
+
+.swatchHex {
+  letter-spacing: 0.08em;
+  margin: 0;
+}
+
+/* --------------------------------------------------------------- Mark --- */
+
+.markRow {
+  display: flex;
+  gap: 1.5em;
+  width: 100%;
+}
+
+.markPanel {
+  flex: 1;
+  height: 26.25em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5em;
+}
+
+.markDark {
+  background: var(--ink);
+}
+
+.markLight {
+  background: var(--warm);
+}
+
+.markGlyph {
+  font-family: 'Novela Display', Georgia, serif;
+  font-size: 8.75em;
+  line-height: 1;
+  margin: 0;
+}
+
+.markGlyphGold {
+  color: var(--gold);
+}
+
+.markGlyphInk {
+  color: var(--ink);
+}
+
+.markCaption {
+  font-size: 0.75em;
+  letter-spacing: 0.08em;
+  margin: 0;
+}
+
+.onDark {
+  color: var(--warm);
+}
+
+.onLight {
+  color: var(--grey);
+}
+
+/* ---------------------------------------------------------- Hierarchy --- */
+
+.stack {
+  background: var(--warm);
+  padding: 3.5em 4em;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.stackRow {
+  display: flex;
+  align-items: center;
+  gap: 2em;
+  padding: 1.75em 0;
+}
+
+.stackNum {
+  font-size: 0.75em;
+  letter-spacing: 0.08em;
+  color: var(--grey);
+  width: 3.75em;
+  flex: none;
+}
+
+.stackLabel {
+  font-family: 'Novela Display', Georgia, serif;
+  font-size: 0.875em;
+  color: var(--ink);
+  width: 17.5em;
+  flex: none;
+}
+
+.stackCase {
+  font-size: 0.8125em;
+  color: var(--grey);
+  width: 13.75em;
+  flex: none;
+}
+
+.stackSample {
+  font-family: 'Novela Display', Georgia, serif;
+  color: var(--ink);
+  margin: 0;
+}
+
+.stackMark {
+  color: var(--gold);
+}
+
+.stackDivider {
+  height: 1px;
+  background: var(--hair);
+  width: 100%;
+}
+
+.stackLogo {
+  height: 3.5em;
+  width: auto;
+  display: block;
+}
+
+/* ------------------------------------------------------- Applications --- */
+
+.appsRow {
+  display: flex;
+  gap: 1.5em;
+  width: 100%;
+}
+
+.appCol {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25em;
+}
+
+.appCaption {
+  font-size: 0.8125em;
+  color: var(--grey);
+  margin: 0;
+}
+
+.appCanvas {
+  height: 47.5em;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Bottle */
+.bottleCanvas {
+  background: var(--ink);
+  padding: 3.5em 3em;
+  align-items: center;
+  justify-content: space-between;
+  text-align: center;
+}
+
+.bottleTop {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1em;
+}
+
+.bottleProto {
+  font-size: 0.875em;
+  letter-spacing: 0.08em;
+  color: var(--gold);
+  margin: 0;
+}
+
+.bottleName {
+  font-size: 2.25em;
+  color: var(--warm);
+  margin: 0;
+}
+
+.bottleMark {
+  font-family: 'Novela Display', Georgia, serif;
+  font-size: 4em;
+  color: var(--gold);
+  margin: 0;
+}
+
+.bottleBot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75em;
+}
+
+.bottleDesc {
+  font-weight: 600;
+  font-size: 1.375em;
+  color: var(--warm);
+  margin: 0;
+}
+
+.bottleVol {
+  font-size: 0.625em;
+  letter-spacing: 0.08em;
+  color: var(--silver);
+  margin: 0;
+}
+
+/* Web */
+.webCanvas {
+  background: var(--warm);
+  padding: 3em;
+  align-items: flex-start;
+}
+
+.webNav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding-bottom: 2em;
+}
+
+.webLogo {
+  font-family: 'Novela Display', Georgia, serif;
+  font-size: 1.125em;
+  color: var(--ink);
+  margin: 0;
+}
+
+.webLinks {
+  display: flex;
+  gap: 1em;
+  font-size: 0.6875em;
+}
+
+.webLinks span {
+  color: var(--grey);
+}
+
+.webLinks .active {
+  color: var(--ink);
+}
+
+.webCrumb {
+  font-family: 'Novela Display', Georgia, serif;
+  font-size: 0.75em;
+  color: var(--grey);
+  margin: 0;
+  padding-top: 3.5em;
+}
+
+.webTitle {
+  font-family: 'Novela Display', Georgia, serif;
+  font-size: 3.5em;
+  line-height: 1.14;
+  color: var(--ink);
+  margin: 0.5em 0 0;
+}
+
+.webDesc {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5em;
+  padding-top: 0.75em;
+}
+
+.webOil {
+  font-family: 'Novela Display', Georgia, serif;
+  font-size: 1.375em;
+  color: var(--grey);
+  margin: 0;
+}
+
+.webMark {
+  font-family: 'Novela Display', Georgia, serif;
+  font-size: 2em;
+  color: var(--gold);
+  margin: 0;
+}
+
+.webBody {
+  font-family: 'Novela Display', Georgia, serif;
+  font-size: 0.875em;
+  line-height: 1.57;
+  color: var(--ink);
+  margin: 0;
+}
+
+.webTagline {
+  font-family: 'Novela Display', Georgia, serif;
+  font-size: 0.875em;
+  color: var(--ink);
+  margin: 0;
+  padding-top: 2.5em;
+}
+
+/* Social */
+.socCanvas {
+  background: var(--ink);
+  padding: 3em;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.socLogo {
+  font-family: 'Novela Display', Georgia, serif;
+  font-size: 1.375em;
+  color: var(--gold);
+  margin: 0;
+}
+
+.socMid {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5em;
+}
+
+.socMark {
+  font-family: 'Novela Display', Georgia, serif;
+  font-size: 3.5em;
+  color: var(--gold);
+  margin: 0;
+}
+
+.socTagline {
+  font-family: 'Novela Display', Georgia, serif;
+  font-size: 2.75em;
+  line-height: 1.18;
+  color: var(--warm);
+  margin: 0;
+}
+
+.socBot {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+}
+
+.socCat {
+  font-size: 0.75em;
+  letter-spacing: 0.08em;
+  color: var(--silver);
+  margin: 0;
+}
+
+.socSignoff {
+  font-family: 'Novela Display', Georgia, serif;
+  font-size: 0.875em;
+  color: var(--warm);
+  margin: 0;
+}
+
+/* ------------------------------------------------------------- Footer --- */
+
+.footer {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  width: 100%;
+  padding-top: 1.5em;
+}
+
+.footerRow {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 1em;
+}
+
+.footerRow p {
+  font-size: 0.75em;
+  color: var(--grey);
+  margin: 0;
+}
+
+.footerLeft {
+  letter-spacing: 0.08em;
+}

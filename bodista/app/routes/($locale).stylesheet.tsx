@@ -1,4 +1,4 @@
-import type {Route} from './+types/stylesheet';
+import type {Route} from './+types/($locale).stylesheet';
 import styles from '~/styles/stylesheet.module.css';
 
 export const meta: Route.MetaFunction = () => {
@@ -55,57 +55,73 @@ export default function Stylesheet() {
       {/* Colors */}
       <section className={styles.section}>
         <h2 className={styles.sectionTitle}>Kleuren</h2>
+        <p style={{marginBottom: '1.5em'}}>
+          Drie core-kleuren, twee accenten. Spaarzaam gebruiken.
+        </p>
         <div className={styles.colorGrid}>
-          <div className={styles.colorSwatch}>
-            <div
-              className={styles.colorSwatchBlock}
-              style={{background: 'var(--color-dark)'}}
-            />
-            <div className={styles.colorSwatchInfo}>
-              <div className={styles.colorSwatchName}>Dark</div>
-              <div className={styles.colorSwatchValue}>--color-dark / #000</div>
+          {[
+            {
+              name: 'Charcoal',
+              token: '--color-charcoal',
+              hex: '#222222',
+              usage: 'Hero & closing sections (core)',
+            },
+            {
+              name: 'Body Grey',
+              token: '--color-body',
+              hex: '#5C594F',
+              usage: 'Body copy & uitleg (core)',
+            },
+            {
+              name: 'Warm White',
+              token: '--color-warm',
+              hex: '#F4EEE2',
+              usage: 'Lichte achtergronden & oil-kolom (core)',
+            },
+            {
+              name: 'Gold',
+              token: '--color-gold',
+              hex: '#C5A55A',
+              usage: 'Logotype · palindroom op donker · CTAs (accent)',
+            },
+            {
+              name: 'Silver',
+              token: '--color-silver',
+              hex: '#B5B0A4',
+              usage: 'Serum-accent · Step II markers (accent)',
+            },
+            {
+              name: 'Hairline',
+              token: '--color-hairline',
+              hex: '#E8E2D5',
+              usage: 'Hairline borders & dividers',
+            },
+          ].map((c) => (
+            <div key={c.token} className={styles.colorSwatch}>
+              <div
+                className={styles.colorSwatchBlock}
+                style={{
+                  background: `var(${c.token})`,
+                  border: '1px solid var(--color-hairline)',
+                }}
+              />
+              <div className={styles.colorSwatchInfo}>
+                <div className={styles.colorSwatchName}>{c.name}</div>
+                <div className={styles.colorSwatchValue}>
+                  {c.token} · {c.hex}
+                </div>
+                <p
+                  style={{
+                    fontSize: '0.8em',
+                    opacity: 0.6,
+                    marginTop: '0.25em',
+                  }}
+                >
+                  {c.usage}
+                </p>
+              </div>
             </div>
-          </div>
-          <div className={styles.colorSwatch}>
-            <div
-              className={styles.colorSwatchBlock}
-              style={{background: 'var(--color-light)', border: '1px solid #e5e5e5'}}
-            />
-            <div className={styles.colorSwatchInfo}>
-              <div className={styles.colorSwatchName}>Light</div>
-              <div className={styles.colorSwatchValue}>--color-light / #fff</div>
-            </div>
-          </div>
-          <div className={styles.colorSwatch}>
-            <div
-              className={styles.colorSwatchBlock}
-              style={{background: '#ddd'}}
-            />
-            <div className={styles.colorSwatchInfo}>
-              <div className={styles.colorSwatchName}>Code bg</div>
-              <div className={styles.colorSwatchValue}>#ddd</div>
-            </div>
-          </div>
-          <div className={styles.colorSwatch}>
-            <div
-              className={styles.colorSwatchBlock}
-              style={{background: '#e5e5e5'}}
-            />
-            <div className={styles.colorSwatchInfo}>
-              <div className={styles.colorSwatchName}>Border</div>
-              <div className={styles.colorSwatchValue}>#e5e5e5</div>
-            </div>
-          </div>
-          <div className={styles.colorSwatch}>
-            <div
-              className={styles.colorSwatchBlock}
-              style={{background: '#d1d5db'}}
-            />
-            <div className={styles.colorSwatchInfo}>
-              <div className={styles.colorSwatchName}>Input border</div>
-              <div className={styles.colorSwatchValue}>#d1d5db</div>
-            </div>
-          </div>
+          ))}
         </div>
       </section>
 
@@ -116,9 +132,22 @@ export default function Stylesheet() {
         <div className={styles.specimen}>
           <span className={styles.specimenLabel}>Font Family</span>
           <p>
-            system-ui, -apple-system, BlinkMacSystemFont, &apos;Segoe UI&apos;,
-            Roboto, Oxygen, Ubuntu, Cantarell, &apos;Open Sans&apos;,
-            &apos;Helvetica Neue&apos;, sans-serif
+            &apos;Novela Display&apos;, Georgia, &apos;Times New Roman&apos;,
+            serif
+          </p>
+        </div>
+
+        <div className={styles.specimen}>
+          <span className={styles.specimenLabel}>Novela Display — Regular</span>
+          <p style={{fontSize: '1.5em'}}>
+            The quick brown fox jumps over the lazy dog
+          </p>
+        </div>
+
+        <div className={styles.specimen}>
+          <span className={styles.specimenLabel}>Novela Display — Italic</span>
+          <p style={{fontSize: '1.5em', fontStyle: 'italic'}}>
+            The quick brown fox jumps over the lazy dog
           </p>
         </div>
 
@@ -161,7 +190,7 @@ export default function Stylesheet() {
         <div className={styles.specimen}>
           <span className={styles.specimenLabel}>a — link</span>
           <p>
-            <a href="#typography">Dit is een link met hover underline</a>
+            <a href="#typography">Dit is een link (geen hover underline)</a>
           </p>
         </div>
 
@@ -408,7 +437,7 @@ export default function Stylesheet() {
             <div className={styles.scaleItemLabel}>Class</div>
             <div className={styles.scaleItemValue}>.link</div>
             <p style={{fontSize: '0.8em', opacity: 0.6, marginTop: '0.25em'}}>
-              Hover underline voor niet-anchor links
+              Klikbare cursor voor niet-anchor links (geen underline)
             </p>
           </div>
           <div className={styles.scaleItem}>

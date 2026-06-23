@@ -4,13 +4,17 @@ import gsap from 'gsap';
 import {ScrollTrigger} from 'gsap/ScrollTrigger';
 import {setLenisInstance} from '~/lib/lenis';
 
-if (typeof window !== 'undefined') {
-  gsap.registerPlugin(ScrollTrigger);
-}
+gsap.registerPlugin(ScrollTrigger);
 
 export function SmoothScroll() {
   useEffect(() => {
-    const lenis = new Lenis();
+    // lerp bepaalt de smoothing-intensiteit (0–1). Default 0.1 voelt zwaar/
+    // floaty; hoger = snappier en dichter bij native scroll. wheelMultiplier 1
+    // houdt de scroll-afstand gelijk aan native.
+    const lenis = new Lenis({
+      lerp: 0.18,
+      wheelMultiplier: 1,
+    });
     setLenisInstance(lenis);
 
     lenis.on('scroll', ScrollTrigger.update);

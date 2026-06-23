@@ -1,26 +1,21 @@
-'use client'
-
-import {Suspense, useEffect, useRef} from 'react'
-import {Await, NavLink, useAsyncValue} from 'react-router'
-import gsap from 'gsap'
-import {ScrollTrigger} from 'gsap/ScrollTrigger'
+import {Suspense} from 'react';
+import {Await, NavLink, useAsyncValue} from 'react-router';
 import {
   type CartViewPayload,
   useAnalytics,
   useOptimisticCart,
-} from '@shopify/hydrogen'
-import type {HeaderQuery, CartApiQueryFragment} from 'storefrontapi.generated'
-import {useAside} from '~/components/Aside'
-import {useMenu} from '~/components/PageLayout'
+} from '@shopify/hydrogen';
+import type {HeaderQuery, CartApiQueryFragment} from 'storefrontapi.generated';
+import {useAside} from '~/components/Aside';
 
 interface HeaderProps {
-  header: HeaderQuery
-  cart: Promise<CartApiQueryFragment | null>
-  isLoggedIn: Promise<boolean>
-  publicStoreDomain: string
+  header: HeaderQuery;
+  cart: Promise<CartApiQueryFragment | null>;
+  isLoggedIn: Promise<boolean>;
+  publicStoreDomain: string;
 }
 
-type Viewport = 'desktop' | 'mobile'
+type Viewport = 'desktop' | 'mobile';
 
 export function Header({
   header,
@@ -28,135 +23,21 @@ export function Header({
   cart,
   publicStoreDomain,
 }: HeaderProps) {
-  const {shop, menu} = header
-  const {isMenuOpen} = useMenu()
-  const locationsRef = useRef<HTMLDivElement>(null)
-  const logoRef = useRef<HTMLSpanElement>(null)
-  const tlRef = useRef<gsap.core.Timeline | null>(null)
-  const stRef = useRef<ScrollTrigger | null>(null)
-  const menuOpenRef = useRef(isMenuOpen)
-
-  // Build timeline once
-  useEffect(() => {
-    const locations = locationsRef.current
-    const logo = logoRef.current
-    if (!locations || !logo) return
-
-    const masks = locations.querySelectorAll('.header-location-mask')
-    const spans = Array.from(masks).map((m) => m.querySelector('span'))
-    const marker = document.querySelector('.header-locations-marker')
-
-    const ctx = gsap.context(() => {
-      const tl = gsap.timeline({paused: true})
-
-      tl.to(spans, {
-        yPercent: 110,
-        duration: 0.4,
-        stagger: {each: 0.05, from: 'end'},
-        ease: 'expo.in',
-      })
-
-      if (marker) {
-        tl.to(
-          marker,
-          {
-            autoAlpha: 0,
-            duration: 0.4,
-            ease: 'expo.in',
-          },
-          '<',
-        )
-      }
-
-      tlRef.current = tl
-
-      // Trigger on scroll
-      stRef.current = ScrollTrigger.create({
-        trigger: document.documentElement,
-        start: 'top -1',
-        onEnter: () => tl.play(),
-        onLeaveBack: () => tl.reverse(),
-      })
-    })
-
-    return () => ctx.revert()
-  }, [])
-
-  // Trigger on menu open/close
-  useEffect(() => {
-    menuOpenRef.current = isMenuOpen
-    if (!tlRef.current || !stRef.current) return
-    if (isMenuOpen) {
-      stRef.current.disable()
-      tlRef.current.pause()
-      gsap.to(tlRef.current, {progress: 1, duration: 0.3, ease: 'expo.in'})
-    } else {
-      // Wait for menu close animation (1.6s) before re-enabling
-      gsap.delayedCall(1.6, () => {
-        if (!menuOpenRef.current) {
-          stRef.current?.enable()
-          if (window.scrollY <= 0) {
-            tlRef.current?.reverse()
-          }
-        }
-      })
-    }
-  }, [isMenuOpen])
-
+  const {shop, menu} = header;
   return (
-    <div className="header-wrapper" data-menu-open={isMenuOpen || undefined}>
-      <header className="header">
-        <div className="header-left">
-          <span ref={logoRef}>
-            <NavLink prefetch="intent" to="/" className="header-logo-text">
-              bodista
-            </NavLink>
-          </span>
-        </div>
-        <div className="header-center">
-          <span className="header-locations-marker">§</span>
-          <div className="header-locations" ref={locationsRef}>
-            <div className="header-location-mask">
-              <span>oils</span>
-            </div>
-            <div className="header-location-mask">
-              <span>serums</span>
-            </div>
-            <div className="header-location-mask">
-              <span>mist</span>
-            </div>
-            <div className="header-location-mask">
-              <span>fragrances</span>
-            </div>
-          </div>
-        </div>
-        <div className="header-right">
-          <NavLink to="/search" prefetch="intent" className="header-search">
-            search
-          </NavLink>
-          <NavLink to="/account" prefetch="intent" className="header-search">
-            profile
-          </NavLink>
-          <CartToggle cart={cart} />
-          <MenuToggle />
-        </div>
-      </header>
-    </div>
-  )
-}
-
-function MenuToggle() {
-  const {isMenuOpen, toggleMenu} = useMenu()
-  return (
-    <button
-      className="header-menu-toggle reset"
-      onClick={toggleMenu}
-      aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
-      aria-expanded={isMenuOpen}
-    >
-      {isMenuOpen ? 'close' : 'menu'}
-    </button>
-  )
+    <header className="header">
+      <NavLink prefetch="intent" to="/" style={activeLinkStyle} end>
+        <strong>Bodista</strong>
+      </NavLink>
+      <HeaderMenu
+        menu={menu}
+        viewport="desktop"
+        primaryDomainUrl={header.shop.primaryDomain.url}
+        publicStoreDomain={publicStoreDomain}
+      />
+      <HeaderCtas isLoggedIn={isLoggedIn} cart={cart} />
+    </header>
+  );
 }
 
 export function HeaderMenu({
@@ -165,13 +46,13 @@ export function HeaderMenu({
   viewport,
   publicStoreDomain,
 }: {
-  menu: HeaderProps['header']['menu']
-  primaryDomainUrl: HeaderProps['header']['shop']['primaryDomain']['url']
-  viewport: Viewport
-  publicStoreDomain: HeaderProps['publicStoreDomain']
+  menu: HeaderProps['header']['menu'];
+  primaryDomainUrl: HeaderProps['header']['shop']['primaryDomain']['url'];
+  viewport: Viewport;
+  publicStoreDomain: HeaderProps['publicStoreDomain'];
 }) {
-  const className = `header-menu-${viewport}`
-  const {close} = useAside()
+  const className = `header-menu-${viewport}`;
+  const {close} = useAside();
 
   return (
     <nav className={className} role="navigation">
@@ -180,20 +61,22 @@ export function HeaderMenu({
           end
           onClick={close}
           prefetch="intent"
+          style={activeLinkStyle}
           to="/"
         >
           Home
         </NavLink>
       )}
       {(menu || FALLBACK_HEADER_MENU).items.map((item) => {
-        if (!item.url) return null
+        if (!item.url) return null;
 
+        // if the url is internal, we strip the domain
         const url =
           item.url.includes('myshopify.com') ||
           item.url.includes(publicStoreDomain) ||
           item.url.includes(primaryDomainUrl)
             ? new URL(item.url).pathname
-            : item.url
+            : item.url;
         return (
           <NavLink
             className="header-menu-item"
@@ -201,67 +84,79 @@ export function HeaderMenu({
             key={item.id}
             onClick={close}
             prefetch="intent"
+            style={activeLinkStyle}
             to={url}
           >
             {item.title}
           </NavLink>
-        )
+        );
       })}
     </nav>
-  )
+  );
 }
 
-function BagIcon() {
+function HeaderCtas({
+  isLoggedIn,
+  cart,
+}: Pick<HeaderProps, 'isLoggedIn' | 'cart'>) {
   return (
-    <svg
-      width="16"
-      height="18"
-      viewBox="0 0 16 18"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
+    <nav className="header-ctas" role="navigation">
+      <HeaderMenuMobileToggle />
+      <NavLink prefetch="intent" to="/account" style={activeLinkStyle}>
+        <Suspense fallback="Sign in">
+          <Await resolve={isLoggedIn} errorElement="Sign in">
+            {(isLoggedIn) => (isLoggedIn ? 'Account' : 'Sign in')}
+          </Await>
+        </Suspense>
+      </NavLink>
+      <SearchToggle />
+      <CartToggle cart={cart} />
+    </nav>
+  );
+}
+
+function HeaderMenuMobileToggle() {
+  const {open} = useAside();
+  return (
+    <button
+      className="header-menu-mobile-toggle reset"
+      onClick={() => open('mobile')}
     >
-      <path
-        d="M4 4V3C4 1.89543 4.89543 1 6 1H10C11.1046 1 12 1.89543 12 3V4"
-        stroke="currentColor"
-        strokeWidth="1"
-        fill="none"
-      />
-      <rect
-        x="0.5"
-        y="4"
-        width="15"
-        height="13"
-        rx="0.5"
-        stroke="currentColor"
-        strokeWidth="1"
-        fill="none"
-      />
-    </svg>
-  )
+      <h3>☰</h3>
+    </button>
+  );
+}
+
+function SearchToggle() {
+  const {open} = useAside();
+  return (
+    <button className="reset" onClick={() => open('search')}>
+      Search
+    </button>
+  );
 }
 
 function CartBadge({count}: {count: number | null}) {
-  const {open} = useAside()
-  const {publish, shop, cart, prevCart} = useAnalytics()
+  const {open} = useAside();
+  const {publish, shop, cart, prevCart} = useAnalytics();
 
   return (
     <a
       href="/cart"
-      className="header-bag"
       onClick={(e) => {
-        e.preventDefault()
-        open('cart')
+        e.preventDefault();
+        open('cart');
         publish('cart_viewed', {
           cart,
           prevCart,
           shop,
           url: window.location.href || '',
-        } as CartViewPayload)
+        } as CartViewPayload);
       }}
     >
-      cart(<span className="header-bag-count">{count ?? 0}</span>)
+      Cart {count === null ? <span>&nbsp;</span> : count}
     </a>
-  )
+  );
 }
 
 function CartToggle({cart}: Pick<HeaderProps, 'cart'>) {
@@ -271,13 +166,13 @@ function CartToggle({cart}: Pick<HeaderProps, 'cart'>) {
         <CartBanner />
       </Await>
     </Suspense>
-  )
+  );
 }
 
 function CartBanner() {
-  const originalCart = useAsyncValue() as CartApiQueryFragment | null
-  const cart = useOptimisticCart(originalCart)
-  return <CartBadge count={cart?.totalQuantity ?? 0} />
+  const originalCart = useAsyncValue() as CartApiQueryFragment | null;
+  const cart = useOptimisticCart(originalCart);
+  return <CartBadge count={cart?.totalQuantity ?? 0} />;
 }
 
 const FALLBACK_HEADER_MENU = {
@@ -320,4 +215,17 @@ const FALLBACK_HEADER_MENU = {
       items: [],
     },
   ],
+};
+
+function activeLinkStyle({
+  isActive,
+  isPending,
+}: {
+  isActive: boolean;
+  isPending: boolean;
+}) {
+  return {
+    fontWeight: isActive ? 'bold' : undefined,
+    color: isPending ? 'grey' : 'black',
+  };
 }

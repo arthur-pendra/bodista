@@ -1,0 +1,80 @@
+/* ==========================================================================
+   HeroHeader — component-specifieke styling
+   Base (typografie, kleuren, section-padding) komt uit global.css.
+   Alle waarden in em → schaalt mee met het Osmo scaling system.
+   ========================================================================== */
+
+.hero {
+  /* Fullscreen donker vlak. dvh = dynamic viewport height: consistent op
+     mobiel (adresbalk-proof), met vh als fallback voor oudere browsers. */
+  height: 100vh;
+  height: 100dvh;
+  padding: 0;
+  /* Full-bleed: breek uit de 1em side-margin van `body > main` (global.css). */
+  margin: 0 -1em;
+}
+
+.heroBackdrop {
+  width: 100%;
+  height: 100%;
+  background-color: #1a1715;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.heroBgImage {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.heroContent {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  max-width: 40em;
+  padding: 1.5em;
+}
+
+.heroHeadline {
+  font-size: 3.5em;
+  font-weight: 300;
+  letter-spacing: 0.02em;
+  margin: 0 0 1em;
+  color: #f5f2ec;
+}
+
+.heroSubtext {
+  font-size: 1.125em;
+  line-height: 1.6;
+  color: rgba(245, 242, 236, 0.75);
+  margin: 0 0 2em;
+}
+
+.heroCta {
+  display: inline-block;
+  padding: 0.875em 2.5em;
+  background-color: #f5f2ec;
+  color: #1a1a1a;
+  text-decoration: none;
+  font-size: 0.875em;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: background-color 0.2s;
+}
+
+.heroCta:hover {
+  background-color: #fff;
+}
+
+/* Mobile Landscape en kleiner */
+@media (max-width: 767px) {
+  .heroHeadline {
+    font-size: 2.25em;
+  }
+}

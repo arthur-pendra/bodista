@@ -1,0 +1,97 @@
+/* ==========================================================================
+   FriendsOfBodista — vier pers-quotes met bron en portret.
+   Base uit global.css; layout via .layout-grid. Statisch (1:1 Figma).
+   ========================================================================== */
+
+.friends {
+  margin-left: -1em;
+  margin-right: -1em;
+}
+
+.inner {
+  row-gap: 1.5em;
+  align-items: start;
+}
+
+.label {
+  grid-column: 1 / -1;
+  font-size: 0.875em; /* 14px */
+  letter-spacing: 0.08em;
+  color: var(--color-gold);
+}
+
+.divider {
+  grid-column: 1 / -1;
+  width: 100%;
+  height: 0;
+  margin: 0;
+  border: 0;
+  border-top: 1px solid var(--color-hairline);
+}
+
+.columns {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  column-gap: var(--grid-gutter);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.col {
+  display: flex;
+  flex-direction: column;
+  padding-left: 1.875em;
+  border-left: 1px solid var(--color-hairline);
+}
+
+.col:first-child {
+  padding-left: 0;
+  border-left: 0;
+}
+
+.quote {
+  margin: 0;
+  min-height: 8em;
+  font-size: 0.875em; /* 14px */
+  font-style: italic;
+  line-height: 1.35;
+  color: var(--color-charcoal);
+}
+
+.source {
+  margin-top: 1.25em;
+  font-size: 0.7125em; /* 11.4px */
+  letter-spacing: -0.02em;
+  color: var(--color-gold);
+}
+
+.portrait {
+  margin-top: 1.75em;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  border-radius: 0.25em;
+  /* Zwart-wit portret-placeholder tot de echte foto er is. */
+  background:
+    linear-gradient(160deg, #d8d4cc, #8d8a82);
+  filter: grayscale(1);
+}
+
+/* ---- Responsive ----------------------------------------------------------- */
+
+@media (max-width: 767px) {
+  .columns {
+    grid-template-columns: 1fr 1fr;
+    row-gap: 2.5em;
+  }
+
+  .col:nth-child(odd) {
+    padding-left: 0;
+    border-left: 0;
+  }
+
+  .quote {
+    min-height: 0;
+  }
+}
