@@ -94,6 +94,9 @@ const RECOMMENDED_PRODUCTS_QUERY = `#graphql
     id
     title
     handle
+    typeProduct: metafield(namespace: "custom", key: "type_product") {
+      value
+    }
     priceRange {
       minVariantPrice {
         amount

@@ -86,7 +86,7 @@
   --color-warm: #f4eee2; /* core — light backgrounds & oil column */
   --color-gold: #c5a55a; /* accent — logotype, palindrome on dark, CTAs */
   --color-silver: #b5b0a4; /* accent — serum accent, Step II markers */
-  --color-hairline: rgba(0, 0, 0, 0.5); /* hairline borders & dividers — Figma: zwart op 50% */
+  --color-hairline: rgba(0, 0, 0, 0.18); /* hairline borders & dividers — zwart op 18% */
 
   /* Layout grid — gedeelde bron van waarheid voor de GridOverlay dev-tool
      (toggle: G) én content via .layout-grid. Desktop = 12 kolommen. */
@@ -137,6 +137,22 @@ body {
   min-height: 100vh;
   background: var(--color-page);
   color: var(--color-ink);
+}
+
+/* Grain-texture: vast over de hele site, getild. pointer-events:none zodat
+   er gewoon doorheen geklikt kan worden. background-size in px → de ruis
+   blijft crisp en schaalt niet mee met het Osmo em-systeem (raster-textuur). */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  background-image: url('/assets/textures/image.png');
+  background-repeat: repeat;
+  background-size: 600px 600px;
+  mix-blend-mode: multiply;
+  opacity: 0.07;
 }
 
 /* Verberg de native scrollbar — Lenis verzorgt de (smooth) scroll. */
@@ -916,6 +932,14 @@ aside li {
 
 .product h1 {
   margin-top: 0;
+}
+
+/* Eyebrow boven de titel — waarde uit het product-metafield custom.type_product. */
+.product-eyebrow {
+  margin: 0 0 0.5em;
+  font-size: var(--text-detail); /* 14px */
+  letter-spacing: 0.08em;
+  color: var(--color-gold);
 }
 
 .product-image img {

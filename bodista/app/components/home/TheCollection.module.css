@@ -14,7 +14,8 @@
 }
 
 .inner {
-  row-gap: 1.75em;
+  /* row-gap = vaste onder-divider afstand (1.875em), site-breed gelijk. */
+  row-gap: 1.875em;
   align-items: start;
 }
 
@@ -27,6 +28,9 @@
   justify-content: space-between;
   gap: 2em;
   flex-wrap: wrap;
+  /* Titel dichter op de divider: trek de header naar de lijn toe (≈0.625em
+     boven de lijn). De row-gap onder de divider blijft ongemoeid. */
+  margin-bottom: -1.25em;
 }
 
 .intro {
@@ -128,7 +132,7 @@
   position: relative;
   aspect-ratio: 348 / 465;
   overflow: hidden;
-  border-radius: 0.25em;
+  border-radius: 0;
   background-color: var(--color-warm);
 }
 
@@ -173,7 +177,9 @@
   opacity: 1;
 }
 
-/* ---- Meta: naam links, prijs rechts --------------------------------------- */
+/* ---- Eyebrow boven de naam — waarde uit metafield custom.type_product ----- */
+
+/* ---- Meta: titel-groep (eyebrow + naam) links, prijs rechtsboven ---------- */
 
 .meta {
   display: flex;
@@ -183,9 +189,23 @@
   margin-top: 0.75em;
 }
 
+/* Eyebrow zit als één blok strak boven de naam. */
+.titleGroup {
+  display: flex;
+  flex-direction: column;
+}
+
+.eyebrow {
+  margin-bottom: 0.25em;
+  font-size: 0.625em; /* 10px — heel klein */
+  line-height: 1;
+  letter-spacing: 0.08em;
+  color: var(--color-gold);
+}
+
 .name {
   margin: 0;
-  font-size: var(--text-detail); /* 14px */
+  font-size: var(--text-body); /* 16px — iets groter dan de prijs/eyebrow */
   font-weight: 400;
   line-height: 1.214;
   letter-spacing: -0.017em;

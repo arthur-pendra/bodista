@@ -96,11 +96,13 @@ export default function Product() {
   });
 
   const {title, descriptionHtml} = product;
+  const typeProduct = product.typeProduct?.value;
 
   return (
     <div className="product">
       <ProductImage image={selectedVariant?.image} />
       <div className="product-main">
+        {typeProduct && <p className="product-eyebrow">{typeProduct}</p>}
         <h1>{title}</h1>
         <ProductPrice
           price={selectedVariant?.price}
@@ -184,6 +186,9 @@ const PRODUCT_FRAGMENT = `#graphql
     handle
     descriptionHtml
     description
+    typeProduct: metafield(namespace: "custom", key: "type_product") {
+      value
+    }
     encodedVariantExistence
     encodedVariantAvailability
     options {

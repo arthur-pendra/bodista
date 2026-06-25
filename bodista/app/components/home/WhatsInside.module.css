@@ -73,7 +73,7 @@
   /* Inset gelijk aan de grid-marge zodat de lijn op de content-kolommen lijnt. */
   margin: 0 var(--grid-margin);
   border: 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.5);
+  border-top: 1px solid rgba(255, 255, 255, 0.18);
 }
 
 /* ---- Onderrij: ingrediënten links, beschrijving rechts -------------------- */

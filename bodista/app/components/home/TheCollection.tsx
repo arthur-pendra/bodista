@@ -94,7 +94,14 @@ export function TheCollection({
                 </div>
 
                 <div className={styles.meta}>
-                  <h3 className={styles.name}>{product.title}</h3>
+                  <div className={styles.titleGroup}>
+                    {product.typeProduct?.value && (
+                      <span className={styles.eyebrow}>
+                        {product.typeProduct.value}
+                      </span>
+                    )}
+                    <h3 className={styles.name}>{product.title}</h3>
+                  </div>
                   <div className={styles.price}>
                     <Money data={product.priceRange.minVariantPrice} />
                   </div>

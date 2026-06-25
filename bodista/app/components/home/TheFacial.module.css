@@ -10,7 +10,8 @@
 }
 
 .inner {
-  row-gap: 1.5em;
+  /* row-gap = vaste onder-divider afstand (1.875em), site-breed gelijk. */
+  row-gap: 1.875em;
   align-items: start;
 }
 
@@ -19,6 +20,9 @@
   font-size: var(--text-detail); /* 14px */
   letter-spacing: 0.08em;
   color: var(--color-gold);
+  /* Titel dichter op de divider: trek het label naar de lijn toe (≈0.625em
+     boven de lijn). De row-gap onder de divider blijft ongemoeid. */
+  margin-bottom: -1.25em;
 }
 
 .divider {
@@ -37,7 +41,7 @@
   position: relative;
   aspect-ratio: 718 / 520;
   overflow: hidden;
-  border-radius: 0.25em;
+  border-radius: 0;
   background:
     radial-gradient(120% 120% at 50% 20%, #3a3128, var(--color-charcoal));
 }
@@ -134,7 +138,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 1em;
-  padding: 0.875em 0;
+  padding: 0.375em 0 0.875em;
   cursor: pointer;
   text-align: left;
 }

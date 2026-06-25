@@ -55,7 +55,7 @@
   margin-bottom: 0.625em;
   overflow: hidden;
   background-color: #f5f5f5;
-  border-radius: 0.25em;
+  border-radius: 0;
 }
 
 .highlightsBadge {
@@ -71,7 +71,7 @@
   padding: 0.5em 0.85em;
   background-color: #f5f2ec;
   color: #1a1a1a;
-  border-radius: 0.25em;
+  border-radius: 0;
 }
 
 .highlightsImage {
@@ -84,7 +84,7 @@
   width: 100%;
   aspect-ratio: 3 / 4;
   background-color: #d1d1d1;
-  border-radius: 0.25em;
+  border-radius: 0;
 }
 
 .highlightsMeta {

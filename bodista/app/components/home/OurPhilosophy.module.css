@@ -14,7 +14,8 @@
 }
 
 .inner {
-  row-gap: 2em;
+  /* row-gap = vaste onder-divider afstand (1.875em), site-breed gelijk. */
+  row-gap: 1.875em;
   align-items: start;
 }
 
@@ -23,6 +24,9 @@
   font-size: var(--text-detail); /* 14px */
   letter-spacing: 0.08em;
   color: var(--color-gold);
+  /* Titel dichter op de divider: trek het label naar de lijn toe (≈0.625em
+     boven de lijn). De row-gap onder de divider blijft ongemoeid. */
+  margin-bottom: -1.25em;
 }
 
 /* Divider in twee segmenten boven de tekst- en mediakolom; de gutter van
@@ -113,7 +117,7 @@
   width: 100%;
   /* Verhouding uit Figma (837 × 393). Placeholder tot de echte foto er is. */
   aspect-ratio: 837 / 393;
-  border-radius: 12em; /* stadion-vorm, zoals het ovale portret in het ontwerp */
+  border-radius: var(--radius-pill); /* volledige stadion-vorm, ronde uiteinden */
   background:
     radial-gradient(
       120% 140% at 70% 30%,
@@ -147,6 +151,6 @@
   }
 
   .portrait {
-    border-radius: 6em;
+    border-radius: var(--radius-pill);
   }
 }

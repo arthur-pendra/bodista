@@ -13,7 +13,8 @@
 }
 
 .inner {
-  row-gap: 1.75em;
+  /* row-gap = vaste onder-divider afstand (1.875em), site-breed gelijk. */
+  row-gap: 1.875em;
   align-items: start;
 }
 
@@ -22,6 +23,9 @@
   font-size: var(--text-detail); /* 14px */
   letter-spacing: 0.08em;
   color: var(--color-gold);
+  /* Titel dichter op de divider: trek het label naar de lijn toe (≈0.625em
+     boven de lijn). De row-gap onder de divider blijft ongemoeid. */
+  margin-bottom: -1.25em;
 }
 
 .divider {

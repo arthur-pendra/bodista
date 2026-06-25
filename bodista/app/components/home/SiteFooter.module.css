@@ -9,7 +9,7 @@
    ========================================================================== */
 
 .footer {
-  padding-bottom: 1.5em;
+  padding-bottom: 2.5em;
   color: var(--color-ink);
 }
 
@@ -28,7 +28,7 @@
   height: 0;
   margin: 0;
   border: 0;
-  border-top: 1px solid rgba(43, 33, 32, 0.5);
+  border-top: 1px solid rgba(43, 33, 32, 0.18);
 }
 
 /* ---- Wordmark ------------------------------------------------------------- */
@@ -39,7 +39,7 @@
   width: 28.625em; /* 458px Figma-breedte; aspect 161:30 houdt de hoogte */
   max-width: 100%;
   height: auto;
-  margin: 2.75em 0;
+  margin: 4.75em 0;
   color: var(--color-gold);
 }
 
@@ -88,7 +88,7 @@
   grid-row: 1;
   width: 0;
   justify-self: end;
-  border-left: 1px solid rgba(43, 33, 32, 0.5);
+  border-left: 1px solid rgba(43, 33, 32, 0.18);
   pointer-events: none;
 }
 .vline:nth-of-type(1) {
