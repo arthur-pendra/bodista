@@ -155,50 +155,15 @@
   transition: opacity 0.3s ease;
 }
 
+/* Pill-look komt uit de global .product-pill; hier alleen plaatsing op de
+   kaart + verschijnen op hover/focus. */
 .addToCart {
   position: absolute;
   bottom: 1.25em;
   left: 50%;
   transform: translateX(-50%);
-  display: flex;
-  align-items: center;
-  gap: 0.625em;
-  height: 2.375em; /* 38px */
-  padding: 0 0.3125em 0 0.3125em;
-  border-radius: 999px;
-  border: 1px solid var(--color-charcoal);
-  background-color: rgba(197, 165, 90, 0.2); /* --color-gold @ 20% */
-  backdrop-filter: blur(8px);
   opacity: 0;
   transition: opacity 0.3s ease;
-}
-
-.addThumb {
-  flex-shrink: 0;
-  width: 1.8125em; /* 29px */
-  height: 1.8125em;
-  border-radius: 50%;
-  object-fit: cover;
-  background-color: var(--color-warm);
-}
-
-.addLabel {
-  font-size: 1.125em; /* 18px */
-  line-height: 1;
-  color: var(--color-charcoal);
-}
-
-.addPlus {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  width: 1.8125em;
-  height: 1.8125em;
-  border-radius: 50%;
-  background-color: var(--color-gold);
-  color: var(--color-charcoal);
-  font-size: 0.9em;
 }
 
 .cardLink:hover .caption,

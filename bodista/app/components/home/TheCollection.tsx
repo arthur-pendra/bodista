@@ -62,20 +62,33 @@ export function TheCollection({
                     Seal · Nourish · Regenerate
                   </span>
 
-                  <span className={styles.addToCart}>
+                  <span
+                    className={`product-pill product-pill--gold ${styles.addToCart}`}
+                  >
                     {product.featuredImage ? (
                       <Image
                         data={product.featuredImage}
                         aspectRatio="1/1"
                         width={30}
-                        className={styles.addThumb}
+                        className="product-pill__thumb"
                       />
                     ) : (
-                      <span className={styles.addThumb} />
+                      <span className="product-pill__thumb" />
                     )}
-                    <span className={styles.addLabel}>add to cart</span>
-                    <span className={styles.addPlus} aria-hidden="true">
-                      +
+                    <span className="product-pill__label">add to cart</span>
+                    <span className="product-pill__plus" aria-hidden="true">
+                      <svg
+                        className="product-pill__icon"
+                        viewBox="0 0 16 16"
+                        fill="none"
+                      >
+                        <path
+                          d="M8 1v14M1 8h14"
+                          stroke="currentColor"
+                          strokeWidth="1"
+                          strokeLinecap="round"
+                        />
+                      </svg>
                     </span>
                   </span>
                 </div>

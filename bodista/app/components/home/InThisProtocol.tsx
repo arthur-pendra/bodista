@@ -2,13 +2,13 @@ import styles from './InThisProtocol.module.css'
 
 const CARDS = [
   {
-    variant: 'oil' as const,
+    variant: 'gold' as const,
     label: 'Universāl Santal',
     title: 'The Face Oil',
     caption: 'Seal · Nourish · Regenerate',
   },
   {
-    variant: 'serum' as const,
+    variant: 'silver' as const,
     label: 'Aqua Universāl',
     title: 'The Serum',
     caption: 'Hydrate · Nourish · Regenerate',
@@ -30,22 +30,34 @@ export function InThisProtocol() {
 
         <ul className={styles.cards}>
           {CARDS.map((card) => (
-            <li
-              key={card.title}
-              className={`${styles.card} ${styles[card.variant]}`}
-            >
-              <span className={styles.thumb} />
-              <div className={styles.info}>
-                <span className={styles.cardLabel}>{card.label}</span>
-                <h3 className={styles.cardTitle}>{card.title}</h3>
-                <span className={styles.caption}>{card.caption}</span>
-              </div>
+            <li key={card.title} className={styles.cardItem}>
               <button
                 type="button"
-                className={styles.plus}
+                className={`pill-button-big pill-button-big--${card.variant}`}
                 aria-label={`Add ${card.title}`}
               >
-                +
+                <span className="pill-button-big__thumb" />
+                <span className="pill-button-big__info">
+                  <span className="pill-button-big__label">{card.label}</span>
+                  <span className="pill-button-big__title">{card.title}</span>
+                  <span className="pill-button-big__caption">
+                    {card.caption}
+                  </span>
+                </span>
+                <span className="pill-button-big__plus" aria-hidden="true">
+                  <svg
+                    className="pill-button-big__icon"
+                    viewBox="0 0 16 16"
+                    fill="none"
+                  >
+                    <path
+                      d="M8 1v14M1 8h14"
+                      stroke="currentColor"
+                      strokeWidth="1"
+                      strokeLinecap="round"
+                    />
+                  </svg>
+                </span>
               </button>
             </li>
           ))}

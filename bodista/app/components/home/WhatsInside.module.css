@@ -1,7 +1,9 @@
 /* ==========================================================================
-   WhatsInside — full-bleed donkere beeld-sectie met ingrediënten-overzicht.
-   Tekst exact op het 12-koloms grid: heading + paragraaf boven (links/rechts),
-   ingrediënten + 1/8 onder (links/rechts), met een donker beeld (placeholder).
+   WhatsInside — full-bleed donkere beeld-sectie, 100vh.
+   Flex-kolom met twee gelijke helften (boven/onder), zodat de divider exact
+   in het verticale midden van het scherm valt. Boven: heading + lead.
+   Onder: ingrediënten (links) die op hover/focus de beschrijving (rechts)
+   wisselen. Tekst op het 12-koloms .layout-grid.
    ========================================================================== */
 
 .inside {
@@ -15,22 +17,38 @@
   background: radial-gradient(140% 90% at 60% 40%, #4a3f30, #161310 70%);
 }
 
-/* .content erft het 12-koloms .layout-grid (incl. --grid-margin padding).
-   align-content space-between duwt de bovenrij naar boven, de onderrij naar
-   onder; daartussen valt het donkere beeld door. */
+/* Volledige viewport-hoogte; boven- en onderblok krijgen elk een gelijke
+   helft (flex: 1), waardoor de divider precies op 50% uitkomt.
+   border-box → padding telt mee in de 100vh (geen overflow). */
 .content {
-  align-content: space-between;
-  row-gap: 2em;
-  min-height: 42em;
+  box-sizing: border-box;
+  display: grid;
+  /* Twee gelijke 1fr-rijen met de divider (auto) ertussen → de divider valt
+     gegarandeerd op exact 50%. minmax(0,1fr) zodat de rijen ook bij veel
+     content even hoog blijven. */
+  grid-template-rows: minmax(0, 1fr) auto minmax(0, 1fr);
+  min-height: 100vh;
   padding-top: 3.125em;
   padding-bottom: 3.125em;
 }
 
-/* ---- Bovenrij ------------------------------------------------------------- */
+/* Boven-blok: tegen de bovenrand. Onder-blok: strak tegen de divider, met
+   dezelfde padding onder de lijn als de sectie-top erboven (gelijke padding). */
+.top,
+.bottom {
+  align-content: start;
+  align-items: start;
+  row-gap: 2em;
+}
+
+.bottom {
+  padding-top: 3.125em; /* == .content padding-top → gelijke ruimte t.o.v. de lijn */
+}
+
+/* ---- Bovenrij: heading links, lead rechts --------------------------------- */
 
 .heading {
   grid-column: 1 / 7;
-  align-self: start;
   margin: 0;
   font-size: 2.1875em; /* 35px */
   font-weight: 400;
@@ -41,66 +59,86 @@
 
 .lead {
   grid-column: 9 / 13;
-  align-self: start;
   margin: 0;
   font-size: 1em; /* 16px */
   line-height: 1.4;
   color: #fcf7ef;
 }
 
-/* ---- Onderrij ------------------------------------------------------------- */
-
-.bottom {
-  grid-column: 1 / -1;
-  display: flex;
-  flex-direction: column;
-  gap: 1.0625em;
-}
+/* ---- Divider — exact in het verticale midden ------------------------------ */
 
 .divider {
-  width: 100%;
+  width: auto;
   height: 0;
-  margin: 0;
+  /* Inset gelijk aan de grid-marge zodat de lijn op de content-kolommen lijnt. */
+  margin: 0 var(--grid-margin);
   border: 0;
   border-top: 1px solid rgba(255, 255, 255, 0.5);
 }
 
-.bottomRow {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 2em;
-}
+/* ---- Onderrij: ingrediënten links, beschrijving rechts -------------------- */
 
 .ingredients {
+  grid-column: 1 / 7;
   margin: 0;
   padding: 0;
   list-style: none;
+}
+
+.ingredient {
+  margin: 0;
+}
+
+/* Klikbare/hoverbare regel; inactief gedimd, actief vol. */
+.ingredientButton {
+  display: block;
+  width: 100%;
+  padding: 0.18em 0;
+  text-align: left;
   font-size: 1.5625em; /* 25px */
   line-height: 1.25;
   color: var(--color-light);
+  opacity: 0.45;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
 }
 
-.counter {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75em;
-  /* Lijnt rechts uit met de paragraaf erboven (kolom 9–12). */
-  width: 25%;
-  min-width: 14.5em;
+.ingredientActive {
+  opacity: 1;
 }
 
-.count {
-  font-size: 1.5625em; /* 25px */
-  line-height: 1.25;
-  color: var(--color-light);
+.description {
+  grid-column: 9 / 13;
+  align-self: start; /* bovenin uitlijnen, gelijk met het eerste ingrediënt */
 }
 
-.detail {
+.descriptionText {
   margin: 0;
   font-size: 1em; /* 16px */
-  line-height: 1.4;
+  line-height: 1.5;
   color: #fcf7ef;
+  animation: insideFade 0.2s ease;
+}
+
+/* Beschrijving fade't kort in bij wissel (key-remount op activeIndex) —
+   alleen opacity, geen beweging. */
+@keyframes insideFade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ingredientButton {
+    transition: none;
+  }
+
+  .descriptionText {
+    animation: none;
+  }
 }
 
 /* ---- Responsive ----------------------------------------------------------- */
@@ -108,27 +146,24 @@
 @media (max-width: 767px) {
   .content {
     min-height: auto;
-    row-gap: 3em;
+    grid-template-rows: auto auto auto;
+    gap: 2.5em;
   }
 
-  .heading {
+  .top,
+  .bottom {
+    align-content: start;
+    row-gap: 1.5em;
+  }
+
+  .heading,
+  .lead,
+  .ingredients,
+  .description {
     grid-column: 1 / -1;
   }
 
-  .lead {
-    grid-column: 1 / -1;
-  }
-
-  .bottomRow {
-    flex-direction: column;
-    gap: 2em;
-  }
-
-  .counter {
-    width: 100%;
-  }
-
-  .ingredients {
+  .ingredientButton {
     font-size: 1.25em;
   }
 }

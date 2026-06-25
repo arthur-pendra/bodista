@@ -39,39 +39,71 @@
   width: 28.625em; /* 458px Figma-breedte; aspect 161:30 houdt de hoogte */
   max-width: 100%;
   height: auto;
-  margin: 1.75em 0;
+  margin: 2.75em 0;
   color: var(--color-gold);
 }
 
 /* ---- Link-kolommen -------------------------------------------------------- */
 
+/* Het kolommen-blok erft het echte 12-koloms grid (zelfde tracks + gutter als
+   .layout-grid). Elke kolom beslaat een 3-koloms groep, zodat de tekst exact
+   op de gridlijn (kolom 1 / 4 / 7 / 10) start. */
 .columns {
   grid-column: 1 / -1;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(12, 1fr);
+  column-gap: var(--grid-gutter);
 }
 
-/* Kolom-padding maakt ruimte voor de verticale divider in de gutter; die
-   loopt zo van de midDivider tot de bottomDivider over de volle hoogte. */
 .column {
+  /* Expliciet in rij 1 zodat de kolommen en de vlines (die kolom 3/6/9 bezetten)
+     elkaar mogen overlappen — anders duwt auto-placement de kolommen omlaag. */
+  grid-row: 1;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  min-height: 13.5em;
-  padding: 1.6875em 1.875em 0;
+  min-height: 17em;
+  /* Gelijke spacing rond de content op elke rand: top/rechts/onder = de gutter
+     (1.25em); links blijft 0 want de gutter zelf vormt daar al de ruimte tot de
+     scheidingslijn (tekst staat op de gridlijn). */
+  padding: 1.25em 1.25em 1.25em 0;
 }
 
-.column:first-child {
-  padding-left: 0;
+.column:nth-child(1) {
+  grid-column: 1 / 4;
+}
+.column:nth-child(2) {
+  grid-column: 4 / 7;
+}
+.column:nth-child(3) {
+  grid-column: 7 / 10;
+}
+.column:nth-child(4) {
+  grid-column: 10 / 13;
 }
 
-.column + .column {
+/* Verticale scheidingslijnen op de ACHTERkant (rechterrand) van kolom 3/6/9,
+   over de volle hoogte van het kolommen-blok. */
+.vline {
+  grid-row: 1;
+  width: 0;
+  justify-self: end;
   border-left: 1px solid rgba(43, 33, 32, 0.5);
+  pointer-events: none;
+}
+.vline:nth-of-type(1) {
+  grid-column: 3;
+}
+.vline:nth-of-type(2) {
+  grid-column: 6;
+}
+.vline:nth-of-type(3) {
+  grid-column: 9;
 }
 
 .heading {
-  margin: 0 0 1.75em;
-  font-size: 0.75em; /* 12px */
+  margin: 0 0 2em;
+  font-size: 0.875em; /* 14px */
   font-weight: 400;
   line-height: 1.2;
   color: var(--color-ink);
@@ -81,7 +113,7 @@
 .links {
   display: flex;
   flex-direction: column;
-  gap: 0.25em;
+  gap: 0.5em;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -92,7 +124,7 @@
 }
 
 .link {
-  font-size: 0.875em; /* 14px */
+  font-size: 1em; /* 16px */
   line-height: 1.5;
   color: var(--color-ink);
 }
@@ -103,7 +135,8 @@
   gap: 0.35em;
 }
 
-/* Onderste "meer"-link zakt naar de voet van de kolom (lijnt over kolommen). */
+/* Onderste "meer"-link zakt naar de voet van de kolom, zodat de links over de
+   kolommen op één lijn onderaan uitlijnen. Blijft binnen de kolom-container. */
 .muted {
   margin-top: auto;
   padding-top: 2em;
@@ -111,12 +144,6 @@
   line-height: 1.5;
   color: var(--color-ink);
   opacity: 0.5;
-}
-
-.mutedArrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35em;
 }
 
 .arrow {
@@ -128,7 +155,7 @@
 
 .signup {
   width: 100%;
-  max-width: none;
+  max-width: 20em; /* iets korter dan de volle kolom-groep */
 }
 
 .pill {
@@ -168,10 +195,10 @@
   align-items: center;
   justify-content: center;
   flex: 0 0 auto;
-  width: 1.5em; /* ~24px gouden cirkel */
-  height: 1.5em;
-  min-width: 1.5rem;
-  min-height: 1.5rem;
+  width: 1.8125em; /* 29px — gelijk aan de plus-cirkel van de product-pills */
+  height: 1.8125em;
+  min-width: 1.8125rem;
+  min-height: 1.8125rem;
   padding: 0;
   border: 0;
   border-radius: 50%;
@@ -209,26 +236,26 @@
     width: 16em;
   }
 
+  /* Terug naar twee gestapelde kolommen; grid-plaatsing en lijnen vervallen. */
   .columns {
     grid-template-columns: 1fr 1fr;
+    row-gap: 2.5em;
+  }
+
+  .column:nth-child(1),
+  .column:nth-child(2),
+  .column:nth-child(3),
+  .column:nth-child(4) {
+    grid-column: auto;
+    grid-row: auto;
   }
 
   .column {
     min-height: auto;
-    padding: 1.6875em 1em 0;
+    padding-right: 1em;
   }
 
-  .column:first-child {
-    padding-left: 0;
-  }
-
-  /* Op 2 kolommen alleen een divider voor de rechterkolom van elk paar. */
-  .column:nth-child(odd) {
-    padding-left: 0;
-    border-left: 0;
-  }
-
-  .column:nth-child(even) {
-    border-left: 1px solid rgba(43, 33, 32, 0.5);
+  .vline {
+    display: none;
   }
 }

@@ -86,7 +86,7 @@
   --color-warm: #f4eee2; /* core — light backgrounds & oil column */
   --color-gold: #c5a55a; /* accent — logotype, palindrome on dark, CTAs */
   --color-silver: #b5b0a4; /* accent — serum accent, Step II markers */
-  --color-hairline: #e8e2d5; /* hairline borders & dividers */
+  --color-hairline: rgba(0, 0, 0, 0.5); /* hairline borders & dividers — Figma: zwart op 50% */
 
   /* Layout grid — gedeelde bron van waarheid voor de GridOverlay dev-tool
      (toggle: G) én content via .layout-grid. Desktop = 12 kolommen. */
@@ -325,10 +325,234 @@ button.reset:hover:not(:has(> *)) {
   cursor: pointer;
 }
 
+/* Form-controls erven het site-font (Novela). Browsers doen dit NIET vanzelf:
+   zonder deze regel vallen buttons/inputs terug op een systeem-font (Arial).
+   Verplicht voor de Novela-only regel — nooit een ander font op de site. */
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
+}
+
 /* Echte action-/CTA-buttons zijn pill-vormig (volle radius). Text-/icon-
    buttons met .reset zijn uitgezonderd. */
 button:not(.reset) {
   border-radius: var(--radius-pill);
+}
+
+/* ==========================================================================
+   Add to Cart Product Button — herbruikbare pill (gold / silver / black)
+   Eén bron van waarheid: overal dezelfde grootte, structuur en styling.
+   Alleen de accentkleur + translucent fill verschilt per producttype:
+     · --gold   → olie-producten
+     · --silver → water-based producten
+     · --black  → cloths / accessoires
+   Markup:
+     <button class="product-pill product-pill--gold">
+       <img/span class="product-pill__thumb">          (rond productbeeldje)
+       <span class="product-pill__label">add to cart</span>
+       <span class="product-pill__plus"><svg class="product-pill__icon">…</svg></span>
+     </button>
+   Positionering (bv. absolute over een productbeeld) hoort in de module,
+   niet hier — die verschilt per sectie.
+   ========================================================================== */
+.product-pill {
+  /* Accent per variant; fill = accent op lage opacity (frosted). */
+  --pill-accent: var(--color-gold);
+  --pill-fill: rgba(197, 165, 90, 0.2);
+  --pill-cross: rgba(0, 0, 0, 0.5);
+
+  display: inline-flex;
+  align-items: center;
+  gap: 2em; /* 32px — ruime spacing tussen thumb, label en plus */
+  height: 2.375em; /* 38px — altijd dezelfde hoogte */
+  padding: 0 0.375em; /* 6px — thumb/plus raken bijna de rand */
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--color-ink);
+  background-color: var(--pill-fill);
+  backdrop-filter: blur(8px);
+  color: var(--color-ink);
+  font-size: 1em;
+  line-height: 1;
+  cursor: pointer;
+}
+
+/* Rond productbeeldje links. Klasse > `img { border-radius: 0 }`, dus de
+   cirkel-radius blijft staan — bewuste uitzondering, conform Figma. */
+.product-pill__thumb {
+  flex-shrink: 0;
+  width: 1.8125em; /* 29px */
+  height: 1.8125em;
+  border-radius: 50%;
+  object-fit: cover;
+  background-color: var(--color-warm);
+}
+
+.product-pill__label {
+  font-size: 1.125em; /* 18px */
+  line-height: 1;
+  letter-spacing: -0.01em;
+  color: var(--color-ink);
+}
+
+/* Gouden/zilveren/zwarte cirkel met geometrisch kruis, exact gecentreerd. */
+.product-pill__plus {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 1.8125em; /* 29px */
+  height: 1.8125em;
+  border-radius: 50%;
+  background-color: var(--pill-accent);
+  color: var(--pill-cross);
+}
+
+.product-pill__icon {
+  display: block;
+  width: 0.9375em; /* 15px */
+  height: 0.9375em;
+}
+
+.product-pill--gold {
+  --pill-accent: var(--color-gold);
+  --pill-fill: rgba(197, 165, 90, 0.2); /* gold @ 20% */
+  --pill-cross: rgba(0, 0, 0, 0.5);
+}
+
+.product-pill--silver {
+  --pill-accent: var(--color-silver);
+  --pill-fill: rgba(181, 176, 164, 0.2); /* silver @ 20% */
+  --pill-cross: rgba(0, 0, 0, 0.5);
+}
+
+.product-pill--black {
+  --pill-accent: var(--color-charcoal);
+  --pill-fill: rgba(0, 0, 0, 0.2); /* black @ 20% */
+  --pill-cross: rgba(255, 255, 255, 0.7); /* licht kruis op donkere cirkel */
+}
+
+/* ==========================================================================
+   Pill Button Big — grote variant van .product-pill (zelfde varianten:
+   gold / silver / black). De héle pill is de actie-button, met product-info
+   (label / titel / caption) ertussen. Eén bron van waarheid, overal herbruikbaar.
+   Markup:
+     <button class="pill-button-big pill-button-big--gold">
+       <img/span class="pill-button-big__thumb">       (rond productbeeld)
+       <span class="pill-button-big__info">
+         <span class="pill-button-big__label">Universāl Santal</span>
+         <span class="pill-button-big__title">The Face Oil</span>
+         <span class="pill-button-big__caption">Seal · Nourish · Regenerate</span>
+       </span>
+       <span class="pill-button-big__plus"><svg class="pill-button-big__icon">…</svg></span>
+     </button>
+   Positionering / grid-plaatsing hoort in de module, niet hier.
+   ========================================================================== */
+.pill-button-big {
+  /* Accent per variant; fill = accent op lage opacity. */
+  --pill-accent: var(--color-gold);
+  --pill-fill: rgba(197, 165, 90, 0.1);
+  --pill-cross: rgba(0, 0, 0, 0.5);
+
+  display: flex;
+  align-items: center;
+  gap: 1.25em; /* 20px */
+  width: 100%;
+  min-height: 11em; /* 176px */
+  padding: 1.875em; /* 30px */
+  border-radius: var(--radius-pill);
+  border: 1px solid rgba(43, 33, 32, 0.25);
+  background-color: var(--pill-fill);
+  color: var(--color-charcoal);
+  text-align: left;
+  cursor: pointer;
+}
+
+/* Rond productbeeldje links. Klasse > `img { border-radius: 0 }`, dus de
+   cirkel-radius blijft staan — bewuste uitzondering. */
+.pill-button-big__thumb {
+  flex-shrink: 0;
+  width: 6.875em; /* 110px */
+  height: 6.875em;
+  border-radius: 50%;
+  object-fit: cover;
+  background:
+    radial-gradient(80% 80% at 50% 35%, var(--color-warm), var(--color-silver));
+}
+
+.pill-button-big__info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4em;
+  text-align: center;
+}
+
+.pill-button-big__label,
+.pill-button-big__caption {
+  font-size: 0.5em; /* 8px */
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-charcoal);
+}
+
+.pill-button-big__title {
+  margin: 0;
+  font-size: 2.625em; /* 42px */
+  font-weight: 400;
+  line-height: 1;
+  color: var(--color-charcoal);
+}
+
+/* Accent-cirkel met geometrisch kruis, exact gecentreerd. */
+.pill-button-big__plus {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 6.875em; /* 110px */
+  height: 6.875em;
+  border-radius: 50%;
+  background-color: var(--pill-accent);
+  color: var(--pill-cross);
+}
+
+.pill-button-big__icon {
+  display: block;
+  width: 2em; /* 32px */
+  height: 2em;
+}
+
+.pill-button-big--gold {
+  --pill-accent: var(--color-gold);
+  --pill-fill: rgba(197, 165, 90, 0.1); /* gold @ 10% */
+  --pill-cross: rgba(0, 0, 0, 0.5);
+}
+
+.pill-button-big--silver {
+  --pill-accent: var(--color-silver);
+  --pill-fill: rgba(181, 176, 164, 0.1); /* silver @ 10% */
+  --pill-cross: rgba(0, 0, 0, 0.5);
+}
+
+.pill-button-big--black {
+  --pill-accent: var(--color-charcoal);
+  --pill-fill: rgba(0, 0, 0, 0.08); /* black @ 8% */
+  --pill-cross: rgba(255, 255, 255, 0.7); /* licht kruis op donkere cirkel */
+}
+
+@media (max-width: 767px) {
+  .pill-button-big__title {
+    font-size: 2em;
+  }
+
+  .pill-button-big__thumb,
+  .pill-button-big__plus {
+    width: 4.5em;
+    height: 4.5em;
+  }
 }
 
 /* ==========================================================================

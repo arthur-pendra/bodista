@@ -1,15 +1,19 @@
 /* ==========================================================================
    FriendsOfBodista — vier pers-quotes met bron en portret.
-   Base uit global.css; layout via .layout-grid. Statisch (1:1 Figma).
+   Alles op het echte 12-koloms grid: per quote beslaat de tekst 3 kolommen
+   (1-3 / 4-6 / 7-9 / 10-12) en de foto 2 kolommen (1-2 / 4-5 / 7-8 / 10-11).
+   De scheidingslijnen staan exact op grid-lijn 4, 7 en 10.
+   Base uit global.css; layout via .layout-grid.
    ========================================================================== */
 
 .friends {
+  /* Full-bleed: breek uit de 1em zijmarge van `body > main`. */
   margin-left: -1em;
   margin-right: -1em;
 }
 
 .inner {
-  row-gap: 1.5em;
+  row-gap: 1.75em;
   align-items: start;
 }
 
@@ -29,53 +33,119 @@
   border-top: 1px solid var(--color-hairline);
 }
 
+/* Het quote-blok erft het 12-koloms grid (zelfde tracks + gutter als
+   .layout-grid). Twee rijen: tekst boven, portret onder. */
 .columns {
   grid-column: 1 / -1;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(12, 1fr);
   column-gap: var(--grid-gutter);
+  row-gap: 1.75em;
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
+/* De <li> groepeert semantisch, maar tekst + foto worden zelf op het grid
+   geplaatst (display: contents). */
 .col {
-  display: flex;
-  flex-direction: column;
-  padding-left: 1.875em;
-  border-left: 1px solid var(--color-hairline);
+  display: contents;
 }
 
-.col:first-child {
-  padding-left: 0;
-  border-left: 0;
+/* ---- Tekst (rij 1, 3 kolommen breed) -------------------------------------- */
+
+.text {
+  grid-row: 1;
+  display: flex;
+  flex-direction: column;
+  /* Tekst beslaat 3 kolommen; de rechterrand valt op de divider, dus padding
+     rechts zodat de tekst niet tegen de lijn aan loopt. Links geeft de gutter
+     al lucht t.o.v. de vorige lijn. */
+  padding-right: 1.875em; /* 30px */
+}
+
+.col:nth-child(1) .text {
+  grid-column: 1 / 4;
+}
+.col:nth-child(2) .text {
+  grid-column: 4 / 7;
+}
+.col:nth-child(3) .text {
+  grid-column: 7 / 10;
+}
+.col:nth-child(4) .text {
+  grid-column: 10 / 13;
 }
 
 .quote {
   margin: 0;
-  min-height: 8em;
   font-size: 0.875em; /* 14px */
   font-style: italic;
-  line-height: 1.35;
+  line-height: 1.4;
   color: var(--color-charcoal);
 }
 
 .source {
-  margin-top: 1.25em;
-  font-size: 0.7125em; /* 11.4px */
-  letter-spacing: -0.02em;
+  margin-top: 4em;
+  font-size: 0.75em; /* 12px */
+  letter-spacing: 0.02em;
   color: var(--color-gold);
 }
 
+/* ---- Portret (rij 2, 2 kolommen breed) ------------------------------------ */
+
+/* Rechthoek met volledig ronde uiteinden (stadium-vorm, zoals de buttons).
+   Container maskeert de foto; de <img> blijft strak (img { border-radius: 0 }). */
 .portrait {
-  margin-top: 1.75em;
-  width: 100%;
+  grid-row: 2;
+  align-self: start;
   aspect-ratio: 3 / 4;
-  border-radius: 0.25em;
-  /* Zwart-wit portret-placeholder tot de echte foto er is. */
-  background:
-    linear-gradient(160deg, #d8d4cc, #8d8a82);
+  overflow: hidden;
+  border-radius: var(--radius-pill);
+}
+
+.col:nth-child(1) .portrait {
+  grid-column: 1 / 3;
+}
+.col:nth-child(2) .portrait {
+  grid-column: 4 / 6;
+}
+.col:nth-child(3) .portrait {
+  grid-column: 7 / 9;
+}
+.col:nth-child(4) .portrait {
+  grid-column: 10 / 12;
+}
+
+.portraitImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
   filter: grayscale(1);
+}
+
+/* ---- Verticale scheidingslijnen, exact op grid-lijn 4 / 7 / 10 ------------- */
+
+/* Loopt door over beide rijen (tekst + portret), tot onderaan de foto.
+   justify-self: end → de lijn staat op de ACHTERkant (rechterrand) van de
+   lege kolom 3/6/9, één gutter links van de volgende fotogroep. */
+.vline {
+  grid-row: 1 / 3;
+  width: 0;
+  justify-self: end;
+  border-left: 1px solid var(--color-hairline);
+  pointer-events: none;
+}
+
+.vline:nth-of-type(1) {
+  grid-column: 3;
+}
+.vline:nth-of-type(2) {
+  grid-column: 6;
+}
+.vline:nth-of-type(3) {
+  grid-column: 9;
 }
 
 /* ---- Responsive ----------------------------------------------------------- */
@@ -86,12 +156,25 @@
     row-gap: 2.5em;
   }
 
-  .col:nth-child(odd) {
-    padding-left: 0;
-    border-left: 0;
+  /* Terug naar gestapelde kolommen; grid-plaatsing en lijnen vervallen. */
+  .col {
+    display: flex;
+    flex-direction: column;
   }
 
-  .quote {
-    min-height: 0;
+  .col .text,
+  .col .portrait {
+    grid-column: auto;
+    grid-row: auto;
+    padding-left: 0;
+  }
+
+  .portrait {
+    margin-top: 1.5em;
+    width: 100%;
+  }
+
+  .vline {
+    display: none;
   }
 }

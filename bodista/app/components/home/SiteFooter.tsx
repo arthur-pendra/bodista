@@ -127,6 +127,11 @@ export function SiteFooter() {
               shop all
             </a>
           </div>
+
+          {/* Verticale scheidingslijnen, exact op de achterkant van kolom 3/6/9. */}
+          <span className={styles.vline} aria-hidden="true" />
+          <span className={styles.vline} aria-hidden="true" />
+          <span className={styles.vline} aria-hidden="true" />
         </div>
 
         <hr className={styles.bottomDivider} />

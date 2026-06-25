@@ -35,14 +35,14 @@
 .media {
   grid-column: 1 / 7;
   position: relative;
-  aspect-ratio: 718 / 555;
+  aspect-ratio: 718 / 520;
   overflow: hidden;
   border-radius: 0.25em;
   background:
     radial-gradient(120% 120% at 50% 20%, #3a3128, var(--color-charcoal));
 }
 
-.cleansing {
+.eyebrow {
   position: absolute;
   top: 2.125em;
   left: 50%;
@@ -52,56 +52,39 @@
   letter-spacing: 0.32em;
   text-transform: lowercase;
   color: var(--color-light);
+  animation: facialFade 0.2s ease;
 }
 
-.dissolve {
+.word {
   position: absolute;
-  top: 38%;
+  top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   font-size: 4.0625em; /* 65px */
   line-height: 1;
+  white-space: nowrap;
   color: var(--color-light);
+  animation: facialFade 0.2s ease;
 }
 
+/* Beeld-overlay wisselt mee met de actieve stap — korte in-fade, geen beweging. */
+@keyframes facialFade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Pill-look komt uit de global .product-pill; hier alleen de plaatsing
+   onderin het beeld. */
 .oilButton {
   position: absolute;
   bottom: 1.875em;
   left: 50%;
   transform: translateX(-50%);
-  display: flex;
-  align-items: center;
-  gap: 0.75em;
-  min-height: 2.875em; /* 46px */
-  padding: 0 0.375em 0 0.5em;
-  border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.6);
-  background: transparent;
-  cursor: pointer;
-}
-
-.oilThumb {
-  width: 1.8125em; /* 29px */
-  height: 1.8125em;
-  border-radius: 50%;
-  background-color: var(--color-warm);
-}
-
-.oilLabel {
-  font-size: 1.125em; /* 18px */
-  line-height: 1;
-  color: var(--color-light);
-}
-
-.oilPlus {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 1.8125em;
-  height: 1.8125em;
-  border-radius: 50%;
-  background-color: var(--color-gold);
-  color: var(--color-charcoal);
+  animation: facialFade 0.2s ease;
 }
 
 /* ---- Stappen-kolom (rechts) ----------------------------------------------- */
@@ -137,7 +120,6 @@
 }
 
 .step {
-  padding: 0.875em 0;
   border-top: 1px solid var(--color-hairline);
 }
 
@@ -145,18 +127,81 @@
   border-top: 0;
 }
 
+/* Toggle-rij: kaal (.reset), volle breedte, klikbaar. */
+.stepTop {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1em;
+  padding: 0.875em 0;
+  cursor: pointer;
+  text-align: left;
+}
+
 .stepLabel {
-  display: block;
   font-size: 1.125em; /* 18px */
   letter-spacing: -0.01em;
   color: var(--color-charcoal);
 }
 
+.stepIcon {
+  flex-shrink: 0;
+  width: 1em;
+  height: 1em;
+  color: var(--color-charcoal);
+  transition: transform 0.6s cubic-bezier(0.625, 0.05, 0, 1);
+}
+
+.stepIcon svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.stepActive .stepIcon {
+  transform: rotate(180deg);
+}
+
+/* Open/dicht via grid-template-rows 0fr → 1fr (Osmo-techniek). */
+.stepBottom {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.6s cubic-bezier(0.625, 0.05, 0, 1);
+}
+
+.stepActive .stepBottom {
+  grid-template-rows: 1fr;
+}
+
+.stepBottomWrap {
+  min-height: 0;
+  overflow: hidden;
+}
+
 .stepText {
-  margin: 0.75em 0 0;
+  margin: 0;
+  padding-bottom: 1.25em;
+  /* Loopt uit tot grid-lijn 11 (einde kolom 10): de stappen-kolom (7–12) is
+     6 kolommen breed, de tekst beslaat kolom 7 t/m 10 = 4 kolommen + 3 gutters
+     = (2/3 van de kolombreedte) − 1 gutter/3. */
+  max-width: calc(200% / 3 - var(--grid-gutter) / 3);
   font-size: 0.875em; /* 14px */
   line-height: 1.714;
   color: var(--color-charcoal);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .eyebrow,
+  .word,
+  .oilButton {
+    animation: none;
+  }
+
+  .stepBottom,
+  .stepIcon {
+    transition: none;
+  }
 }
 
 /* ---- Responsive ----------------------------------------------------------- */
@@ -168,6 +213,10 @@
 
   .steps {
     grid-column: 1 / -1;
+  }
+
+  .stepText {
+    max-width: none;
   }
 
   .heading {

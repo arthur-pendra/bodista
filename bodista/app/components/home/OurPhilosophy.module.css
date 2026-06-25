@@ -25,13 +25,23 @@
   color: var(--color-gold);
 }
 
-.divider {
-  grid-column: 1 / -1;
+/* Divider in twee segmenten boven de tekst- en mediakolom; de gutter van
+   .layout-grid (20px) laat het gat ertussen open, exact zoals in Figma. */
+.dividerLeft,
+.dividerRight {
   width: 100%;
   height: 0;
   margin: 0;
   border: 0;
   border-top: 1px solid var(--color-hairline);
+}
+
+.dividerLeft {
+  grid-column: 1 / 6;
+}
+
+.dividerRight {
+  grid-column: 6 / 13;
 }
 
 /* ---- Tekst-kolom (links) -------------------------------------------------- */
@@ -41,7 +51,7 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 1.875em;
+  gap: 2.9375em; /* 47px — paragraaf → read more → tags, zoals Figma */
 }
 
 .paragraph {
@@ -76,7 +86,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 0.875em;
-  margin: 0.625em 0 0;
+  margin: 0;
   padding: 0;
   list-style: none;
 }
@@ -115,6 +125,15 @@
 /* ---- Responsive ----------------------------------------------------------- */
 
 @media (max-width: 767px) {
+  /* 6-koloms grid: één doorlopende divider, geen tweede segment. */
+  .dividerLeft {
+    grid-column: 1 / -1;
+  }
+
+  .dividerRight {
+    display: none;
+  }
+
   .text {
     grid-column: 1 / -1;
   }

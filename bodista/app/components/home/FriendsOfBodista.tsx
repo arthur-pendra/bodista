@@ -3,23 +3,29 @@ import styles from './FriendsOfBodista.module.css'
 const QUOTES = [
   {
     quote:
-      'This serum acts like a probiotic, tackling inflammation while ensuring your skin barrier stays healthy and vibrant. Remember, biotechnology is paving the way for the future of skincare!',
-    source: 'Refinery29',
+      'The face oil melts into my skin without a trace of heaviness. By morning everything looks calm, soft and genuinely nourished — it has quietly become the part of my evening I look forward to most.',
+    source: 'Marlowe V.',
+    image: '/assets/images/friends%20of%20bodista/Frame_2713313_1.jpg.png',
   },
   {
     quote:
-      "But that's not all this amazing formula has to offer: founder Joanna Ellner has gone beyond the usual ingredients, crafting a unique blend that truly stands out in effectiveness.",
-    source: "Harper's Bazaar",
+      'The serum did in two weeks what nothing else managed in years. My barrier finally feels healthy again — no tightness, no redness, just skin that looks hydrated and alive. Bodista understands skin almost biologically.',
+    source: 'Anaïs R.',
+    image:
+      '/assets/images/friends%20of%20bodista/JO_ELLNER_REOME1648_1_e5841e7f-ef1b-4384-a156-6e237387e4c5.jpg.png',
   },
   {
     quote:
-      "This cleanser achieves the ideal balance – it's gentle yet powerfully effective, leaving your skin feeling soft, refreshed, and most importantly, deeply hydrated.",
-    source: "Women's Health",
+      'I came for the ritual and stayed for the results. Cleansing with the oil and water feels like a small ceremony each night, and my skin has never been softer — deeply hydrated without ever feeling stripped.',
+    source: 'Theo L.',
+    image: '/assets/images/friends%20of%20bodista/Reome_060120262102_copy.jpg.png',
   },
   {
     quote:
-      'REOME’s second product launch is impressively on point... Not only does it provide excellent glide for facial massages, but the formula is also packed with biofermented actives that nourish and revitalize the skin.',
-    source: 'Vogue',
+      'After years of overcomplicated routines, this is the first that feels truly considered. A few botanical drops and my skin regenerates overnight — firmer, clearer, more like itself. I won’t go back.',
+    source: 'Juno M.',
+    image:
+      '/assets/images/friends%20of%20bodista/REOME_171024_SHOT_01_050_retouch_bw.jpg.png',
   },
 ]
 
@@ -34,11 +40,20 @@ export function FriendsOfBodista() {
         <ul className={styles.columns}>
           {QUOTES.map((item) => (
             <li key={item.source} className={styles.col}>
-              <p className={styles.quote}>&ldquo;{item.quote}&rdquo;</p>
-              <span className={styles.source}>[ {item.source} ]</span>
-              <div className={styles.portrait} />
+              <div className={styles.text}>
+                <p className={styles.quote}>&ldquo;{item.quote}&rdquo;</p>
+                <span className={styles.source}>[ {item.source} ]</span>
+              </div>
+              <div className={styles.portrait}>
+                <img src={item.image} alt="" className={styles.portraitImg} />
+              </div>
             </li>
           ))}
+
+          {/* Verticale scheidingslijnen, exact op grid-lijn 4, 7 en 10. */}
+          <span className={styles.vline} aria-hidden="true" />
+          <span className={styles.vline} aria-hidden="true" />
+          <span className={styles.vline} aria-hidden="true" />
         </ul>
       </div>
     </section>
