@@ -19,14 +19,14 @@
 }
 
 .highlightsHeading {
-  font-size: 2em;
+  font-size: var(--text-heading-md);
   font-weight: 300;
   margin: 0;
   color: #1a1a1a;
 }
 
 .highlightsViewAll {
-  font-size: 0.875em;
+  font-size: var(--text-detail);
   letter-spacing: 0.04em;
   text-decoration: none;
   color: #1a1a1a;
@@ -100,14 +100,14 @@
 }
 
 .highlightsProductName {
-  font-size: 1em;
+  font-size: var(--text-body);
   font-weight: 400;
   margin: 0 0 0.25em;
   color: #1a1a1a;
 }
 
 .highlightsPrice {
-  font-size: 0.875em;
+  font-size: var(--text-detail);
   color: #666;
   margin: 0;
 }
@@ -132,6 +132,6 @@
   }
 
   .highlightsHeading {
-    font-size: 1.5em;
+    font-size: var(--text-heading-sm);
   }
 }

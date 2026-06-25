@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Font Faces — Novela Display
+   Font Faces — Novela Display 
    ========================================================================== */
 
 @font-face {
@@ -95,6 +95,16 @@
   --grid-gutter: 1.25em; /* 20px — ruimte tussen kolommen */
 
   --radius-pill: 100em; /* volle pill-radius voor buttons */
+
+  /* Type scale — 6 maten, meer niet. Drie headings + drie basisteksten.
+     In em (Osmo) zodat ze meeschalen met --size-font. Schrijf nergens een
+     losse font-size meer: kies altijd één van deze tokens. */
+  --text-heading-lg: 3.5em; /* 56px — display / hero & grote sectiekoppen */
+  --text-heading-md: 2.1875em; /* 35px — standaard sectiekoppen */
+  --text-heading-sm: 1.5625em; /* 25px — kleine koppen & subtitels */
+  --text-body-lg: 1.125em; /* 18px — lead / iets grotere basistekst */
+  --text-body: 1em; /* 16px — normale basistekst */
+  --text-detail: 0.875em; /* 14px — labels, captions, kleine details */
 }
 
 /* Mobiel (<=767px): 6 kolommen, kleinere buitenmarge. */

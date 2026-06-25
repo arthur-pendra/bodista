@@ -103,7 +103,7 @@
 
 .heading {
   margin: 0 0 2em;
-  font-size: 0.875em; /* 14px */
+  font-size: var(--text-detail); /* 14px */
   font-weight: 400;
   line-height: 1.2;
   color: var(--color-ink);
@@ -124,7 +124,7 @@
 }
 
 .link {
-  font-size: 1em; /* 16px */
+  font-size: var(--text-body); /* 16px */
   line-height: 1.5;
   color: var(--color-ink);
 }
@@ -140,7 +140,7 @@
 .muted {
   margin-top: auto;
   padding-top: 2em;
-  font-size: 0.75em; /* 12px */
+  font-size: var(--text-detail); /* 14px */
   line-height: 1.5;
   color: var(--color-ink);
   opacity: 0.5;
@@ -178,7 +178,7 @@
   border-radius: 0;
   background: transparent;
   font-family: inherit;
-  font-size: 0.75em; /* 12px */
+  font-size: var(--text-detail); /* 14px */
   color: var(--color-ink);
 }
 
@@ -222,7 +222,7 @@
 .copyright {
   grid-column: 1 / -1;
   margin: 0.5em 0 0;
-  font-size: 0.875em; /* 14px */
+  font-size: var(--text-detail); /* 14px */
   line-height: 1.5;
   text-align: left;
   color: var(--color-ink);

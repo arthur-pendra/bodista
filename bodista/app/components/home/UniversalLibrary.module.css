@@ -15,7 +15,7 @@
 
 .label {
   grid-column: 1 / -1;
-  font-size: 0.875em; /* 14px */
+  font-size: var(--text-detail); /* 14px */
   letter-spacing: 0.08em;
   color: var(--color-gold);
 }
@@ -40,7 +40,7 @@
 
 .heading {
   margin: 0;
-  font-size: 2em; /* 32px */
+  font-size: var(--text-heading-md); /* 35px */
   font-weight: 400;
   line-height: 1.05;
   letter-spacing: -0.01em;
@@ -50,7 +50,7 @@
 .intro {
   margin: 1.5em 0 2.5em;
   max-width: 30em;
-  font-size: 0.875em; /* 14px */
+  font-size: var(--text-detail); /* 14px */
   line-height: 1.714;
   color: var(--color-charcoal);
 }
@@ -75,7 +75,7 @@
 }
 
 .entryLabel {
-  font-size: 1.125em; /* 18px */
+  font-size: var(--text-body-lg); /* 18px */
   color: var(--color-charcoal);
 }
 
@@ -112,7 +112,7 @@
   }
 
   .heading {
-    font-size: 1.5em;
+    font-size: var(--text-heading-sm);
   }
 
   .portrait {

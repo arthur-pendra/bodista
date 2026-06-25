@@ -20,7 +20,7 @@
 
 .label {
   grid-column: 1 / -1;
-  font-size: 0.875em; /* 14px */
+  font-size: var(--text-detail); /* 14px */
   letter-spacing: 0.08em;
   color: var(--color-gold);
 }
@@ -56,7 +56,7 @@
 
 .paragraph {
   margin: 0;
-  font-size: 2em; /* 32px */
+  font-size: var(--text-heading-md); /* 35px */
   line-height: 1.05;
   color: var(--color-charcoal);
 }
@@ -65,7 +65,7 @@
   display: inline-flex;
   align-items: center;
   gap: 0.5em;
-  font-size: 1.125em; /* 18px */
+  font-size: var(--text-body-lg); /* 18px */
   line-height: 1;
   color: var(--color-charcoal);
   text-decoration: none;
@@ -97,7 +97,7 @@
   min-height: 2.375em; /* 38px */
   padding: 0 1.375em;
   border-radius: 999px;
-  font-size: 1.125em; /* 18px */
+  font-size: var(--text-body-lg); /* 18px */
   line-height: 1;
   color: var(--color-light);
   background-color: var(--color-charcoal);
@@ -143,7 +143,7 @@
   }
 
   .paragraph {
-    font-size: 1.5em;
+    font-size: var(--text-heading-sm);
   }
 
   .portrait {

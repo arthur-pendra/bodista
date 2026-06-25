@@ -19,7 +19,7 @@
 
 .label {
   grid-column: 1 / -1;
-  font-size: 0.875em; /* 14px */
+  font-size: var(--text-detail); /* 14px */
   letter-spacing: 0.08em;
   color: var(--color-gold);
 }
@@ -79,7 +79,7 @@
 
 .quote {
   margin: 0;
-  font-size: 0.875em; /* 14px */
+  font-size: var(--text-detail); /* 14px */
   font-style: italic;
   line-height: 1.4;
   color: var(--color-charcoal);
@@ -87,7 +87,7 @@
 
 .source {
   margin-top: 4em;
-  font-size: 0.75em; /* 12px */
+  font-size: var(--text-detail); /* 14px */
   letter-spacing: 0.02em;
   color: var(--color-gold);
 }

@@ -36,13 +36,13 @@
 
 .mark {
   display: block;
-  height: 1.25em;
+  height: 2em;
   width: auto;
 }
 
 .link {
   font-family: 'Novela Display', Georgia, serif;
-  font-size: 0.8125em;
+  font-size: var(--text-detail);
   line-height: 1;
   letter-spacing: 0.02em;
   color: var(--color-dark);

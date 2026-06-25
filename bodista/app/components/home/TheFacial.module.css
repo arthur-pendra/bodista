@@ -16,7 +16,7 @@
 
 .label {
   grid-column: 1 / -1;
-  font-size: 0.875em; /* 14px */
+  font-size: var(--text-detail); /* 14px */
   letter-spacing: 0.08em;
   color: var(--color-gold);
 }
@@ -48,7 +48,7 @@
   left: 50%;
   transform: translateX(-50%);
   white-space: nowrap;
-  font-size: 0.75em; /* 12px */
+  font-size: var(--text-detail); /* 14px */
   letter-spacing: 0.32em;
   text-transform: lowercase;
   color: var(--color-light);
@@ -60,7 +60,7 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-size: 4.0625em; /* 65px */
+  font-size: var(--text-heading-lg); /* 56px */
   line-height: 1;
   white-space: nowrap;
   color: var(--color-light);
@@ -97,7 +97,7 @@
 
 .heading {
   margin: 0;
-  font-size: 4.5em; /* 72px */
+  font-size: var(--text-heading-lg); /* 56px */
   font-weight: 400;
   font-style: italic;
   line-height: 1;
@@ -108,7 +108,7 @@
 .intro {
   margin: 1em 0 2em;
   max-width: 30em;
-  font-size: 1.125em; /* 18px */
+  font-size: var(--text-body-lg); /* 18px */
   line-height: 1.333;
   color: var(--color-charcoal);
 }
@@ -140,7 +140,7 @@
 }
 
 .stepLabel {
-  font-size: 1.125em; /* 18px */
+  font-size: var(--text-body-lg); /* 18px */
   letter-spacing: -0.01em;
   color: var(--color-charcoal);
 }
@@ -186,7 +186,7 @@
      6 kolommen breed, de tekst beslaat kolom 7 t/m 10 = 4 kolommen + 3 gutters
      = (2/3 van de kolombreedte) − 1 gutter/3. */
   max-width: calc(200% / 3 - var(--grid-gutter) / 3);
-  font-size: 0.875em; /* 14px */
+  font-size: var(--text-detail); /* 14px */
   line-height: 1.714;
   color: var(--color-charcoal);
 }
@@ -220,10 +220,10 @@
   }
 
   .heading {
-    font-size: 3em;
+    font-size: var(--text-heading-md);
   }
 
   .dissolve {
-    font-size: 3em;
+    font-size: var(--text-heading-md);
   }
 }
