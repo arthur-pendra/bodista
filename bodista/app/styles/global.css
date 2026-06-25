@@ -100,8 +100,8 @@
      In em (Osmo) zodat ze meeschalen met --size-font. Schrijf nergens een
      losse font-size meer: kies altijd één van deze tokens. */
   --text-heading-lg: 3.5em; /* 56px — display / hero & grote sectiekoppen */
-  --text-heading-md: 2.1875em; /* 35px — standaard sectiekoppen */
-  --text-heading-sm: 1.5625em; /* 25px — kleine koppen & subtitels */
+  --text-heading-md: 1.5em; /* 35px — standaard sectiekoppen */
+  --text-heading-sm: 1.25em; /* 25px — kleine koppen & subtitels */
   --text-body-lg: 1.125em; /* 18px — lead / iets grotere basistekst */
   --text-body: 1em; /* 16px — normale basistekst */
   --text-detail: 0.875em; /* 14px — labels, captions, kleine details */
@@ -137,6 +137,38 @@ body {
   min-height: 100vh;
   background: var(--color-page);
   color: var(--color-ink);
+  /* Lopende tekst gebruikt de elegante old-style cijfers van Novela Display
+     (3/4/5/7/9 zakken onder de baseline). UI-cijfers (prijzen, maten) zetten
+     dit lokaal om naar lining via .ui-nums. */
+  font-variant-numeric: oldstyle-nums proportional-nums;
+  font-feature-settings: 'onum' 1, 'pnum' 1;
+}
+
+/* UI-cijfers: strak op één baseline en even breed. Plaats op prijzen, maten,
+   tellers en andere functionele getallen. */
+.ui-nums {
+  font-variant-numeric: lining-nums tabular-nums;
+  /* 'case' tilt het valutateken (£/$/€) mee op naar lining-hoogte; anders
+     hangt het symbool op old-style-hoogte lager dan de cijfers. */
+  font-feature-settings: 'lnum' 1, 'tnum' 1, 'case' 1;
+}
+
+/* De 0 blijft altijd de ronde old-style glyph (merkwens). Wordt via de
+   <Figures> helper rond elke 0 gezet, binnen een .ui-nums context. Tabular
+   houdt de breedte gelijk aan de lining-cijfers, dus de uitlijning blijft. */
+.ui-nums-zero {
+  font-variant-numeric: oldstyle-nums tabular-nums;
+  font-feature-settings: 'onum' 1, 'tnum' 1;
+}
+
+/* Valutateken optisch op lijn met de lining-cijfers. Symbolen als £ hebben
+   een staart onder de baseline en hangen anders te laag; til ze iets op.
+   Pas --ui-nums-symbol-shift aan om te finetunen. */
+.ui-nums-symbol {
+  --ui-nums-symbol-shift: -0.1em;
+  position: relative;
+  top: var(--ui-nums-symbol-shift);
+  margin-right: 0.08em;
 }
 
 /* Grain-texture: vast over de hele site, getild. pointer-events:none zodat

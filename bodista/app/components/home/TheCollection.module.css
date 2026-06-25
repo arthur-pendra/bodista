@@ -159,21 +159,75 @@
   transition: opacity 0.3s ease;
 }
 
-/* Pill-look komt uit de global .product-pill; hier alleen plaatsing op de
-   kaart + verschijnen op hover/focus. */
-.addToCart {
+/* Quick-add: gouden cirkel met plus, altijd zichtbaar, bottom-center.
+   Op hover vouwt de cirkel uit tot een pill met "30ML | 60ML"; de plus
+   verliest zijn horizontale streep en blijft als verticale divider staan.
+   De breedte groeit mee met de labels (geen vaste breedte). */
+.quickAdd {
   position: absolute;
   bottom: 1.25em;
   left: 50%;
   transform: translateX(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  height: 2.375em; /* 38px */
+  padding: 0 0.71875em; /* collapsed = perfecte cirkel (38px) */
+  border-radius: var(--radius-pill);
+  background-color: var(--color-gold);
+  color: rgba(0, 0, 0, 0.55);
+  cursor: pointer;
+  transition: gap 0.35s ease, padding 0.35s ease;
+}
+
+.quickAdd:hover {
+  gap: 0.625em;
+  padding: 0 0.9375em;
+}
+
+.quickAddSize {
+  max-width: 0;
+  overflow: hidden;
   opacity: 0;
-  transition: opacity 0.3s ease;
+  white-space: nowrap;
+  font-size: 0.6875em; /* 11px */
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  transition: max-width 0.35s ease, opacity 0.3s ease;
+}
+
+.quickAdd:hover .quickAddSize {
+  max-width: 4em;
+  opacity: 1;
+}
+
+.quickAddDivider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 0.9375em; /* 15px */
+  height: 0.9375em;
+}
+
+.quickAddDivider svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Horizontale streep van de plus verdwijnt op hover → enkel verticale divider. */
+.quickAddBarH {
+  transition: opacity 0.25s ease;
+}
+
+.quickAdd:hover .quickAddBarH {
+  opacity: 0;
 }
 
 .cardLink:hover .caption,
-.cardLink:hover .addToCart,
-.cardLink:focus-visible .caption,
-.cardLink:focus-visible .addToCart {
+.cardLink:focus-visible .caption {
   opacity: 1;
 }
 

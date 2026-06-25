@@ -50,28 +50,6 @@ export function TheFacial() {
           <span className={styles.word} key={`word-${activeIndex}`}>
             {active.word}
           </span>
-          <button
-            type="button"
-            key={`pill-${activeIndex}`}
-            className={`product-pill product-pill--${active.product.variant} ${styles.oilButton}`}
-          >
-            <span className="product-pill__thumb" />
-            <span className="product-pill__label">{active.product.name}</span>
-            <span className="product-pill__plus" aria-hidden="true">
-              <svg
-                className="product-pill__icon"
-                viewBox="0 0 16 16"
-                fill="none"
-              >
-                <path
-                  d="M8 1v14M1 8h14"
-                  stroke="currentColor"
-                  strokeWidth="1"
-                  strokeLinecap="round"
-                />
-              </svg>
-            </span>
-          </button>
         </div>
 
         <div className={styles.steps}>

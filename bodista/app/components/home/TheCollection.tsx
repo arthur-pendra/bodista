@@ -1,6 +1,8 @@
 import {Link} from 'react-router'
-import {Image, Money} from '@shopify/hydrogen'
+import {Image} from '@shopify/hydrogen'
 import type {RecommendedProductFragment} from 'storefrontapi.generated'
+import {Figures} from '~/components/Figures'
+import {LiningMoney} from '~/components/LiningMoney'
 import styles from './TheCollection.module.css'
 
 const FILTERS = ['oils', 'serums', 'bodymist', 'cloths']
@@ -62,33 +64,29 @@ export function TheCollection({
                     Seal · Nourish · Regenerate
                   </span>
 
-                  <span
-                    className={`product-pill product-pill--gold ${styles.addToCart}`}
-                  >
-                    {product.featuredImage ? (
-                      <Image
-                        data={product.featuredImage}
-                        aspectRatio="1/1"
-                        width={30}
-                        className="product-pill__thumb"
-                      />
-                    ) : (
-                      <span className="product-pill__thumb" />
-                    )}
-                    <span className="product-pill__label">add to cart</span>
-                    <span className="product-pill__plus" aria-hidden="true">
-                      <svg
-                        className="product-pill__icon"
-                        viewBox="0 0 16 16"
-                        fill="none"
-                      >
+                  <span className={styles.quickAdd} aria-label="Quick add">
+                    <span className={`${styles.quickAddSize} ui-nums`}>
+                      <Figures>30ML</Figures>
+                    </span>
+                    <span className={styles.quickAddDivider} aria-hidden="true">
+                      <svg viewBox="0 0 16 16" fill="none">
                         <path
-                          d="M8 1v14M1 8h14"
+                          className={styles.quickAddBarH}
+                          d="M1 8h14"
+                          stroke="currentColor"
+                          strokeWidth="1"
+                          strokeLinecap="round"
+                        />
+                        <path
+                          d="M8 1v14"
                           stroke="currentColor"
                           strokeWidth="1"
                           strokeLinecap="round"
                         />
                       </svg>
+                    </span>
+                    <span className={`${styles.quickAddSize} ui-nums`}>
+                      <Figures>60ML</Figures>
                     </span>
                   </span>
                 </div>
@@ -103,7 +101,7 @@ export function TheCollection({
                     <h3 className={styles.name}>{product.title}</h3>
                   </div>
                   <div className={styles.price}>
-                    <Money data={product.priceRange.minVariantPrice} />
+                    <LiningMoney data={product.priceRange.minVariantPrice} />
                   </div>
                 </div>
               </Link>
