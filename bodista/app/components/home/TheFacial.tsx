@@ -1,30 +1,31 @@
 import {useState} from 'react'
+import {Figures} from '~/components/Figures'
 import styles from './TheFacial.module.css'
 
 const STEPS = [
   {
-    label: 'Step 1',
+    label: '01',
     word: 'Cleanse',
     eyebrow: 'intelligent cleansing',
     product: {variant: 'gold', name: 'The face oil'},
     text: 'Warm a few drops between your palms and press them into dry skin. The botanical oil dissolves makeup, sunscreen and the residue of the day, lifting it all away gently — without ever stripping your barrier or leaving the skin tight.',
   },
   {
-    label: 'Step 2',
+    label: '02',
     word: 'Hydrate',
     eyebrow: 'water meets oil',
     product: {variant: 'silver', name: 'The serum'},
     text: 'Mist the serum over the oil and emulsify with damp fingertips. Water binds to the oil and carries everything away clean, so the skin is left fresh, soft and deeply quenched rather than stripped of its own moisture.',
   },
   {
-    label: 'Step 3',
+    label: '03',
     word: 'Moisturize',
     eyebrow: 'a living base layer',
     product: {variant: 'silver', name: 'The serum'},
     text: 'Press a second veil of serum into still-damp skin. This living base layer floods the surface with lightweight moisture and prepares it to hold and absorb everything that follows in the ritual.',
   },
   {
-    label: 'Step 4',
+    label: '04',
     word: 'Regenerate',
     eyebrow: 'lasting nourishment',
     product: {variant: 'gold', name: 'The face oil'},
@@ -74,18 +75,10 @@ export function TheFacial() {
                     onFocus={() => setActiveIndex(index)}
                     onClick={() => setActiveIndex(index)}
                   >
-                    <span className={styles.stepLabel}>{step.label}</span>
-                    <span className={styles.stepIcon} aria-hidden="true">
-                      <svg viewBox="0 0 16 16" fill="none">
-                        <path
-                          d="M4 6l4 4 4-4"
-                          stroke="currentColor"
-                          strokeWidth="1.25"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
+                    <span className={`ui-nums ${styles.stepLabel}`}>
+                      <Figures>{step.label}</Figures>
                     </span>
+                    <span className={styles.stepIcon} aria-hidden="true" />
                   </button>
                   <div className={styles.stepBottom}>
                     <div className={styles.stepBottomWrap}>

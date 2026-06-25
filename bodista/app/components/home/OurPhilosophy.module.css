@@ -52,10 +52,13 @@
 
 .text {
   grid-column: 1 / 6;
+  /* Strek mee met de rijhoogte (bepaald door de pill-media rechts) zodat de
+     tags naar de onderkant van de pill kunnen zakken. */
+  align-self: stretch;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 2.9375em; /* 47px — paragraaf → read more → tags, zoals Figma */
+  gap: 2.9375em; /* 47px — paragraaf → tags, zoals Figma */
 }
 
 .paragraph {
@@ -65,32 +68,13 @@
   color: var(--color-charcoal);
 }
 
-.readMore {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5em;
-  font-size: var(--text-body-lg); /* 18px */
-  line-height: 1;
-  color: var(--color-charcoal);
-  text-decoration: none;
-  border-bottom: 1px solid currentColor;
-  padding-bottom: 0.25em;
-}
-
-.readMore:hover {
-  text-decoration: none;
-}
-
-.arrow {
-  width: 1.2em;
-  height: 1.2em;
-}
-
 .tags {
+  /* Duw de tags onderin de tekstkolom, op één lijn met de onderkant van de
+     pill-media rechts. */
+  margin: auto 0 0;
   display: flex;
   flex-wrap: wrap;
   gap: 0.875em;
-  margin: 0;
   padding: 0;
   list-style: none;
 }

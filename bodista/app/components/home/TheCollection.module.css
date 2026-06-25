@@ -57,9 +57,31 @@
 .filters {
   display: flex;
   align-items: center;
-  gap: 1em;
-  font-size: var(--text-body-lg); /* 18px */
+  font-size: var(--text-body); /* 16px */
   line-height: 1;
+}
+
+/* Filter-items zijn standaard verborgen en vouwen open bij hover over de
+   filtergroep (incl. de "+ Filters"-knop). */
+.filterList {
+  display: flex;
+  align-items: center;
+  gap: 1em;
+  overflow: hidden;
+  max-width: 0;
+  margin-right: 0;
+  opacity: 0;
+  transition:
+    max-width 0.45s ease,
+    margin-right 0.45s ease,
+    opacity 0.3s ease;
+}
+
+.filters:hover .filterList,
+.filters:focus-within .filterList {
+  max-width: 40em;
+  margin-right: 1em;
+  opacity: 1;
 }
 
 .filter {
@@ -90,7 +112,10 @@
 }
 
 .filterPlus {
+  display: block;
   font-size: 1.3em;
+  line-height: 1;
+  transform: translateY(-1px);
 }
 
 /* ---- Divider -------------------------------------------------------------- */
@@ -178,9 +203,30 @@
   background-color: var(--color-gold);
   color: rgba(0, 0, 0, 0.55);
   cursor: pointer;
-  transition: gap 0.35s ease, padding 0.35s ease;
+  opacity: 0;
+  transition:
+    gap 0.35s ease,
+    padding 0.35s ease,
+    opacity 0.3s ease;
 }
 
+/* Onzichtbare hover-zone over de onderkant van de media: hier overheen
+   bewegen vouwt de quick-add uit — je hoeft dus niet exact op de knop. */
+.hoverZone {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 38%;
+}
+
+/* Quick-add verschijnt pas bij hover/focus op de card. */
+.cardLink:hover .quickAdd,
+.cardLink:focus-visible .quickAdd {
+  opacity: 1;
+}
+
+.hoverZone:hover ~ .quickAdd,
 .quickAdd:hover {
   gap: 0.625em;
   padding: 0 0.9375em;
@@ -197,6 +243,7 @@
   transition: max-width 0.35s ease, opacity 0.3s ease;
 }
 
+.hoverZone:hover ~ .quickAdd .quickAddSize,
 .quickAdd:hover .quickAddSize {
   max-width: 4em;
   opacity: 1;
@@ -222,6 +269,7 @@
   transition: opacity 0.25s ease;
 }
 
+.hoverZone:hover ~ .quickAdd .quickAddBarH,
 .quickAdd:hover .quickAddBarH {
   opacity: 0;
 }

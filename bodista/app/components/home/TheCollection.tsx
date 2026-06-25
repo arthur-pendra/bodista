@@ -27,11 +27,13 @@ export function TheCollection({
             </h2>
           </div>
           <div className={styles.filters}>
-            {FILTERS.map((filter) => (
-              <button key={filter} type="button" className={styles.filter}>
-                {filter}
-              </button>
-            ))}
+            <div className={styles.filterList}>
+              {FILTERS.map((filter) => (
+                <button key={filter} type="button" className={styles.filter}>
+                  {filter}
+                </button>
+              ))}
+            </div>
             <button type="button" className={styles.filterToggle}>
               <span className={styles.filterPlus}>+</span>
               Filters
@@ -63,6 +65,8 @@ export function TheCollection({
                   <span className={styles.caption}>
                     Seal · Nourish · Regenerate
                   </span>
+
+                  <span className={styles.hoverZone} aria-hidden="true" />
 
                   <span className={styles.quickAdd} aria-label="Quick add">
                     <span className={`${styles.quickAddSize} ui-nums`}>

@@ -1,4 +1,3 @@
-import {Link} from 'react-router'
 import styles from './OurPhilosophy.module.css'
 
 const TAGS = ['Sustainability', 'philanthropy', 'mission']
@@ -19,26 +18,6 @@ export function OurPhilosophy() {
             elements and nutrition, the skin formulates all the actives it
             needs, at the levels and times required.
           </p>
-
-          <Link to="/pages/about" className={styles.readMore}>
-            read more
-            <svg
-              className={styles.arrow}
-              width="23"
-              height="23"
-              viewBox="0 0 23 23"
-              fill="none"
-              aria-hidden="true"
-            >
-              <path
-                d="M5 18L18 5M18 5H7M18 5v11"
-                stroke="currentColor"
-                strokeWidth="1.2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </Link>
 
           <ul className={styles.tags}>
             {TAGS.map((tag) => (
