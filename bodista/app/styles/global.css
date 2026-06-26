@@ -89,8 +89,8 @@
   --color-hairline: rgba(0, 0, 0, 0.18); /* hairline borders & dividers — zwart op 18% */
 
   /* Layout grid — gedeelde bron van waarheid voor de GridOverlay dev-tool
-     (toggle: G) én content via .layout-grid. Desktop = 12 kolommen. */
-  --grid-columns: 12;
+     (toggle: G) én content via .layout-grid. Desktop = 24 kolommen. */
+  --grid-columns: 24;
   --grid-margin: 1.875em; /* 30px — buitenmarge links/rechts */
   --grid-gutter: 1.25em; /* 20px — ruimte tussen kolommen */
 
@@ -107,10 +107,10 @@
   --text-detail: 0.875em; /* 14px — labels, captions, kleine details */
 }
 
-/* Mobiel (<=767px): 6 kolommen, kleinere buitenmarge. */
+/* Mobiel (<=767px): 12 kolommen, kleinere buitenmarge. */
 @media (max-width: 767px) {
   :root {
-    --grid-columns: 6;
+    --grid-columns: 12;
     --grid-margin: 1em; /* 16px */
   }
 }

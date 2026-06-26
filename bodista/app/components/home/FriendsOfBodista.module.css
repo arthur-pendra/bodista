@@ -37,12 +37,12 @@
   border-top: 1px solid var(--color-hairline);
 }
 
-/* Het quote-blok erft het 12-koloms grid (zelfde tracks + gutter als
+/* Het quote-blok erft het 24-koloms grid (zelfde tracks + gutter als
    .layout-grid). Twee rijen: tekst boven, portret onder. */
 .columns {
   grid-column: 1 / -1;
   display: grid;
-  grid-template-columns: repeat(12, 1fr);
+  grid-template-columns: repeat(var(--grid-columns), 1fr);
   column-gap: var(--grid-gutter);
   row-gap: 1.75em;
   margin: 0;
@@ -69,16 +69,16 @@
 }
 
 .col:nth-child(1) .text {
-  grid-column: 1 / 4;
+  grid-column: 1 / 7;
 }
 .col:nth-child(2) .text {
-  grid-column: 4 / 7;
+  grid-column: 7 / 13;
 }
 .col:nth-child(3) .text {
-  grid-column: 7 / 10;
+  grid-column: 13 / 19;
 }
 .col:nth-child(4) .text {
-  grid-column: 10 / 13;
+  grid-column: 19 / 25;
 }
 
 .quote {
@@ -109,16 +109,16 @@
 }
 
 .col:nth-child(1) .portrait {
-  grid-column: 1 / 3;
+  grid-column: 1 / 5;
 }
 .col:nth-child(2) .portrait {
-  grid-column: 4 / 6;
+  grid-column: 7 / 11;
 }
 .col:nth-child(3) .portrait {
-  grid-column: 7 / 9;
+  grid-column: 13 / 17;
 }
 .col:nth-child(4) .portrait {
-  grid-column: 10 / 12;
+  grid-column: 19 / 23;
 }
 
 .portraitImg {
@@ -129,11 +129,11 @@
   filter: grayscale(1);
 }
 
-/* ---- Verticale scheidingslijnen, exact op grid-lijn 4 / 7 / 10 ------------- */
+/* ---- Verticale scheidingslijnen, exact op grid-lijn 7 / 13 / 19 ------------ */
 
 /* Loopt door over beide rijen (tekst + portret), tot onderaan de foto.
-   justify-self: end → de lijn staat op de ACHTERkant (rechterrand) van de
-   lege kolom 3/6/9, één gutter links van de volgende fotogroep. */
+   justify-self: end → de lijn staat op de ACHTERkant (rechterrand) van
+   kolom 6/12/18, één gutter links van de volgende fotogroep. */
 .vline {
   grid-row: 1 / 3;
   width: 0;
@@ -143,13 +143,13 @@
 }
 
 .vline:nth-of-type(1) {
-  grid-column: 3;
-}
-.vline:nth-of-type(2) {
   grid-column: 6;
 }
+.vline:nth-of-type(2) {
+  grid-column: 12;
+}
 .vline:nth-of-type(3) {
-  grid-column: 9;
+  grid-column: 18;
 }
 
 /* ---- Responsive ----------------------------------------------------------- */

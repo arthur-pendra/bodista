@@ -6,7 +6,7 @@
   z-index: 9999;
   pointer-events: none;
   display: grid;
-  grid-template-columns: repeat(12, 1fr);
+  grid-template-columns: repeat(24, 1fr);
   column-gap: var(--grid-gutter);
   padding: 0 var(--grid-margin);
 }
@@ -28,13 +28,13 @@
   color: rgba(255, 0, 0, 0.7);
 }
 
-/* Mobile — 6 kolommen (margin/gutter komen uit de gedeelde tokens). */
+/* Mobile — 12 kolommen (margin/gutter komen uit de gedeelde tokens). */
 @media (max-width: 767px) {
   .overlay {
-    grid-template-columns: repeat(6, 1fr);
+    grid-template-columns: repeat(12, 1fr);
   }
 
-  .col:nth-child(n + 7) {
+  .col:nth-child(n + 13) {
     display: none;
   }
 }

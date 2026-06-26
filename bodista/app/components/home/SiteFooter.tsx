@@ -17,7 +17,7 @@ const ArrowIcon = () => (
     aria-hidden="true"
   >
     <path
-      d="M3 11L11 3M11 3H4.5M11 3v6.5"
+      d="M3 11L11 3M4.5 3H11V9.5"
       stroke="currentColor"
       strokeWidth="1.2"
       strokeLinecap="round"
@@ -131,7 +131,7 @@ export function SiteFooter() {
             </a>
           </div>
 
-          {/* Verticale scheidingslijnen, exact op de achterkant van kolom 3/6/9. */}
+          {/* Verticale scheidingslijnen vlak vóór elk nav-item (kolom 9/14/19). */}
           <span className={styles.vline} aria-hidden="true" />
           <span className={styles.vline} aria-hidden="true" />
           <span className={styles.vline} aria-hidden="true" />

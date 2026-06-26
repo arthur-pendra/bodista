@@ -8,8 +8,7 @@ export function OurPhilosophy() {
       <div className={`layout-grid ${styles.inner}`}>
         <span className={styles.label}>Our philosophy</span>
 
-        <hr className={styles.dividerLeft} />
-        <hr className={styles.dividerRight} />
+        <hr className={styles.divider} />
 
         <div className={styles.text}>
           <p className={styles.paragraph}>

@@ -48,7 +48,7 @@
 /* ---- Bovenrij: heading links, lead rechts --------------------------------- */
 
 .heading {
-  grid-column: 1 / 7;
+  grid-column: 1 / 13;
   margin: 0;
   font-size: var(--text-heading-md); /* 35px */
   font-weight: 400;
@@ -58,7 +58,7 @@
 }
 
 .lead {
-  grid-column: 9 / 13;
+  grid-column: 17 / 25;
   margin: 0;
   font-size: var(--text-body); /* 16px */
   line-height: 1.4;
@@ -79,7 +79,7 @@
 /* ---- Onderrij: ingrediënten links, beschrijving rechts -------------------- */
 
 .ingredients {
-  grid-column: 1 / 7;
+  grid-column: 1 / 13;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -108,7 +108,7 @@
 }
 
 .description {
-  grid-column: 9 / 13;
+  grid-column: 17 / 25;
   align-self: start; /* bovenin uitlijnen, gelijk met het eerste ingrediënt */
 }
 

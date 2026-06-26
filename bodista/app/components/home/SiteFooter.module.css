@@ -45,13 +45,14 @@
 
 /* ---- Link-kolommen -------------------------------------------------------- */
 
-/* Het kolommen-blok erft het echte 12-koloms grid (zelfde tracks + gutter als
-   .layout-grid). Elke kolom beslaat een 3-koloms groep, zodat de tekst exact
-   op de gridlijn (kolom 1 / 4 / 7 / 10) start. */
+/* Het kolommen-blok erft het echte 24-koloms grid (zelfde tracks + gutter als
+   .layout-grid). De Newsletter beslaat 9 kolommen (1 t/m 9); de drie nav-items
+   zijn elk 5 kolommen breed en verdelen — gelijk — kolom 10 t/m 24
+   (10–14 / 15–19 / 20–24). */
 .columns {
   grid-column: 1 / -1;
   display: grid;
-  grid-template-columns: repeat(12, 1fr);
+  grid-template-columns: repeat(var(--grid-columns), 1fr);
   column-gap: var(--grid-gutter);
 }
 
@@ -70,20 +71,20 @@
 }
 
 .column:nth-child(1) {
-  grid-column: 1 / 4;
+  grid-column: 1 / 10;
 }
 .column:nth-child(2) {
-  grid-column: 4 / 7;
+  grid-column: 10 / 15;
 }
 .column:nth-child(3) {
-  grid-column: 7 / 10;
+  grid-column: 15 / 20;
 }
 .column:nth-child(4) {
-  grid-column: 10 / 13;
+  grid-column: 20 / 25;
 }
 
-/* Verticale scheidingslijnen op de ACHTERkant (rechterrand) van kolom 3/6/9,
-   over de volle hoogte van het kolommen-blok. */
+/* Verticale scheidingslijnen vlak vóór elk nav-item (rechterrand van kolom
+   9/14/19), over de volle hoogte van het kolommen-blok. */
 .vline {
   grid-row: 1;
   width: 0;
@@ -92,13 +93,13 @@
   pointer-events: none;
 }
 .vline:nth-of-type(1) {
-  grid-column: 3;
+  grid-column: 9;
 }
 .vline:nth-of-type(2) {
-  grid-column: 6;
+  grid-column: 14;
 }
 .vline:nth-of-type(3) {
-  grid-column: 9;
+  grid-column: 19;
 }
 
 .heading {
@@ -155,7 +156,7 @@
 
 .signup {
   width: 100%;
-  max-width: 20em; /* iets korter dan de volle kolom-groep */
+  max-width: 23em; /* iets korter dan de volle kolom-groep */
 }
 
 /* Korte consent-regel onder de pill — klein en gedempt, zoals .muted. */
@@ -213,7 +214,7 @@
   justify-content: center;
   flex: 0 0 auto;
   min-height: 2.75rem; /* a11y tap-target ondergrens */
-  padding: 0 1.75em;
+  padding: 0 2.5em;
   border: 0;
   border-radius: 0; /* helemaal recht */
   background: var(--color-silver);

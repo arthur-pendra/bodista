@@ -36,7 +36,9 @@
 /* ---- Tekst-kolom (links) -------------------------------------------------- */
 
 .text {
-  grid-column: 1 / 6;
+  /* Zelfde breedte als de Newsletter-kolom in de footer (kol 1 t/m 9) zodat
+     de tekst + accordion-links daarmee matchen. */
+  grid-column: 1 / 10;
   /* Strek mee met de rijhoogte (bepaald door het portret rechts) zodat de
      lineup naar de onderkant van het portret kan zakken. */
   align-self: stretch;
@@ -50,17 +52,26 @@
   font-size: var(--text-heading-md); /* 35px */
   font-weight: 400;
   line-height: 1.05;
-  letter-spacing: -0.01em;
   color: var(--color-charcoal);
+  /* Wisselt mee met het gehoverde onderwerp — korte in-fade, geen beweging. */
+  animation: libraryFade 0.25s ease;
 }
 
-.intro {
-  margin: 1.5em 0 2.5em;
-  max-width: 30em;
-  font-size: var(--text-detail); /* 14px */
-  line-height: 1.714;
-  color: var(--color-charcoal);
+@keyframes libraryFade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .heading {
+    animation: none;
+  }
+}
+
 
 .accordion {
   /* Duw de lineup onderin de tekstkolom, op één lijn met de onderkant van het
@@ -79,11 +90,18 @@
      strak op de lijn. */
   padding: 0.375em 0 0.5em;
   border-bottom: 1px solid var(--color-hairline);
+  cursor: pointer;
 }
 
 .entryLabel {
   font-size: var(--text-body-lg); /* 18px */
   color: var(--color-charcoal);
+  opacity: 0.55;
+  transition: opacity 0.2s ease;
+}
+
+.entry:hover .entryLabel {
+  opacity: 1;
 }
 
 .arrow {
@@ -91,12 +109,18 @@
   width: 1.125em;
   height: 1.125em;
   color: var(--color-charcoal);
+  opacity: 0.55;
+  transition: opacity 0.2s ease;
+}
+
+.entry:hover .arrow {
+  opacity: 1;
 }
 
 /* ---- Media-kolom (rechts) ------------------------------------------------- */
 
 .media {
-  grid-column: 6 / 13;
+  grid-column: 11 / 25;
 }
 
 .portrait {

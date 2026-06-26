@@ -63,49 +63,51 @@ There is one shared column grid. The **GridOverlay dev tool** draws it, and cont
 
 | | Desktop (>767px) | Mobile (≤767px) |
 |---|---|---|
-| Columns | **12** | **6** |
+| Columns | **24** | **12** |
 | Margin (outer margin) | `--grid-margin` = 1.875em (30px) | 1em (16px) |
 | Gutter (between columns) | `--grid-gutter` = 1.25em (20px) | 1.25em (20px) |
+
+24 columns (desktop) keeps all the divisibility of 12 (2/3/4/6/12) but doubles the placement resolution. A clean 4-up still works: `grid-column: span 6` (24 ÷ 6 = 4-up desktop, 12 ÷ 6 = 2-up mobile).
 
 Tokens live in `global.css` `:root` (with a mobile override): `--grid-columns`, `--grid-margin`, `--grid-gutter`. Change the grid here — overlay and content follow automatically.
 
 ### The overlay (dev tool)
 
 - Toggle with the **`G` key** (ignored while typing in a field). Dev only (`import.meta.env.DEV`).
-- Columns are **numbered** (1–12 desktop, 1–6 mobile) → this is how we refer to positions.
+- Columns are **numbered** (1–24 desktop, 1–12 mobile) → this is how we refer to positions.
 - Component: `app/components/GridOverlay.tsx`.
 
 ### Placing content on the grid
 
 Put a wrapper on `className="layout-grid"` (the global utility) and place children with `grid-column`.
 
-**Line arithmetic (important):** 12 columns = 13 lines. Column *N* runs from line *N* to line *N+1*.
+**Line arithmetic (important):** 24 columns = 25 lines. Column *N* runs from line *N* to line *N+1*.
 → "column **X through Y**" = `grid-column: X / (Y+1)` i.e. `grid-column: X / span (Y−X+1)`.
 
 ```css
-/* "Put this on column 3 through 8" (desktop, 12-column) */
+/* "Put this on column 5 through 16" (desktop, 24-column) */
 .block {
-  grid-column: 3 / 9; /* = 3 / span 6 */
+  grid-column: 5 / 17; /* = 5 / span 12 */
 }
 
-/* Mobile is 6-column → reposition, otherwise the position is wrong */
+/* Mobile is 12-column → reposition, otherwise the position is wrong */
 @media (max-width: 767px) {
   .block {
-    grid-column: 1 / 7; /* full width on mobile */
+    grid-column: 1 / -1; /* full width on mobile */
   }
 }
 ```
 
 Examples of instructions → CSS:
 - "full width" → `grid-column: 1 / -1`
-- "column 1 through 6" (left half desktop) → `grid-column: 1 / 7`
-- "column 7 through 12" (right half) → `grid-column: 7 / 13`
-- "centered, column 4 through 9" → `grid-column: 4 / 10`
+- "left half desktop" (column 1 through 12) → `grid-column: 1 / 13`
+- "right half" (column 13 through 24) → `grid-column: 13 / 25`
+- "centered, column 7 through 18" → `grid-column: 7 / 19`
 
 ### Rules
 
 - **Always** position with `grid-column` lines, never by guessing loose `px`/`%` widths — this keeps it pixel-perfect on the grid.
-- For every grid placement **also provide the mobile variant** (6 columns); a 12-column `grid-column` does not match a 6-column grid.
+- For every grid placement **also provide the mobile variant** (12 columns); a 24-column `grid-column` does not match a 12-column grid.
 - Margin/gutter come from the tokens — do not redefine them per component.
 - **Alignment rule:** the overlay (and `.layout-grid`) aligns to the **viewport edge**. `body > main` has a `margin: 0 1em` — so a `.layout-grid` inside `main` shifts 1em and does not align with the overlay. Therefore place grid wrappers **full-bleed** (outside `main`, or break out of the margin), so the outer margin comes purely from `--grid-margin`.
 

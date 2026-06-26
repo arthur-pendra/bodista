@@ -32,7 +32,7 @@ export function HeroHeader() {
               aria-hidden="true"
             >
               <path
-                d="M4 14L14 4M14 4H6M14 4v8"
+                d="M4 14L14 4M6 4H14V12"
                 stroke="currentColor"
                 strokeWidth="1.2"
                 strokeLinecap="round"

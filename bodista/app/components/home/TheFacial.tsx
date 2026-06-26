@@ -1,31 +1,26 @@
 import {useState} from 'react'
-import {Figures} from '~/components/Figures'
 import styles from './TheFacial.module.css'
 
 const STEPS = [
   {
-    label: '0.1',
     word: 'Cleanse',
     eyebrow: 'intelligent cleansing',
     product: {variant: 'gold', name: 'The face oil'},
     text: 'Warm a few drops between your palms and press them into dry skin. The botanical oil dissolves makeup, sunscreen and the residue of the day, lifting it all away gently, without ever stripping your barrier or leaving the skin tight.',
   },
   {
-    label: '0.2',
     word: 'Hydrate',
     eyebrow: 'water meets oil',
     product: {variant: 'silver', name: 'The serum'},
     text: 'Mist the serum over the oil and emulsify with damp fingertips. Water binds to the oil and carries everything away clean, so the skin is left fresh, soft and deeply quenched rather than stripped of its own moisture.',
   },
   {
-    label: '0.3',
     word: 'Moisturize',
     eyebrow: 'a living base layer',
     product: {variant: 'silver', name: 'The serum'},
     text: 'Press a second veil of serum into still-damp skin. This living base layer floods the surface with lightweight moisture and prepares it to hold and absorb everything that follows in the ritual.',
   },
   {
-    label: '0.4',
     word: 'Regenerate',
     eyebrow: 'lasting nourishment',
     product: {variant: 'gold', name: 'The face oil'},
@@ -64,7 +59,7 @@ export function TheFacial() {
               const isActive = index === activeIndex
               return (
                 <li
-                  key={step.label}
+                  key={step.word}
                   className={`${styles.step} ${isActive ? styles.stepActive : ''}`}
                 >
                   <button
@@ -75,17 +70,42 @@ export function TheFacial() {
                     onFocus={() => setActiveIndex(index)}
                     onClick={() => setActiveIndex(index)}
                   >
-                    <span className={styles.stepHead}>
-                      <span className={`ui-nums ${styles.stepLabel}`}>
-                        <Figures>{step.label}</Figures>
-                      </span>
-                      <span className={styles.stepWord}>{step.word}</span>
-                    </span>
-                    <span className={styles.stepIcon} aria-hidden="true" />
+                    <span className={styles.stepWord}>{step.word}</span>
+                    <svg
+                      className={styles.stepIcon}
+                      viewBox="0 0 18 18"
+                      fill="none"
+                      aria-hidden="true"
+                    >
+                      <path
+                        className={styles.stepBarV}
+                        d="M9 3v12"
+                        stroke="currentColor"
+                        strokeWidth="1.2"
+                        strokeLinecap="round"
+                      />
+                      <path
+                        d="M3 9h12"
+                        stroke="currentColor"
+                        strokeWidth="1.2"
+                        strokeLinecap="round"
+                      />
+                    </svg>
                   </button>
                   <div className={styles.stepBottom}>
                     <div className={styles.stepBottomWrap}>
-                      <p className={styles.stepText}>{step.text}</p>
+                      <p className={styles.stepText}>
+                        <span
+                          className={`${styles.stepCount} ${
+                            step.product.variant === 'gold'
+                              ? styles.stepCountGold
+                              : styles.stepCountSilver
+                          }`}
+                        >
+                          Step {index + 1}.
+                        </span>
+                        {step.text}
+                      </p>
                     </div>
                   </div>
                 </li>

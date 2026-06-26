@@ -134,7 +134,7 @@
 .grid {
   grid-column: 1 / -1;
   display: grid;
-  /* 4-up op desktop (12 koloms), 2-up op mobiel (6 koloms): span 3 past beide. */
+  /* 4-up op desktop (24 koloms), 2-up op mobiel (12 koloms): span 6 past beide. */
   grid-template-columns: repeat(var(--grid-columns), 1fr);
   column-gap: var(--grid-gutter);
   row-gap: 2.5em;
@@ -144,7 +144,7 @@
 }
 
 .card {
-  grid-column: span 3;
+  grid-column: span 6;
 }
 
 .cardLink {

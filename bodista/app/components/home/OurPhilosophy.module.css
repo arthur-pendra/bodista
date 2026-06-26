@@ -29,10 +29,9 @@
   margin-bottom: -1.25em;
 }
 
-/* Divider in twee segmenten boven de tekst- en mediakolom; de gutter van
-   .layout-grid (20px) laat het gat ertussen open, exact zoals in Figma. */
-.dividerLeft,
-.dividerRight {
+/* Eén doorlopende divider over de volle breedte boven de tekst- en mediakolom. */
+.divider {
+  grid-column: 1 / -1;
   width: 100%;
   height: 0;
   margin: 0;
@@ -40,18 +39,10 @@
   border-top: 1px solid var(--color-hairline);
 }
 
-.dividerLeft {
-  grid-column: 1 / 6;
-}
-
-.dividerRight {
-  grid-column: 6 / 13;
-}
-
 /* ---- Tekst-kolom (links) -------------------------------------------------- */
 
 .text {
-  grid-column: 1 / 6;
+  grid-column: 1 / 11;
   /* Strek mee met de rijhoogte (bepaald door de pill-media rechts) zodat de
      tags naar de onderkant van de pill kunnen zakken. */
   align-self: stretch;
@@ -94,7 +85,7 @@
 /* ---- Media-kolom (rechts) ------------------------------------------------- */
 
 .media {
-  grid-column: 6 / 13;
+  grid-column: 12 / 25;
 }
 
 .portrait {
@@ -117,15 +108,6 @@
 /* ---- Responsive ----------------------------------------------------------- */
 
 @media (max-width: 767px) {
-  /* 6-koloms grid: één doorlopende divider, geen tweede segment. */
-  .dividerLeft {
-    grid-column: 1 / -1;
-  }
-
-  .dividerRight {
-    display: none;
-  }
-
   .text {
     grid-column: 1 / -1;
   }
