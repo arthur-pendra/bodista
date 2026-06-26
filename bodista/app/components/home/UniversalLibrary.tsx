@@ -1,9 +1,11 @@
 import styles from './UniversalLibrary.module.css'
 
 const ENTRIES = [
-  {id: 'skin-1', label: 'How the skin works'},
-  {id: 'skin-2', label: 'How the skin works'},
-  {id: 'skin-3', label: 'How the skin works'},
+  {id: 'how-the-skin-works', label: 'How the skin works'},
+  {id: 'oil-and-water', label: 'Why oil and water belong together'},
+  {id: 'skin-barrier', label: 'Reading your skin barrier'},
+  {id: 'botanical-actives', label: 'The botanicals that do the work'},
+  {id: 'night-renewal', label: 'How the skin repairs at night'},
 ]
 
 export function UniversalLibrary() {
@@ -16,12 +18,12 @@ export function UniversalLibrary() {
 
         <div className={styles.text}>
           <p className={styles.heading}>
-            Everything our body needs to be healthy is made by the biology
-            within us.
+            A library of everything we have learned about the skin and the
+            biology within it.
           </p>
           <p className={styles.intro}>
-            Begin with a gentle botanical cleanser to remove the day. Pat your
-            skin damp, not dry — moisture is the bridge between cleanser and oil.
+            Slow, considered reading on the science behind each ritual — from how
+            the barrier works to why oil and water belong together.
           </p>
           <ul className={styles.accordion}>
             {ENTRIES.map((entry) => (

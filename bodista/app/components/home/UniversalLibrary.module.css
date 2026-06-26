@@ -37,6 +37,9 @@
 
 .text {
   grid-column: 1 / 6;
+  /* Strek mee met de rijhoogte (bepaald door het portret rechts) zodat de
+     lineup naar de onderkant van het portret kan zakken. */
+  align-self: stretch;
   display: flex;
   flex-direction: column;
   align-items: stretch;
@@ -60,7 +63,9 @@
 }
 
 .accordion {
-  margin: 0;
+  /* Duw de lineup onderin de tekstkolom, op één lijn met de onderkant van het
+     portret rechts (zelfde aanpak als de tags in OurPhilosophy). */
+  margin: auto 0 0;
   padding: 0;
   list-style: none;
 }
@@ -70,11 +75,9 @@
   align-items: center;
   justify-content: space-between;
   gap: 1em;
-  padding: 1.125em 0;
-  border-top: 1px solid var(--color-hairline);
-}
-
-.entry:last-child {
+  /* Zelfde ritme als de Protocols-stappen: lijn alleen onder de link, tekst
+     strak op de lijn. */
+  padding: 0.375em 0 0.5em;
   border-bottom: 1px solid var(--color-hairline);
 }
 

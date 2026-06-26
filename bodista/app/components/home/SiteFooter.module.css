@@ -158,14 +158,28 @@
   max-width: 20em; /* iets korter dan de volle kolom-groep */
 }
 
-.pill {
+/* Korte consent-regel onder de pill — klein en gedempt, zoals .muted. */
+.consent {
+  margin: 1em 0 0;
+  font-size: var(--text-detail); /* 14px */
+  line-height: 1.5;
+  color: var(--color-ink);
+  opacity: 0.5;
+}
+
+/* Link in de consent-regel onderscheidt zich met een lijn eronder (geen
+   hover-underline). */
+.consentLink {
+  color: var(--color-ink);
+  border-bottom: 1px solid rgba(43, 33, 32, 0.4);
+}
+
+/* Gouden pill-input links + losse zilveren subscribe-knop rechts. */
+.fields {
   display: flex;
-  align-items: center;
-  gap: 0.5em;
+  align-items: stretch;
+  gap: 0.0625em; /* ~1px — vrijwel naadloos tegen elkaar */
   width: 100%;
-  padding: 0.375em 0.375em 0.375em 1em;
-  border: 1px solid var(--color-ink);
-  border-radius: var(--radius-pill);
 }
 
 .input {
@@ -173,47 +187,49 @@
   min-width: 0;
   min-height: 2.75rem; /* a11y tap-target ondergrens */
   margin: 0;
-  padding: 0;
+  padding: 0 1.5em;
   border: 0;
-  border-radius: 0;
-  background: transparent;
+  border-radius: var(--radius-pill);
+  background: var(--color-gold);
   font-family: inherit;
   font-size: var(--text-detail); /* 14px */
   color: var(--color-ink);
 }
 
 .input::placeholder {
-  color: #313437;
+  color: var(--color-ink);
+  opacity: 0.7;
 }
 
 .input:focus {
   outline: none;
 }
 
-.submit {
+/* .fields-scope wint van de globale button:not(.reset) pill-radius → lichte
+   ronding i.p.v. pill. */
+.fields .submit {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   flex: 0 0 auto;
-  width: 1.8125em; /* 29px — gelijk aan de plus-cirkel van de product-pills */
-  height: 1.8125em;
-  min-width: 1.8125rem;
-  min-height: 1.8125rem;
-  padding: 0;
+  min-height: 2.75rem; /* a11y tap-target ondergrens */
+  padding: 0 1.75em;
   border: 0;
-  border-radius: 50%;
-  background: var(--color-gold);
-  color: var(--color-light);
+  border-radius: 0; /* helemaal recht */
+  background: var(--color-silver);
+  font-family: inherit;
+  font-size: var(--text-detail); /* 14px */
+  color: var(--color-ink);
   cursor: pointer;
 }
 
-.pill:focus-within {
+.input:focus-visible {
   outline: 2px solid var(--color-gold);
   outline-offset: 2px;
 }
 
-.submit:focus-visible {
-  outline: 2px solid var(--color-light);
+.fields .submit:focus-visible {
+  outline: 2px solid var(--color-silver);
   outline-offset: 2px;
 }
 

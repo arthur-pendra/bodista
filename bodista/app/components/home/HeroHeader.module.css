@@ -34,48 +34,69 @@
   object-fit: cover;
 }
 
+/* Zwarte gradient van onder naar boven uitfadend — tilt de leesbaarheid van de
+   tekst linksonder zonder het beeld erboven te verdonkeren. Ligt boven de
+   video, onder de tekst (.heroContent z-index 1). */
+.heroBackdrop::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.65) 0%,
+    rgba(0, 0, 0, 0) 45%
+  );
+}
+
+/* Tekstblok linksonder, uitgelijnd op de buitenmarge (--grid-margin). */
 .heroContent {
-  position: relative;
+  position: absolute;
+  left: var(--grid-margin);
+  bottom: 2.5em;
   z-index: 1;
-  text-align: center;
-  max-width: 40em;
-  padding: 1.5em;
+  max-width: 30em;
+  color: var(--color-warm);
 }
 
 .heroHeadline {
-  font-size: var(--text-heading-lg);
-  font-weight: 300;
-  letter-spacing: 0.02em;
-  margin: 0 0 1em;
-  color: #f5f2ec;
+  margin: 0;
+  font-size: var(--text-heading-md); /* 35px */
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  color: var(--color-warm);
 }
 
 .heroSubtext {
-  font-size: var(--text-body-lg);
-  line-height: 1.6;
-  color: rgba(245, 242, 236, 0.75);
-  margin: 0 0 2em;
+  margin: 1.25em 0 0;
+  font-size: var(--text-detail); /* 14px */
+  line-height: 1.5;
+  color: var(--color-light);
 }
 
-.heroCta {
-  display: inline-block;
-  padding: 0.875em 2.5em;
-  background-color: #f5f2ec;
-  color: #1a1a1a;
-  text-decoration: none;
-  font-size: var(--text-detail);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  transition: background-color 0.2s;
+/* Tekst-link met een lijn eronder (geen pill, geen hover-underline). */
+.heroLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.625em;
+  margin-top: 2.25em;
+  padding-bottom: 0.5em;
+  border-bottom: 1px solid rgba(244, 238, 226, 0.55);
+  font-size: var(--text-detail); /* 14px */
+  color: var(--color-warm);
 }
 
-.heroCta:hover {
-  background-color: #fff;
+.heroLinkArrow {
+  flex-shrink: 0;
+  width: 0.85em;
+  height: 0.85em;
 }
 
 /* Mobile Landscape en kleiner */
 @media (max-width: 767px) {
   .heroHeadline {
-    font-size: var(--text-heading-md);
+    font-size: var(--text-heading-sm);
   }
 }

@@ -110,11 +110,26 @@
 }
 
 .intro {
-  margin: 1em 0 2em;
+  margin: 1em 0 1.75em;
   max-width: 30em;
   font-size: var(--text-body-lg); /* 18px */
   line-height: 1.333;
   color: var(--color-charcoal);
+}
+
+/* Donkere pill-CTA onder de intro, boven de stappen. */
+.shopButton {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem; /* a11y tap-target ondergrens */
+  margin: 0 0 2.5em;
+  padding: 0 1.75em;
+  border-radius: var(--radius-pill);
+  background-color: var(--color-charcoal);
+  font-size: var(--text-detail); /* 14px */
+  letter-spacing: 0.04em;
+  color: var(--color-light);
 }
 
 .stepList {

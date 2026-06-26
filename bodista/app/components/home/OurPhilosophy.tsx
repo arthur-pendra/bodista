@@ -29,7 +29,11 @@ export function OurPhilosophy() {
         </div>
 
         <div className={styles.media}>
-          <div className={styles.portrait} />
+          <img
+            className={styles.portrait}
+            src="/assets/images/ourphilosophy.png"
+            alt=""
+          />
         </div>
       </div>
     </section>

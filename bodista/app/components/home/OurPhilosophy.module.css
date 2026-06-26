@@ -98,10 +98,14 @@
 }
 
 .portrait {
+  display: block;
   width: 100%;
-  /* Verhouding uit Figma (837 × 393). Placeholder tot de echte foto er is. */
+  /* Verhouding uit Figma (837 × 393). */
   aspect-ratio: 837 / 393;
+  /* Foto vult de pill en wordt door de radius bijgesneden. */
+  object-fit: cover;
   border-radius: var(--radius-pill); /* volledige stadion-vorm, ronde uiteinden */
+  /* Gradient blijft als achtergrond zichtbaar tijdens het laden van de foto. */
   background:
     radial-gradient(
       120% 140% at 70% 30%,

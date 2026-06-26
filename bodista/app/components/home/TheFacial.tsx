@@ -59,6 +59,9 @@ export function TheFacial() {
             two botanical elements, oil and water. a sensory sequence in four
             steps that cleanses and nourishes your skin.
           </p>
+          <a className={styles.shopButton} href="/collections">
+            Shop the whole system
+          </a>
           <ul className={styles.stepList}>
             {STEPS.map((step, index) => {
               const isActive = index === activeIndex

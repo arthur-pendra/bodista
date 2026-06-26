@@ -5,7 +5,6 @@ import {HeroHeader} from '~/components/home/HeroHeader';
 import {TheCollection} from '~/components/home/TheCollection';
 import {OurPhilosophy} from '~/components/home/OurPhilosophy';
 import {TheFacial} from '~/components/home/TheFacial';
-import {InThisProtocol} from '~/components/home/InThisProtocol';
 import {WhatsInside} from '~/components/home/WhatsInside';
 import {FriendsOfBodista} from '~/components/home/FriendsOfBodista';
 import {UniversalLibrary} from '~/components/home/UniversalLibrary';
@@ -58,7 +57,6 @@ export default function Homepage() {
       </Suspense>
       <OurPhilosophy />
       <TheFacial />
-      <InThisProtocol />
       <WhatsInside />
       <FriendsOfBodista />
       <UniversalLibrary />

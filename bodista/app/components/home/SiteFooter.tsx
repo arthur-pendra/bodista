@@ -47,7 +47,7 @@ export function SiteFooter() {
               <label htmlFor="footer-email" className="sr-only">
                 Email address
               </label>
-              <div className={styles.pill}>
+              <div className={styles.fields}>
                 <input
                   id="footer-email"
                   className={styles.input}
@@ -56,14 +56,17 @@ export function SiteFooter() {
                   placeholder="your@mail.com"
                   autoComplete="email"
                 />
-                <button
-                  className={styles.submit}
-                  type="submit"
-                  aria-label="Subscribe to newsletter"
-                >
-                  <ArrowIcon />
+                <button className={styles.submit} type="submit">
+                  subscribe
                 </button>
               </div>
+              <p className={styles.consent}>
+                By subscribing you agree to our{' '}
+                <a className={styles.consentLink} href="/">
+                  Privacy Policy
+                </a>
+                . Unsubscribe anytime.
+              </p>
             </form>
           </div>
 
