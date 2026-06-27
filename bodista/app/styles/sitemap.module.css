@@ -92,25 +92,6 @@
   background: #ccc;
 }
 
-.connectorBranch {
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  padding: 1em 0 2em;
-  position: relative;
-}
-
-.connectorBranch::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 1px;
-  height: 1em;
-  background: #ccc;
-}
-
 .connectorHorizontal {
   display: flex;
   justify-content: center;
@@ -141,23 +122,6 @@
   content: '';
   width: 1px;
   height: 1.5em;
-  background: #ccc;
-}
-
-/* ==========================================================================
-   Sub-connection (page to child page)
-   ========================================================================== */
-
-.subConnector {
-  display: flex;
-  justify-content: center;
-  padding: 1em 0;
-  position: relative;
-}
-
-.subConnectorLine {
-  width: 1px;
-  height: 2em;
   background: #ccc;
 }
 

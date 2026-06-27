@@ -18,3 +18,6 @@ text-demo-*.png
 
 # Allow all assets under public/
 !public/**
+
+# TypeScript build cache
+tsconfig.tsbuildinfo

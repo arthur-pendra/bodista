@@ -300,8 +300,8 @@
 
 .eyebrow {
   margin-bottom: 0.25em;
-  font-size: 0.625em; /* 10px — heel klein */
-  line-height: 1;
+  font-size: var(--text-caption); /* microcaption — type-label boven de productnaam */
+  line-height: var(--leading-caption);
   letter-spacing: var(--tracking-detail);
   color: var(--color-gold);
 }

@@ -81,16 +81,6 @@
   }
 }
 
-/* Pill-look komt uit de global .product-pill; hier alleen de plaatsing
-   onderin het beeld. */
-.oilButton {
-  position: absolute;
-  bottom: 1.875em;
-  left: 50%;
-  transform: translateX(-50%);
-  animation: facialFade 0.2s ease;
-}
-
 /* ---- Stappen-kolom (rechts) ----------------------------------------------- */
 
 .steps {
@@ -210,8 +200,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .eyebrow,
-  .word,
-  .oilButton {
+  .word {
     animation: none;
   }
 
@@ -237,10 +226,6 @@
   }
 
   .heading {
-    font-size: var(--text-heading-md);
-  }
-
-  .dissolve {
     font-size: var(--text-heading-md);
   }
 }

@@ -13,7 +13,7 @@
   color: var(--color-charcoal);
 }
 
-.footer .layout-grid {
+.footer :global(.layout-grid) {
   row-gap: 0;
   align-items: start;
 }
@@ -142,7 +142,7 @@
   margin-top: auto;
   padding-top: 2em;
   font-size: var(--text-detail); /* 14px */
-  line-height: 1.5;
+  line-height: var(--leading-body);
   color: var(--color-charcoal);
   opacity: 0.5;
 }
@@ -163,7 +163,7 @@
 .consent {
   margin: 1em 0 0;
   font-size: var(--text-detail); /* 14px */
-  line-height: 1.5;
+  line-height: var(--leading-body);
   color: var(--color-charcoal);
   opacity: 0.5;
 }
@@ -240,7 +240,7 @@
   grid-column: 1 / -1;
   margin: 0.5em 0 0;
   font-size: var(--text-detail); /* 14px */
-  line-height: 1.5;
+  line-height: var(--leading-body);
   text-align: left;
   color: var(--color-charcoal);
   opacity: 0.3;
