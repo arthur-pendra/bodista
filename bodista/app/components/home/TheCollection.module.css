@@ -114,7 +114,7 @@
 
 .filterPlus {
   display: block;
-  font-size: 1.3em;
+  font-size: 1.3em; /* glyph — bewuste uitzondering: "+"-teken, geen type-scale tekst */
   line-height: 1;
   transform: translateY(-1px);
 }
@@ -238,7 +238,7 @@
   overflow: hidden;
   opacity: 0;
   white-space: nowrap;
-  font-size: 0.6875em; /* 11px */
+  font-size: var(--text-caption); /* micro-uppercase ML-label */
   letter-spacing: 0.04em;
   text-transform: uppercase;
   transition: max-width 0.35s ease, opacity 0.3s ease;
@@ -310,7 +310,7 @@
   margin: 0;
   font-size: var(--text-body); /* 16px — iets groter dan de prijs/eyebrow */
   font-weight: 400;
-  line-height: 1.214;
+  line-height: var(--leading-detail);
   letter-spacing: -0.017em;
   color: var(--color-charcoal);
 }
@@ -318,7 +318,7 @@
 .price {
   margin: 0;
   font-size: var(--text-detail);
-  line-height: 1.214;
+  line-height: var(--leading-detail);
   color: var(--color-charcoal);
 }
 
