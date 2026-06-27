@@ -128,7 +128,7 @@
   border: 1px solid var(--color-dark);
   border-radius: 0.25em;
   background: transparent;
-  color: var(--color-dark);
+  color: var(--color-ink);
   font-size: 1em;
   cursor: pointer;
 }

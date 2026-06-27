@@ -10,7 +10,7 @@
 
 .footer {
   padding-bottom: 2.5em;
-  color: var(--color-ink);
+  color: var(--color-charcoal);
 }
 
 .footer .layout-grid {
@@ -106,8 +106,8 @@
   margin: 0 0 2em;
   font-size: var(--text-detail); /* 14px */
   font-weight: 400;
-  line-height: 1.2;
-  color: var(--color-ink);
+  line-height: var(--leading-detail);
+  color: var(--color-charcoal);
   opacity: 0.5;
 }
 
@@ -126,8 +126,8 @@
 
 .link {
   font-size: var(--text-body); /* 16px */
-  line-height: 1.5;
-  color: var(--color-ink);
+  line-height: var(--leading-body);
+  color: var(--color-charcoal);
 }
 
 .linkArrow {
@@ -143,7 +143,7 @@
   padding-top: 2em;
   font-size: var(--text-detail); /* 14px */
   line-height: 1.5;
-  color: var(--color-ink);
+  color: var(--color-charcoal);
   opacity: 0.5;
 }
 
@@ -164,14 +164,14 @@
   margin: 1em 0 0;
   font-size: var(--text-detail); /* 14px */
   line-height: 1.5;
-  color: var(--color-ink);
+  color: var(--color-charcoal);
   opacity: 0.5;
 }
 
 /* Link in de consent-regel onderscheidt zich met een lijn eronder (geen
    hover-underline). */
 .consentLink {
-  color: var(--color-ink);
+  color: var(--color-charcoal);
   border-bottom: 1px solid rgba(43, 33, 32, 0.4);
 }
 
@@ -194,11 +194,11 @@
   background: var(--color-gold);
   font-family: inherit;
   font-size: var(--text-detail); /* 14px */
-  color: var(--color-ink);
+  color: var(--color-charcoal);
 }
 
 .input::placeholder {
-  color: var(--color-ink);
+  color: var(--color-charcoal);
   opacity: 0.7;
 }
 
@@ -220,7 +220,7 @@
   background: var(--color-silver);
   font-family: inherit;
   font-size: var(--text-detail); /* 14px */
-  color: var(--color-ink);
+  color: var(--color-charcoal);
   cursor: pointer;
 }
 
@@ -242,7 +242,7 @@
   font-size: var(--text-detail); /* 14px */
   line-height: 1.5;
   text-align: left;
-  color: var(--color-ink);
+  color: var(--color-charcoal);
   opacity: 0.3;
 }
 

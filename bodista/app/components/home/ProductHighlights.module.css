@@ -22,14 +22,14 @@
   font-size: var(--text-heading-md);
   font-weight: 300;
   margin: 0;
-  color: #1a1a1a;
+  color: var(--color-charcoal);
 }
 
 .highlightsViewAll {
   font-size: var(--text-detail);
   letter-spacing: 0.04em;
   text-decoration: none;
-  color: #1a1a1a;
+  color: var(--color-charcoal);
 }
 
 .highlightsGrid {
@@ -65,12 +65,12 @@
   z-index: 1;
   /* Zelfde styling als de marquee-phrase in MegaNav (--mega-fs-marquee: 0.5em,
      letter-spacing 0.16em) → exact dezelfde grootte/look als "Worldwide Shipping". */
-  font-size: 0.5em;
+  font-size: var(--text-caption); /* 8px */
   letter-spacing: 0.16em;
   text-transform: uppercase;
   padding: 0.5em 0.85em;
   background-color: #f5f2ec;
-  color: #1a1a1a;
+  color: var(--color-charcoal);
   border-radius: 0;
 }
 
@@ -103,12 +103,12 @@
   font-size: var(--text-body);
   font-weight: 400;
   margin: 0 0 0.25em;
-  color: #1a1a1a;
+  color: var(--color-charcoal);
 }
 
 .highlightsPrice {
   font-size: var(--text-detail);
-  color: #666;
+  color: var(--color-charcoal);
   margin: 0;
 }
 
@@ -120,7 +120,7 @@
   padding: 0;
   background: none;
   border: none;
-  color: #1a1a1a;
+  color: var(--color-charcoal);
   cursor: pointer;
 }
 

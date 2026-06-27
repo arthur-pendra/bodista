@@ -21,7 +21,7 @@
 .label {
   grid-column: 1 / -1;
   font-size: var(--text-detail); /* 14px */
-  letter-spacing: 0.08em;
+  letter-spacing: var(--tracking-detail);
   color: var(--color-gold);
   /* Titel dichter op de divider: trek het label naar de lijn toe (≈0.625em
      boven de lijn). De row-gap onder de divider blijft ongemoeid. */
@@ -62,37 +62,34 @@
   grid-row: 1;
   display: flex;
   flex-direction: column;
-  /* Tekst beslaat 3 kolommen; de rechterrand valt op de divider, dus padding
-     rechts zodat de tekst niet tegen de lijn aan loopt. Links geeft de gutter
-     al lucht t.o.v. de vorige lijn. */
-  padding-right: 1.875em; /* 30px */
 }
 
+/* Tekst eindigt één kolom ná de foto (portret = 4 kolommen, tekst = 5): zo
+   blijft de tekst binnen het grid en houdt hij lucht tot de divider. */
 .col:nth-child(1) .text {
-  grid-column: 1 / 7;
+  grid-column: 1 / 6;
 }
 .col:nth-child(2) .text {
-  grid-column: 7 / 13;
+  grid-column: 7 / 12;
 }
 .col:nth-child(3) .text {
-  grid-column: 13 / 19;
+  grid-column: 13 / 18;
 }
 .col:nth-child(4) .text {
-  grid-column: 19 / 25;
+  grid-column: 19 / 24;
 }
 
 .quote {
   margin: 0;
-  font-size: var(--text-detail); /* 14px */
-  font-style: italic;
-  line-height: 1.4;
+  font-size: var(--text-body); /* 16px */
+  line-height: var(--leading-body);
   color: var(--color-charcoal);
 }
 
 .source {
   margin-top: 4em;
   font-size: var(--text-detail); /* 14px */
-  letter-spacing: 0.02em;
+  letter-spacing: var(--tracking-detail);
   color: var(--color-gold);
 }
 

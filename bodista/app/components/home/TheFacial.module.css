@@ -18,7 +18,7 @@
 .label {
   grid-column: 1 / -1;
   font-size: var(--text-detail); /* 14px */
-  letter-spacing: 0.08em;
+  letter-spacing: var(--tracking-detail);
   color: var(--color-gold);
   /* Titel dichter op de divider: trek het label naar de lijn toe (≈0.625em
      boven de lijn). De row-gap onder de divider blijft ongemoeid. */
@@ -52,10 +52,10 @@
   left: 50%;
   transform: translateX(-50%);
   white-space: nowrap;
-  font-size: 0.5em; /* 8px — gelijk aan de hover-caption in de product cards */
+  font-size: var(--text-caption); /* 8px — gelijk aan de hover-caption in de product cards */
   letter-spacing: 0.32em;
   text-transform: uppercase;
-  color: var(--color-light);
+  color: var(--color-warm);
   animation: facialFade 0.2s ease;
 }
 
@@ -65,9 +65,9 @@
   left: 50%;
   transform: translate(-50%, -50%);
   font-size: var(--text-heading-lg); /* 56px */
-  line-height: 1;
+  line-height: var(--leading-heading-lg);
   white-space: nowrap;
-  color: var(--color-light);
+  color: var(--color-warm);
   animation: facialFade 0.2s ease;
 }
 
@@ -104,7 +104,7 @@
   font-size: var(--text-heading-lg); /* 56px */
   font-weight: 400;
   font-style: italic;
-  line-height: 1;
+  line-height: var(--leading-heading-lg);
   letter-spacing: -0.01em;
   color: var(--color-gold);
 }
@@ -112,8 +112,8 @@
 .intro {
   margin: 1em 0 2em;
   max-width: 30em;
-  font-size: var(--text-body-lg); /* 18px */
-  line-height: 1.333;
+  font-size: var(--text-body); /* 16px */
+  line-height: var(--leading-body);
   color: var(--color-charcoal);
 }
 
@@ -142,6 +142,7 @@
 
 .stepWord {
   font-size: var(--text-body-lg); /* 18px */
+  line-height: var(--leading-body-lg);
   letter-spacing: -0.01em;
   color: var(--color-charcoal);
 }
@@ -202,8 +203,8 @@
      12 kolommen breed, de tekst beslaat kolom 13 t/m 22 = 10 kolommen + 9 gutters.
      Fysiek identiek aan de oude 12-koloms opzet, dus de formule blijft gelijk. */
   max-width: calc((500% - var(--grid-gutter)) / 6);
-  font-size: var(--text-detail); /* 14px */
-  line-height: 1.714;
+  font-size: var(--text-body); /* 16px */
+  line-height: var(--leading-body);
   color: var(--color-charcoal);
 }
 

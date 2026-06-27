@@ -41,7 +41,8 @@
 
 .label {
   font-size: var(--text-detail); /* 14px */
-  line-height: 1.2;
+  line-height: var(--leading-detail);
+  letter-spacing: var(--tracking-detail);
   color: var(--color-gold);
 }
 
@@ -49,7 +50,7 @@
   margin: 0;
   font-size: var(--text-heading-md); /* 35px */
   font-weight: 400;
-  line-height: 1;
+  line-height: var(--leading-heading-md);
   letter-spacing: -0.01em;
   color: var(--color-charcoal);
 }
@@ -176,10 +177,10 @@
   left: 50%;
   transform: translateX(-50%);
   white-space: nowrap;
-  font-size: 0.5em; /* 8px */
+  font-size: var(--text-caption); /* 8px */
   letter-spacing: 0.32em;
   text-transform: uppercase;
-  color: var(--color-light);
+  color: var(--color-warm);
   opacity: 0;
   transition: opacity 0.3s ease;
 }
@@ -201,7 +202,7 @@
   padding: 0 0.71875em; /* collapsed = perfecte cirkel (38px) */
   border-radius: var(--radius-pill);
   background-color: var(--color-gold);
-  color: rgba(0, 0, 0, 0.55);
+  color: var(--color-charcoal);
   cursor: pointer;
   opacity: 0;
   transition:
@@ -301,7 +302,7 @@
   margin-bottom: 0.25em;
   font-size: 0.625em; /* 10px — heel klein */
   line-height: 1;
-  letter-spacing: 0.08em;
+  letter-spacing: var(--tracking-detail);
   color: var(--color-gold);
 }
 

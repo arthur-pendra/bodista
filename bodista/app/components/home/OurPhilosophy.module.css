@@ -22,7 +22,7 @@
 .label {
   grid-column: 1 / -1;
   font-size: var(--text-detail); /* 14px */
-  letter-spacing: 0.08em;
+  letter-spacing: var(--tracking-detail);
   color: var(--color-gold);
   /* Titel dichter op de divider: trek het label naar de lijn toe (≈0.625em
      boven de lijn). De row-gap onder de divider blijft ongemoeid. */
@@ -55,7 +55,7 @@
 .paragraph {
   margin: 0;
   font-size: var(--text-heading-md); /* 35px */
-  line-height: 1.05;
+  line-height: var(--leading-heading-md);
   color: var(--color-charcoal);
 }
 
@@ -71,15 +71,9 @@
 }
 
 .tag {
-  display: inline-flex;
-  align-items: center;
-  min-height: 2.375em; /* 38px */
-  padding: 0 1.375em;
-  border-radius: 999px;
-  font-size: var(--text-body-lg); /* 18px */
-  line-height: 1;
-  color: var(--color-light);
-  background-color: var(--color-charcoal);
+  /* Styling tijdelijk weggehaald — alleen de basisgrootte (text-body).
+     De pill-styling komt later opnieuw terug. */
+  font-size: var(--text-body); /* 16px */
 }
 
 /* ---- Media-kolom (rechts) ------------------------------------------------- */

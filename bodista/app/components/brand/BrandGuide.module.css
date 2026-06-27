@@ -328,7 +328,7 @@
 }
 
 .swatchDark {
-  color: #fff;
+  color: var(--color-warm);
 }
 
 .swatchName {

@@ -30,7 +30,7 @@
 
 /* Desktop */
 :root {
-  --size-unit: 16;
+  --size-unit: 14;
   --size-container-ideal: 1440;
   --size-container-min: 992px;
   --size-container-max: 1920px;
@@ -75,18 +75,27 @@
   --cart-aside-summary-height: 15.625em;
   --grid-item-width: 22.1875em;
   --header-height: 3em;
-  --color-dark: #000;
-  --color-light: #fff;
+  /* ==========================================================================
+     Kleur — de complete brand-palette (zie BrandGuide). Gebruik in eigen
+     componenten UITSLUITEND deze tokens; nooit een losse hex.
+     ========================================================================== */
 
-  /* Brand palette — three core colours, two accents. Used sparingly. */
-  --color-page: #e5e0d5; /* warme pagina-achtergrond (home-frame fill) */
-  --color-charcoal: #222222; /* core — hero & closing sections */
-  --color-ink: #2b2120; /* warm-donkere tekst (footer, body op warm) */
-  --color-body: #5c594f; /* core — body copy & explanatory text */
-  --color-warm: #f4eee2; /* core — light backgrounds & oil column */
-  --color-gold: #c5a55a; /* accent — logotype, palindrome on dark, CTAs */
-  --color-silver: #b5b0a4; /* accent — serum accent, Step II markers */
-  --color-hairline: rgba(0, 0, 0, 0.18); /* hairline borders & dividers — zwart op 18% */
+  /* --- Brand-palette: als TEKSTkleur enkel deze vijf (3 core + 2 accenten) --- */
+  --color-charcoal: #222222; /* core, donker — álle koppen & lopende tekst, hero/closing-secties, pill-accent */
+  --color-body: #5c594f; /* Body Grey — gereserveerd voor body/uitleg-tekst; palette-kleur, nu nog niet in gebruik */
+  --color-warm: #f4eee2; /* Warm White — lichte tekst op donker + lichte achtergronden/oil-gradients */
+  --color-gold: #c5a55a; /* accent — logotype, labels/eyebrows, CTA's, palindroom op donker */
+  --color-silver: #b5b0a4; /* accent — serum, Step II-markers, eindpunt van gradients */
+
+  /* --- Structurele chrome: GEEN merk-tekstkleur, alleen vlakken/lijnen ------- */
+  --color-page: #e5e0d5; /* warme pagina-achtergrond (body fill) */
+  --color-hairline: rgba(0, 0, 0, 0.10); /* hairline borders & dividers — zwart op 18% */
+
+  /* --- Scaffolding-only: Hydrogen default-UI (cart, sitemap, stylesheet,
+     footer-menu). Niet in eigen componenten gebruiken. ----------------------- */
+  --color-dark: #000; /* randen/vlakken op scaffolding */
+  --color-light: #fff; /* tekst & vlakken op donkere scaffolding */
+  --color-ink: #2b2120; /* legacy warm-donker — enkel nog de stylesheet-devpagina */
 
   /* Layout grid — gedeelde bron van waarheid voor de GridOverlay dev-tool
      (toggle: G) én content via .layout-grid. Desktop = 24 kolommen. */
@@ -96,15 +105,46 @@
 
   --radius-pill: 100em; /* volle pill-radius voor buttons */
 
+  /* Easings — Osmo Favorites. Gebruik via var(--ease-…) in transitions/animaties.
+     Standaard voor UI-overgangen: --ease-osmo. */
+  --ease-osmo: cubic-bezier(0.625, 0.05, 0, 1);
+  --ease-energy: cubic-bezier(0.32, 0.72, 0, 1);
+  --ease-smooth: cubic-bezier(0.38, 0.005, 0.215, 1);
+  --ease-punch: cubic-bezier(0.19, 1, 0.22, 1);
+  --ease-relaxed: cubic-bezier(0.7, 0, 0.3, 1);
+  --ease-expo-inout: cubic-bezier(0.87, 0, 0.13, 1);
+  --ease-jump: cubic-bezier(0.35, 1.5, 0.6, 1);
+  --ease-pop: cubic-bezier(0.17, 0.67, 0.3, 1.33); /* = elastic */
+  --ease-anticipate: cubic-bezier(0.8, -0.4, 0.5, 1); /* = bounce */
+  --ease-fade: cubic-bezier(0.25, 0.1, 0.25, 1);
+
   /* Type scale — 6 maten, meer niet. Drie headings + drie basisteksten.
      In em (Osmo) zodat ze meeschalen met --size-font. Schrijf nergens een
-     losse font-size meer: kies altijd één van deze tokens. */
-  --text-heading-lg: 3.5em; /* 56px — display / hero & grote sectiekoppen */
-  --text-heading-md: 1.5em; /* 35px — standaard sectiekoppen */
-  --text-heading-sm: 1.25em; /* 25px — kleine koppen & subtitels */
-  --text-body-lg: 1.125em; /* 18px — lead / iets grotere basistekst */
-  --text-body: 1em; /* 16px — normale basistekst */
-  --text-detail: 0.875em; /* 14px — labels, captions, kleine details */
+     losse font-size meer: kies altijd één van deze tokens.
+     Basis = --size-unit (14px) → px = em × 14 op de referentie-breedte. */
+  --text-heading-lg: 3.5em; /* 49px  (3.5 × 14) — display / hero & grote sectiekoppen */
+  --text-heading-md: 1.5em; /* 21px  (1.5 × 14) — standaard sectiekoppen */
+  --text-heading-sm: 1.25em; /* 17.5px (1.25 × 14) — kleine koppen & subtitels */
+  --text-body-lg: 1.125em; /* 15.75px (1.125 × 14) — lead / iets grotere basistekst */
+  --text-body: 1em; /* 14px  (1 × 14) — basistekst (= --size-unit) */
+  --text-detail: 0.875em; /* 12.25px (0.875 × 14) — labels, captions, kleine details */
+  --text-caption: 0.5em; /* 7px   (0.5 × 14) — microcaption: uppercase eyebrows onder de leesbaarheidsvloer */
+
+  /* Line-height (leading) — unitless, één per tekstmaat. Schaalt mee met de
+     font-size. Stel hier centraal in; de teksten verwijzen ernaar via
+     var(--leading-…). Strak voor display, ruimer naar lopende tekst toe. */
+  --leading-heading-lg: 1; /* display / hero — strak op één regel */
+  --leading-heading-md: 1.4; /* sectiekoppen — vaak 2 regels */
+  --leading-heading-sm: 1.25; /* kleine koppen & subtitels */
+  --leading-body-lg: 1.3; /* lead / grotere basistekst */
+  --leading-body: 1.5; /* lopende tekst */
+  --leading-detail: 1.2; /* labels, captions, prijzen */
+  --leading-caption: 1; /* microcaption op één regel */
+
+  /* Tracking — basis letter-spacing voor kleine gouden detail-tekst
+     (labels, eyebrows, source). 0.08em ≈ 0.98px op de detail-labels (12.25px).
+     Pas dit hier aan en alle gouden labels volgen. */
+  --tracking-detail: 0.08em;
 }
 
 /* Mobiel (<=767px): 12 kolommen, kleinere buitenmarge. */
@@ -136,7 +176,7 @@ body {
   flex-direction: column;
   min-height: 100vh;
   background: var(--color-page);
-  color: var(--color-ink);
+  color: var(--color-charcoal);
   /* Lopende tekst gebruikt de elegante old-style cijfers van Novela Display
      (3/4/5/7/9 zakken onder de baseline). UI-cijfers (prijzen, maten) zetten
      dit lokaal om naar lining via .ui-nums. */
@@ -234,7 +274,7 @@ p {
 }
 
 a {
-  color: #000;
+  color: var(--color-charcoal);
 }
 
 a:hover {
@@ -393,10 +433,10 @@ textarea {
   font-family: inherit;
 }
 
-/* Echte action-/CTA-buttons zijn pill-vormig (volle radius). Text-/icon-
+/* Echte action-/CTA-buttons zijn rechthoekig (geen radius). Text-/icon-
    buttons met .reset zijn uitgezonderd. */
 button:not(.reset) {
-  border-radius: var(--radius-pill);
+  border-radius: 0;
 }
 
 /* ==========================================================================
@@ -426,11 +466,11 @@ button:not(.reset) {
   gap: 2em; /* 32px — ruime spacing tussen thumb, label en plus */
   height: 2.375em; /* 38px — altijd dezelfde hoogte */
   padding: 0 0.375em; /* 6px — thumb/plus raken bijna de rand */
-  border-radius: var(--radius-pill);
-  border: 1px solid var(--color-ink);
+  border-radius: 0;
+  border: 1px solid var(--color-charcoal);
   background-color: var(--pill-fill);
   backdrop-filter: blur(8px);
-  color: var(--color-ink);
+  color: var(--color-charcoal);
   font-size: 1em;
   line-height: 1;
   cursor: pointer;
@@ -451,7 +491,7 @@ button:not(.reset) {
   font-size: 1.125em; /* 18px */
   line-height: 1;
   letter-spacing: -0.01em;
-  color: var(--color-ink);
+  color: var(--color-charcoal);
 }
 
 /* Gouden/zilveren/zwarte cirkel met geometrisch kruis, exact gecentreerd. */
@@ -519,7 +559,7 @@ button:not(.reset) {
   width: 100%;
   min-height: 11em; /* 176px */
   padding: 1.875em; /* 30px */
-  border-radius: var(--radius-pill);
+  border-radius: 0;
   border: 1px solid rgba(43, 33, 32, 0.25);
   background-color: var(--pill-fill);
   color: var(--color-charcoal);
@@ -550,7 +590,7 @@ button:not(.reset) {
 
 .pill-button-big__label,
 .pill-button-big__caption {
-  font-size: 0.5em; /* 8px */
+  font-size: var(--text-caption); /* 8px */
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--color-charcoal);

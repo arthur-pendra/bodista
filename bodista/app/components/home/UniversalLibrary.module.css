@@ -17,7 +17,7 @@
 .label {
   grid-column: 1 / -1;
   font-size: var(--text-detail); /* 14px */
-  letter-spacing: 0.08em;
+  letter-spacing: var(--tracking-detail);
   color: var(--color-gold);
   /* Titel dichter op de divider: trek het label naar de lijn toe (≈0.625em
      boven de lijn). De row-gap onder de divider blijft ongemoeid. */
@@ -51,7 +51,7 @@
   margin: 0;
   font-size: var(--text-heading-md); /* 35px */
   font-weight: 400;
-  line-height: 1.05;
+  line-height: var(--leading-heading-md);
   color: var(--color-charcoal);
   /* Wisselt mee met het gehoverde onderwerp — korte in-fade, geen beweging. */
   animation: libraryFade 0.25s ease;
