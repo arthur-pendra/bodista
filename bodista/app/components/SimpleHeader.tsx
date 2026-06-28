@@ -8,6 +8,8 @@ import type {
 } from 'storefrontapi.generated'
 import {useAside} from '~/components/Aside'
 import {LiningMoney} from '~/components/LiningMoney'
+import {SearchFormPredictive} from '~/components/SearchFormPredictive'
+import {SearchResultsPredictive} from '~/components/SearchResultsPredictive'
 import {SHOP_TABS, EXPLORE_COLUMNS, EXPLORE_CARDS} from '~/components/megaMenu'
 import styles from './SimpleHeader.module.css'
 
@@ -20,84 +22,184 @@ type MenuProduct = NonNullable<
   MenuProductsQuery['products']
 >['nodes'][number]
 
-type MenuKey = 'shop' | 'explore'
-const MENUS: MenuKey[] = ['shop', 'explore']
+type MenuKey = 'shop' | 'explore' | 'search'
+const MENUS: MenuKey[] = ['shop', 'explore', 'search']
 
 export function SimpleHeader({cart, menuProducts}: SimpleHeaderProps) {
   const {open} = useAside()
   const location = useLocation()
 
   const rootRef = useRef<HTMLDivElement>(null)
-  const tlRef = useRef<Partial<Record<MenuKey, gsap.core.Timeline>>>({})
+  const containerRef = useRef<HTMLDivElement>(null)
+  const backdropRef = useRef<HTMLButtonElement>(null)
+  const panelRefs = useRef<Partial<Record<MenuKey, HTMLDivElement>>>({})
+  const tlRef = useRef<gsap.core.Timeline | null>(null)
+  const prevActive = useRef<MenuKey | null>(null)
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const [active, setActive] = useState<MenuKey | null>(null)
 
-  // Bouw de open/close-timelines één keer (placeholder-content is statisch).
+  // Beginstand: dropdown dicht.
   useEffect(() => {
-    if (!rootRef.current) return
-
-    const ctx = gsap.context(() => {
-      const reduce = window.matchMedia(
-        '(prefers-reduced-motion: reduce)',
-      ).matches
-
-      MENUS.forEach((key) => {
-        const panel = rootRef.current!.querySelector<HTMLElement>(
-          `[data-mega-panel="${key}"]`,
-        )
-        if (!panel) return
-        const bg = panel.querySelector<HTMLElement>('[data-mega-bg]')
-        const items = panel.querySelectorAll<HTMLElement>('[data-mega-item]')
-
-        gsap.set(panel, {autoAlpha: 0})
-        gsap.set(bg, {scaleY: 0, transformOrigin: 'top center'})
-        gsap.set(items, {autoAlpha: 0, y: reduce ? 0 : 24})
-
-        const tl = gsap.timeline({paused: true})
-        tl.set(panel, {autoAlpha: 1})
-          .to(bg, {
-            scaleY: 1,
-            duration: reduce ? 0.001 : 0.55,
-            ease: 'expo.out',
-          })
-          .to(
-            items,
-            {
-              autoAlpha: 1,
-              y: 0,
-              duration: reduce ? 0.001 : 0.5,
-              stagger: reduce ? 0 : 0.05,
-              ease: 'power3.out',
-            },
-            reduce ? '<' : 0.12,
-          )
-        tlRef.current[key] = tl
-      })
-
-      const backdrop = rootRef.current!.querySelector('[data-mega-backdrop]')
-      gsap.set(backdrop, {autoAlpha: 0})
-    }, rootRef)
-
-    return () => ctx.revert()
+    if (!containerRef.current) return
+    const els = [
+      panelRefs.current.shop,
+      panelRefs.current.explore,
+      panelRefs.current.search,
+    ].filter(Boolean) as HTMLElement[]
+    gsap.set(els, {autoAlpha: 0, pointerEvents: 'none'})
+    gsap.set(containerRef.current, {height: 0})
+    gsap.set(backdropRef.current, {autoAlpha: 0})
   }, [])
 
-  // Speel/keer de juiste timeline op basis van de actieve menu.
+  // Eén morphende dropdown: open vanuit dicht / wissel (directionele cross-fade,
+  // shop uit + explore in in dezelfde container) / sluit.
   useEffect(() => {
-    MENUS.forEach((key) => {
-      const tl = tlRef.current[key]
-      if (!tl) return
-      if (key === active) tl.play()
-      else tl.reverse()
+    const container = containerRef.current
+    const backdrop = backdropRef.current
+    if (!container) return
+
+    const prev = prevActive.current
+    prevActive.current = active
+    if (active === prev) return
+
+    const reduce = window.matchMedia(
+      '(prefers-reduced-motion: reduce)',
+    ).matches
+    const D = reduce ? 0.001 : 1
+
+    const fadeOf = (el: HTMLElement | null) =>
+      el ? Array.from(el.querySelectorAll<HTMLElement>('[data-mega-item]')) : []
+    // Meet de hoogte van een panel terwijl het (onzichtbaar) gemeten mag worden.
+    const measure = (el: HTMLElement) => {
+      const s = el.style
+      const pv = s.visibility
+      const po = s.opacity
+      const pp = s.pointerEvents
+      s.visibility = 'visible'
+      s.opacity = '0'
+      s.pointerEvents = 'none'
+      const h = el.getBoundingClientRect().height
+      s.visibility = pv
+      s.opacity = po
+      s.pointerEvents = pp
+      return h
+    }
+
+    const allEls = [
+      panelRefs.current.shop,
+      panelRefs.current.explore,
+      panelRefs.current.search,
+    ].filter(Boolean) as HTMLElement[]
+
+    // Schoonmaak: stop álle lopende tweens, anders kan een onderbroken animatie
+    // een panel half-zichtbaar achterlaten (→ beide menu's over elkaar).
+    tlRef.current?.kill()
+    gsap.killTweensOf([container, backdrop])
+    allEls.forEach((p) => {
+      gsap.killTweensOf(p)
+      gsap.killTweensOf(fadeOf(p))
     })
 
-    const backdrop = rootRef.current?.querySelector('[data-mega-backdrop]')
-    if (backdrop) {
-      gsap.to(backdrop, {
-        autoAlpha: active ? 1 : 0,
-        duration: 0.3,
-        ease: 'power2.out',
-        overwrite: true,
+    const hidePanel = (el: HTMLElement) => {
+      gsap.set(el, {autoAlpha: 0, pointerEvents: 'none'})
+      gsap.set(fadeOf(el), {autoAlpha: 0, x: 0, y: 0})
+    }
+
+    // OPEN — vanuit gesloten staat
+    if (active && !prev) {
+      const el = panelRefs.current[active]
+      if (!el) return
+      // Verberg eventuele achterblijver (bv. een onderbroken sluit-animatie).
+      allEls.forEach((p) => p !== el && hidePanel(p))
+      const fade = fadeOf(el)
+      const h = measure(el)
+      gsap.set(el, {autoAlpha: 1, pointerEvents: 'auto'})
+      gsap.set(fade, {autoAlpha: 0, x: 0, y: reduce ? 0 : 10})
+      const tl = gsap.timeline()
+      tl.to(backdrop, {autoAlpha: 1, duration: 0.3 * D, ease: 'power2.out'}, 0)
+        .fromTo(
+          container,
+          {height: 0},
+          {height: h, duration: 0.45 * D, ease: 'power3.out'},
+          0,
+        )
+        .to(
+          fade,
+          {
+            autoAlpha: 1,
+            y: 0,
+            duration: 0.35 * D,
+            stagger: reduce ? 0 : 0.05,
+            ease: 'power3.out',
+          },
+          0.12 * D,
+        )
+      tlRef.current = tl
+      return
+    }
+
+    // WISSEL — content cross-fade in dezelfde dropdown, richting o.b.v. volgorde
+    if (active && prev) {
+      const fromEl = panelRefs.current[prev]
+      const toEl = panelRefs.current[active]
+      if (!fromEl || !toEl) return
+      const dir = MENUS.indexOf(active) > MENUS.indexOf(prev) ? 1 : -1
+      const fromFade = fadeOf(fromEl)
+      const toFade = fadeOf(toEl)
+      const h = measure(toEl)
+
+      // Forceer een schone uitgangsstaat: 'from' volledig zichtbaar (om uit te
+      // faden), 'to' verborgen — ongeacht waar een vorige animatie stopte.
+      gsap.set(fromEl, {autoAlpha: 1, pointerEvents: 'auto'})
+      gsap.set(fromFade, {autoAlpha: 1, x: 0, y: 0})
+      gsap.set(toEl, {autoAlpha: 0, pointerEvents: 'none'})
+      gsap.set(toFade, {autoAlpha: 0, x: reduce ? 0 : dir * 28, y: 0})
+
+      const tl = gsap.timeline()
+      tl.to(
+        fromFade,
+        {autoAlpha: 0, x: reduce ? 0 : dir * -28, duration: 0.2 * D, ease: 'power2.in'},
+        0,
+      )
+        .set(fromEl, {autoAlpha: 0, pointerEvents: 'none'}, 0.2 * D)
+        .set(fromFade, {x: 0}, 0.2 * D)
+        .to(container, {height: h, duration: 0.4 * D, ease: 'power3.out'}, 0.05)
+        .set(toEl, {autoAlpha: 1, pointerEvents: 'auto'}, 0.1 * D)
+        .to(
+          toFade,
+          {
+            autoAlpha: 1,
+            x: 0,
+            duration: 0.35 * D,
+            stagger: reduce ? 0 : 0.05,
+            ease: 'power3.out',
+          },
+          0.14 * D,
+        )
+      tlRef.current = tl
+      return
+    }
+
+    // SLUIT
+    if (!active && prev) {
+      const el = panelRefs.current[prev] ?? null
+      // Verberg de andere (niet-actieve) panel-achterblijver direct.
+      allEls.forEach((p) => p !== el && hidePanel(p))
+      const fade = fadeOf(el)
+      const tl = gsap.timeline({
+        onComplete: () => {
+          if (el) gsap.set(el, {autoAlpha: 0, pointerEvents: 'none'})
+          gsap.set(container, {height: 0})
+        },
       })
+      tl.to(
+        fade,
+        {autoAlpha: 0, y: reduce ? 0 : -4, duration: 0.15 * D, ease: 'power2.in'},
+        0,
+      )
+        .to(container, {height: 0, duration: 0.25 * D, ease: 'power2.in'}, 0.05)
+        .to(backdrop, {autoAlpha: 0, duration: 0.2 * D, ease: 'power2.out'}, 0)
+      tlRef.current = tl
     }
   }, [active])
 
@@ -114,6 +216,32 @@ export function SimpleHeader({cart, menuProducts}: SimpleHeaderProps) {
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
   }, [])
+
+  // Focus het zoekveld zodra het Search-paneel opent.
+  useEffect(() => {
+    if (active !== 'search') return
+    const input =
+      panelRefs.current.search?.querySelector<HTMLInputElement>('input')
+    const t = setTimeout(() => input?.focus(), 80)
+    return () => clearTimeout(t)
+  }, [active])
+
+  // Search-resultaten veranderen de hoogte → laat de container meegroeien
+  // (het panel is position:absolute, dus height:auto werkt niet). Alleen actief
+  // wanneer Search open is; verandert het panel niet, dan vuurt dit niet.
+  useEffect(() => {
+    const panel = panelRefs.current.search
+    const container = containerRef.current
+    if (!panel || !container || typeof ResizeObserver === 'undefined') return
+    const ro = new ResizeObserver(() => {
+      if (prevActive.current === 'search') {
+        gsap.set(container, {height: panel.offsetHeight})
+      }
+    })
+    ro.observe(panel)
+    return () => ro.disconnect()
+  }, [])
+
 
   const clearClose = useCallback(() => {
     if (closeTimer.current) {
@@ -132,7 +260,7 @@ export function SimpleHeader({cart, menuProducts}: SimpleHeaderProps) {
 
   const scheduleClose = useCallback(() => {
     clearClose()
-    closeTimer.current = setTimeout(() => setActive(null), 120)
+    closeTimer.current = setTimeout(() => setActive(null), 250)
   }, [clearClose])
 
   const toggleMenu = useCallback((key: MenuKey) => {
@@ -147,32 +275,40 @@ export function SimpleHeader({cart, menuProducts}: SimpleHeaderProps) {
     if (e.pointerType === 'mouse') scheduleClose()
   }
 
+  const setPanelRef = (key: MenuKey) => (el: HTMLDivElement | null) => {
+    if (el) panelRefs.current[key] = el
+  }
+
   return (
     <div ref={rootRef} className={styles.root} data-menu-open={active ?? 'closed'}>
       <button
         type="button"
         aria-hidden="true"
         tabIndex={-1}
-        data-mega-backdrop
+        ref={backdropRef}
         className={styles.backdrop}
         onClick={() => setActive(null)}
       />
 
       <header className={styles.header}>
-        <nav className={styles.group}>
+        {/* Leave/enter op de hele groep: tussen Shop en Explore bewegen sluit
+            dus niet — pas als je de groep én het menu verlaat sluit het. */}
+        <nav
+          className={styles.group}
+          onPointerEnter={() => clearClose()}
+          onPointerLeave={handlePointerLeave}
+        >
           <MenuTrigger
             label="Shop"
             isOpen={active === 'shop'}
             onClick={() => toggleMenu('shop')}
             onPointerEnter={handlePointerEnter('shop')}
-            onPointerLeave={handlePointerLeave}
           />
           <MenuTrigger
             label="Explore"
             isOpen={active === 'explore'}
             onClick={() => toggleMenu('explore')}
             onPointerEnter={handlePointerEnter('explore')}
-            onPointerLeave={handlePointerLeave}
           />
         </nav>
 
@@ -182,18 +318,25 @@ export function SimpleHeader({cart, menuProducts}: SimpleHeaderProps) {
           end
           className={styles.logo}
           aria-label="Bodista — home"
+          onPointerEnter={() => clearClose()}
+          onPointerLeave={handlePointerLeave}
         >
           <BodistaWordmark />
         </NavLink>
 
-        <nav className={styles.group}>
-          <button
-            type="button"
-            className={styles.link}
-            onClick={() => open('search')}
-          >
-            Search
-          </button>
+        {/* Ook hier leave/enter op de groep: naar Search/Account/Cart bewegen
+            (terwijl het menu open is) sluit dus niet. */}
+        <nav
+          className={styles.group}
+          onPointerEnter={() => clearClose()}
+          onPointerLeave={handlePointerLeave}
+        >
+          <MenuTrigger
+            label="Search"
+            isOpen={active === 'search'}
+            onClick={() => toggleMenu('search')}
+            onPointerEnter={handlePointerEnter('search')}
+          />
           <NavLink prefetch="intent" to="/account" className={styles.link}>
             Account
           </NavLink>
@@ -207,17 +350,42 @@ export function SimpleHeader({cart, menuProducts}: SimpleHeaderProps) {
         </nav>
       </header>
 
-      <ShopPanel
-        menuProducts={menuProducts}
-        onPointerEnter={() => clearClose()}
-        onPointerLeave={handlePointerLeave}
-        onNavigate={() => setActive(null)}
-      />
-      <ExplorePanel
-        onPointerEnter={() => clearClose()}
-        onPointerLeave={handlePointerLeave}
-        onNavigate={() => setActive(null)}
-      />
+      {/* Eén morphende dropdown — Shop en Explore delen container + achtergrond.
+          Bij wisselen fade't de content cross (geen twee panelen over elkaar). */}
+      <div className={styles.dropWrapper}>
+        <div
+          ref={containerRef}
+          className={styles.dropContainer}
+          onPointerEnter={() => clearClose()}
+          onPointerLeave={handlePointerLeave}
+        >
+          <div className={styles.dropBg} />
+          <div
+            ref={setPanelRef('shop')}
+            className={styles.dropPanel}
+            data-panel="shop"
+          >
+            <ShopContent
+              menuProducts={menuProducts}
+              onNavigate={() => setActive(null)}
+            />
+          </div>
+          <div
+            ref={setPanelRef('explore')}
+            className={styles.dropPanel}
+            data-panel="explore"
+          >
+            <ExploreContent onNavigate={() => setActive(null)} />
+          </div>
+          <div
+            ref={setPanelRef('search')}
+            className={styles.dropPanel}
+            data-panel="search"
+          >
+            <SearchContent onNavigate={() => setActive(null)} />
+          </div>
+        </div>
+      </div>
     </div>
   )
 }
@@ -227,13 +395,11 @@ function MenuTrigger({
   isOpen,
   onClick,
   onPointerEnter,
-  onPointerLeave,
 }: {
   label: string
   isOpen: boolean
   onClick: () => void
   onPointerEnter: (e: React.PointerEvent) => void
-  onPointerLeave: (e: React.PointerEvent) => void
 }) {
   return (
     <button
@@ -243,37 +409,24 @@ function MenuTrigger({
       aria-haspopup="true"
       onClick={onClick}
       onPointerEnter={onPointerEnter}
-      onPointerLeave={onPointerLeave}
     >
       {label}
     </button>
   )
 }
 
-type PanelProps = {
-  onPointerEnter: () => void
-  onPointerLeave: (e: React.PointerEvent) => void
-  onNavigate: () => void
-}
-
-function ShopPanel({
+function ShopContent({
   menuProducts,
-  onPointerEnter,
-  onPointerLeave,
   onNavigate,
-}: PanelProps & {menuProducts: Promise<MenuProductsQuery | null>}) {
+}: {
+  menuProducts: Promise<MenuProductsQuery | null>
+  onNavigate: () => void
+}) {
   // Tabs zijn voorlopig puur visueel; de type-filtering wordt later gekoppeld.
   const [tab, setTab] = useState(SHOP_TABS[0].key)
 
   return (
-    <div
-      data-mega-panel="shop"
-      className={styles.panel}
-      onPointerEnter={onPointerEnter}
-      onPointerLeave={onPointerLeave}
-    >
-      <div data-mega-bg className={styles.panelBg} />
-      <div className={`layout-grid ${styles.panelInner}`}>
+    <div className={`layout-grid ${styles.panelInner}`}>
         {/* Links: filters (categorieën) + alle collecties. Filtering komt later. */}
         <div className={styles.megaLeft} data-mega-item>
           <span className={styles.megaHeading}>filters</span>
@@ -295,7 +448,7 @@ function ShopPanel({
           </ul>
           <Link
             prefetch="intent"
-            to="/collections"
+            to="/collections/all"
             className={styles.megaMuted}
             onClick={onNavigate}
           >
@@ -325,7 +478,6 @@ function ShopPanel({
           </Suspense>
         </ul>
       </div>
-    </div>
   )
 }
 
@@ -348,7 +500,7 @@ function ShopCard({
           {product.featuredImage && (
             <Image
               data={product.featuredImage}
-              aspectRatio="1/1"
+              aspectRatio="1/1.1"
               sizes="(min-width: 768px) 22vw, 45vw"
               className={styles.cardImage}
             />
@@ -372,17 +524,10 @@ function ShopCard({
   )
 }
 
-function ExplorePanel({onPointerEnter, onPointerLeave, onNavigate}: PanelProps) {
+function ExploreContent({onNavigate}: {onNavigate: () => void}) {
   return (
-    <div
-      data-mega-panel="explore"
-      className={styles.panel}
-      onPointerEnter={onPointerEnter}
-      onPointerLeave={onPointerLeave}
-    >
-      <div data-mega-bg className={styles.panelBg} />
-      <div className={`layout-grid ${styles.panelInner}`}>
-        {/* Links: tekst-kolommen in footer-stijl. */}
+    <div className={`layout-grid ${styles.panelInner}`}>
+      {/* Links: tekst-kolommen in footer-stijl. */}
         <div className={styles.exploreCols} data-mega-item>
           {EXPLORE_COLUMNS.map((column) => (
             <div key={column.heading} className={styles.exploreCol}>
@@ -442,6 +587,147 @@ function ExplorePanel({onPointerEnter, onPointerLeave, onNavigate}: PanelProps) 
             </li>
           ))}
         </ul>
+      </div>
+  )
+}
+
+function SearchContent({onNavigate}: {onNavigate: () => void}) {
+  return (
+    <div className={`layout-grid ${styles.panelInner}`}>
+      <div className={styles.searchBar} data-mega-item>
+        <SearchFormPredictive className={styles.searchForm}>
+          {({fetchResults, goToSearch, inputRef}) => (
+            <input
+              ref={inputRef}
+              name="q"
+              type="search"
+              placeholder="Search products, collections…"
+              className={styles.searchInput}
+              onChange={fetchResults}
+              onFocus={fetchResults}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  e.preventDefault()
+                  goToSearch()
+                  onNavigate()
+                }
+              }}
+            />
+          )}
+        </SearchFormPredictive>
+      </div>
+
+      <div className={styles.searchResults} data-mega-item>
+        <SearchResultsPredictive>
+          {({items, total, term, state}) => {
+            if (!term.current) {
+              return (
+                <p className={styles.searchHint}>
+                  Start typing to search the collection.
+                </p>
+              )
+            }
+            if (state === 'loading') {
+              return <p className={styles.searchHint}>Searching…</p>
+            }
+            if (!total) {
+              return (
+                <p className={styles.searchHint}>
+                  No results for “{term.current}”.
+                </p>
+              )
+            }
+
+            const products = items.products ?? []
+            const collections = items.collections ?? []
+            const articles = items.articles ?? []
+
+            return (
+              <div className={styles.searchInner}>
+                {(collections.length > 0 || articles.length > 0) && (
+                  <div className={styles.searchSide}>
+                    {collections.length > 0 && (
+                      <div className={styles.searchCol}>
+                        <span className={styles.megaHeading}>collections</span>
+                        <ul className={styles.megaLinks}>
+                          {collections.map((collection) => (
+                            <li key={collection.id}>
+                              <Link
+                                to={`/collections/${collection.handle}`}
+                                className={styles.megaLink}
+                                onClick={onNavigate}
+                              >
+                                {collection.title}
+                              </Link>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                    {articles.length > 0 && (
+                      <div className={styles.searchCol}>
+                        <span className={styles.megaHeading}>journal</span>
+                        <ul className={styles.megaLinks}>
+                          {articles.map((article) => (
+                            <li key={article.id}>
+                              <Link
+                                to={`/blogs/${article.blog.handle}/${article.handle}`}
+                                className={styles.megaLink}
+                                onClick={onNavigate}
+                              >
+                                {article.title}
+                              </Link>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                <ul className={styles.searchCards}>
+                  {products.slice(0, 4).map((product) => {
+                    const image = product.selectedOrFirstAvailableVariant?.image
+                    const price = product.selectedOrFirstAvailableVariant?.price
+                    return (
+                      <li key={product.id} className={styles.card}>
+                        <Link
+                          prefetch="intent"
+                          to={`/products/${product.handle}`}
+                          className={styles.cardLink}
+                          onClick={onNavigate}
+                        >
+                          <span className={styles.cardMedia}>
+                            {image && (
+                              <Image
+                                data={image}
+                                aspectRatio="1/1.1"
+                                sizes="(min-width: 768px) 18vw, 45vw"
+                                className={styles.cardImage}
+                              />
+                            )}
+                          </span>
+                          <span className={styles.cardMeta}>
+                            <span className={styles.cardText}>
+                              <span className={styles.cardName}>
+                                {product.title}
+                              </span>
+                            </span>
+                            {price && (
+                              <span className={styles.cardPrice}>
+                                <LiningMoney data={price} />
+                              </span>
+                            )}
+                          </span>
+                        </Link>
+                      </li>
+                    )
+                  })}
+                </ul>
+              </div>
+            )
+          }}
+        </SearchResultsPredictive>
       </div>
     </div>
   )

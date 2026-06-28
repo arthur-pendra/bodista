@@ -93,21 +93,40 @@
   visibility: hidden;
 }
 
-/* --- Panel-basis ---------------------------------------------------------- */
-.panel {
+/* --- Eén morphende dropdown (gedeeld door Shop + Explore) ------------------ */
+.dropWrapper {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   z-index: 70;
-  visibility: hidden;
+  pointer-events: none;
 }
 
-.panelBg {
+/* Clipt de content en animeert in hoogte (de "gordijn"-reveal + morph). */
+.dropContainer {
+  position: relative;
+  height: 0;
+  overflow: hidden;
+  pointer-events: auto;
+}
+
+/* Eén gedeelde achtergrond die met de container meegroeit. */
+.dropBg {
   position: absolute;
   inset: 0;
   background: var(--color-page);
   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.1);
+}
+
+/* Beide content-panelen liggen op dezelfde plek; er is er altijd maar één
+   zichtbaar — bij wisselen fade't de content cross (geen twee gordijnen). */
+.dropPanel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  visibility: hidden;
 }
 
 .panelInner {
@@ -138,14 +157,14 @@
 
 /* ---- Linker tekstkolom(men) ---- */
 .megaLeft {
-  grid-column: 1 / 10;
+  grid-column: 1 / 7;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
 }
 
 .exploreCols {
-  grid-column: 1 / 15;
+  grid-column: 1 / 13;
   display: flex;
   gap: var(--grid-gutter);
 }
@@ -222,17 +241,18 @@
   pointer-events: none;
 }
 
-[data-mega-panel='shop'] .megaVline {
-  grid-column: 9;
+[data-panel='shop'] .megaVline {
+  grid-column: 6;
 }
 
-[data-mega-panel='explore'] .megaVline {
-  grid-column: 14;
+[data-panel='explore'] .megaVline {
+  grid-column: 12;
 }
 
-/* ---- Rechter foto-cards ---- */
+/* ---- Rechter foto-cards — op 3/4 van het grid (18 kolommen).
+   Cards spannen in beide menu's 6 kolommen → gelijke kaartgrootte/hoogte. ---- */
 .shopCards {
-  grid-column: 10 / -1;
+  grid-column: 7 / -1;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: var(--grid-gutter);
@@ -242,7 +262,7 @@
 }
 
 .exploreCards {
-  grid-column: 15 / -1;
+  grid-column: 13 / -1;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: var(--grid-gutter);
@@ -266,7 +286,8 @@
 .cardMedia {
   position: relative;
   display: block;
-  aspect-ratio: 1 / 1;
+  /* Net iets hoger dan vierkant — subtiel portret. */
+  aspect-ratio: 1 / 1.1;
   overflow: hidden;
   background-color: var(--color-warm);
 }
@@ -312,6 +333,81 @@
 }
 
 /* ==========================================================================
+   Search-paneel (derde dropdown, live predictive)
+   ========================================================================== */
+
+.searchBar {
+  grid-column: 1 / -1;
+}
+
+/* Overschrijf de globale form-breedte (max-width 25em) en predictive-styling. */
+.searchForm {
+  width: 100%;
+  max-width: none;
+}
+
+.searchInput {
+  width: 100%;
+  margin: 0;
+  padding: 0.4em 0;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--color-hairline);
+  border-radius: 0;
+  font-family: 'Novela Display', Georgia, serif;
+  font-size: var(--text-heading-md);
+  line-height: var(--leading-heading-md);
+  color: var(--color-charcoal);
+}
+
+.searchInput::placeholder {
+  color: var(--color-charcoal);
+  opacity: 0.4;
+}
+
+.searchInput:focus {
+  outline: none;
+}
+
+.searchResults {
+  grid-column: 1 / -1;
+}
+
+.searchHint {
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  color: var(--color-charcoal);
+  opacity: 0.5;
+}
+
+.searchInner {
+  display: flex;
+  gap: 3.5em;
+}
+
+.searchSide {
+  flex: 0 0 14em;
+  display: flex;
+  flex-direction: column;
+  gap: 2em;
+}
+
+.searchCol {
+  display: flex;
+  flex-direction: column;
+}
+
+.searchCards {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--grid-gutter);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* ==========================================================================
    Responsive
    ========================================================================== */
 
@@ -347,8 +443,23 @@
   }
 
   .shopCards,
-  .exploreCards {
+  .exploreCards,
+  .searchCards {
     grid-template-columns: repeat(2, 1fr);
     row-gap: 1.5em;
+  }
+
+  /* Search stapelt: zijlijst boven de productkaarten. */
+  .searchInner {
+    flex-direction: column;
+    gap: 1.75em;
+  }
+
+  .searchSide {
+    flex: none;
+  }
+
+  .searchInput {
+    font-size: var(--text-heading-sm);
   }
 }

@@ -70,7 +70,7 @@
    ========================================================================== */
 
 :root {
-  --aside-width: 25em;
+  --aside-width: 36em;
   --cart-aside-summary-height-with-discount: 18.75em;
   --cart-aside-summary-height: 15.625em;
   --grid-item-width: 22.1875em;
@@ -450,7 +450,7 @@ button:not(.reset) {
 }
 
 aside {
-  background: var(--color-light);
+  background: var(--color-page);
   box-shadow: 0 0 3.125em rgba(0, 0, 0, 0.3);
   height: 100vh;
   width: min(var(--aside-width), 100vw);
@@ -462,7 +462,7 @@ aside {
 
 aside header {
   align-items: center;
-  border-bottom: 1px solid var(--color-dark);
+  border-bottom: 1px solid var(--color-hairline);
   display: flex;
   height: var(--header-height);
   justify-content: space-between;

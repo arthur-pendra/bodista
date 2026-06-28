@@ -21,3 +21,7 @@ text-demo-*.png
 
 # TypeScript build cache
 tsconfig.tsbuildinfo
+
+# Hydrogen dev cache & dev server log
+.hydrogen
+.dev-server.log

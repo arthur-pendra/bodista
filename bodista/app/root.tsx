@@ -232,6 +232,10 @@ const MENU_PRODUCTS_QUERY = `#graphql
         currencyCode
       }
     }
+    selectedOrFirstAvailableVariant(selectedOptions: [], ignoreUnknownOptions: true) {
+      id
+      availableForSale
+    }
     featuredImage {
       id
       url

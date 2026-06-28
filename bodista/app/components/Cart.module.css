@@ -1,0 +1,549 @@
+/* ==========================================================================
+   Cart drawer (aside) — eigen component-styling bovenop global.css.
+   Leunt op de brand-tokens (kleur, type, easing) en de Osmo em-schaling.
+   Px alleen voor hairlines/shadows; al het overige in em.
+   ========================================================================== */
+
+/* Root: vult de aside-hoogte (header + 1em marge boven/onder) en stapelt
+   shipping-bar · scrollende inhoud · sticky footer. */
+.cart {
+  display: flex;
+  flex-direction: column;
+  color: var(--color-charcoal);
+}
+
+.cartAside {
+  /* Vult van onder de header tot de onderrand. De aside-<main> heeft 1em marge
+     rondom; met margin:-1em breken we daar volledig uit (regels/divider
+     edge-to-edge) en zetten binnenruimte zelf per blok terug. */
+  height: calc(100dvh - var(--header-height));
+  margin: -1em;
+}
+
+/* Op de /cart-pagina geen vaste hoogte — gewoon meelopen in de flow. */
+.cartPage {
+  max-width: 34em;
+}
+
+/* --- Scrollend middendeel (regels + suggesties) --------------------------- */
+.scroll {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.cartPage .scroll {
+  overflow: visible;
+}
+
+/* --- Free-shipping voortgangsbalk ----------------------------------------- */
+.shipping {
+  flex: 0 0 auto;
+  padding: 1em 1.25em 1.1em;
+  border-bottom: 1px solid var(--color-hairline);
+}
+
+.shippingLabel {
+  display: block;
+  margin-bottom: 0.7em;
+  font-size: var(--text-detail);
+  line-height: var(--leading-detail);
+  letter-spacing: var(--tracking-detail);
+  text-transform: lowercase;
+  color: var(--color-charcoal);
+}
+
+.shippingLabel strong {
+  font-weight: 400;
+  color: var(--color-gold);
+}
+
+.shippingReached {
+  color: var(--color-gold);
+}
+
+.shippingTrack {
+  position: relative;
+  height: 0.25em;
+  border-radius: var(--radius-pill);
+  background: var(--color-hairline);
+  overflow: hidden;
+}
+
+.shippingFill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  border-radius: var(--radius-pill);
+  background: var(--color-charcoal);
+  transition: width 450ms var(--ease-osmo);
+}
+
+.shippingFill[data-reached='true'] {
+  background: var(--color-gold);
+}
+
+/* --- Regel-lijst ---------------------------------------------------------- */
+.lines {
+  margin: 0;
+  padding: 0 1.25em;
+  list-style: none;
+}
+
+.line {
+  display: flex;
+  gap: 1em;
+  padding: 1.1em 0;
+  margin: 0;
+  border-bottom: 1px solid var(--color-hairline);
+}
+
+.lineMedia {
+  flex: 0 0 auto;
+  width: 4.75em;
+  aspect-ratio: 1 / 1.1;
+  overflow: hidden;
+  background: var(--color-warm);
+}
+
+.lineMedia img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.lineBody {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35em;
+  min-width: 0;
+}
+
+.lineTop {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75em;
+}
+
+.lineName {
+  font-size: var(--text-body-lg);
+  line-height: var(--leading-body-lg);
+  color: var(--color-charcoal);
+}
+
+.lineName:hover {
+  color: var(--color-charcoal);
+  opacity: 0.6;
+}
+
+.lineRemove {
+  flex: 0 0 auto;
+  font-size: var(--text-detail);
+  line-height: var(--leading-detail);
+  color: var(--color-charcoal);
+  opacity: 0.45;
+  transition: opacity 200ms var(--ease-fade);
+}
+
+.lineRemove:hover {
+  opacity: 0.85;
+}
+
+.lineVariant {
+  font-size: var(--text-detail);
+  line-height: var(--leading-detail);
+  letter-spacing: var(--tracking-detail);
+  text-transform: lowercase;
+  color: var(--color-gold);
+}
+
+.lineBottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75em;
+  margin-top: 0.5em;
+}
+
+/* Stepper — pill met hairline; knoppen zijn .reset (geen global pill-button). */
+.stepper {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-pill);
+}
+
+.stepperBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2em;
+  height: 2em;
+  min-width: 24px;
+  min-height: 24px;
+  font-size: var(--text-body);
+  line-height: 1;
+  color: var(--color-charcoal);
+  transition: opacity 200ms var(--ease-fade);
+}
+
+.stepperBtn:disabled {
+  opacity: 0.3;
+}
+
+.stepperBtn:not(:disabled):hover {
+  opacity: 0.6;
+}
+
+.qty {
+  min-width: 1.75em;
+  text-align: center;
+  font-size: var(--text-detail);
+}
+
+.linePrice {
+  font-size: var(--text-body);
+  line-height: var(--leading-detail);
+  color: var(--color-charcoal);
+  white-space: nowrap;
+}
+
+.compareAt {
+  margin-right: 0.5em;
+  color: var(--color-charcoal);
+  opacity: 0.4;
+  text-decoration: line-through;
+}
+
+/* Genest (componenten als gift wrap) iets ingesprongen + gedempt. */
+.children {
+  margin: 0.5em 0 0;
+  padding-left: 1.25em;
+  list-style: none;
+  border-left: 1px solid var(--color-hairline);
+}
+
+.children .line {
+  border-bottom: 0;
+  padding: 0.6em 0;
+}
+
+/* --- "You may also like" -------------------------------------------------- */
+.recommend {
+  padding: 1.4em 1.25em 0.5em;
+}
+
+.recommendHead {
+  display: block;
+  margin-bottom: 1em;
+  font-size: var(--text-detail);
+  line-height: var(--leading-detail);
+  letter-spacing: var(--tracking-detail);
+  text-transform: lowercase;
+  color: var(--color-charcoal);
+  opacity: 0.5;
+}
+
+.recommendList {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--grid-gutter);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.recommendCard {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65em;
+  margin: 0;
+}
+
+.recommendMedia {
+  position: relative;
+  display: block;
+  aspect-ratio: 1 / 1.1;
+  overflow: hidden;
+  background: var(--color-warm);
+}
+
+.recommendMedia img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Quick-add zweeft rechtsonder op de afbeelding. */
+.recommendAdd {
+  position: absolute;
+  right: 0.5em;
+  bottom: 0.5em;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2em;
+  height: 2em;
+  min-width: 24px;
+  min-height: 24px;
+  font-size: var(--text-body-lg);
+  line-height: 1;
+  color: var(--color-charcoal);
+  background: var(--color-warm);
+  border-radius: var(--radius-pill);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  transition:
+    transform 250ms var(--ease-osmo),
+    opacity 200ms var(--ease-fade);
+}
+
+.recommendAdd:hover {
+  transform: scale(1.08);
+}
+
+.recommendAdd:disabled {
+  opacity: 0.5;
+}
+
+.recommendText {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15em;
+}
+
+.recommendType {
+  font-size: var(--text-detail);
+  line-height: var(--leading-detail);
+  letter-spacing: var(--tracking-detail);
+  text-transform: lowercase;
+  color: var(--color-gold);
+}
+
+.recommendName {
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  color: var(--color-charcoal);
+}
+
+.recommendPrice {
+  font-size: var(--text-detail);
+  line-height: var(--leading-detail);
+  color: var(--color-charcoal);
+}
+
+/* --- Footer / samenvatting (sticky onderin de drawer) --------------------- */
+.footer {
+  flex: 0 0 auto;
+  padding: 1.1em 1.25em 1.25em;
+  background: var(--color-page);
+  border-top: 1px solid var(--color-hairline);
+}
+
+/* Kortings-/giftcard-blok — inklapbaar. */
+.promo {
+  margin-bottom: 1em;
+}
+
+.promoToggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  font-size: var(--text-detail);
+  letter-spacing: var(--tracking-detail);
+  text-transform: lowercase;
+  color: var(--color-charcoal);
+  opacity: 0.65;
+  transition: opacity 200ms var(--ease-fade);
+}
+
+.promoToggle:hover {
+  opacity: 1;
+}
+
+.promoToggleIcon {
+  transition: transform 250ms var(--ease-osmo);
+}
+
+.promoToggleIcon[data-open='true'] {
+  transform: rotate(45deg);
+}
+
+.promoPanel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6em;
+  margin-top: 0.85em;
+}
+
+.promoField {
+  display: flex;
+  gap: 0.5em;
+}
+
+.promoField input {
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 2.85em;
+  padding: 0 1em;
+  font-size: var(--text-detail);
+  color: var(--color-charcoal);
+  background: var(--color-light);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-pill);
+}
+
+.promoField input::placeholder {
+  color: var(--color-charcoal);
+  opacity: 0.4;
+}
+
+.promoApply {
+  flex: 0 0 auto;
+  padding: 0 1.25em;
+  font-size: var(--text-detail);
+  letter-spacing: var(--tracking-detail);
+  text-transform: lowercase;
+  color: var(--color-charcoal);
+  background: transparent;
+  border: 1px solid var(--color-charcoal);
+  border-radius: var(--radius-pill);
+  transition: opacity 200ms var(--ease-fade);
+}
+
+.promoApply:hover {
+  opacity: 0.6;
+}
+
+.promoApplied {
+  display: flex;
+  align-items: center;
+  gap: 0.6em;
+  font-size: var(--text-detail);
+  color: var(--color-charcoal);
+}
+
+.promoApplied code {
+  letter-spacing: var(--tracking-detail);
+}
+
+.promoRemove {
+  font-size: var(--text-detail);
+  color: var(--color-charcoal);
+  opacity: 0.5;
+}
+
+.promoRemove:hover {
+  opacity: 0.9;
+}
+
+/* Subtotaal. */
+.subtotal {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 0.6em 0 0.2em;
+  border-top: 1px solid var(--color-hairline);
+}
+
+.subtotalLabel {
+  font-size: var(--text-body);
+  letter-spacing: var(--tracking-detail);
+  text-transform: lowercase;
+  color: var(--color-charcoal);
+}
+
+.subtotalValue {
+  font-size: var(--text-heading-sm);
+  line-height: var(--leading-detail);
+  color: var(--color-charcoal);
+}
+
+.taxNote {
+  margin: 0.15em 0 1em;
+  font-size: var(--text-detail);
+  line-height: var(--leading-detail);
+  color: var(--color-charcoal);
+  opacity: 0.55;
+}
+
+/* Checkout — link gestyled als volle pill-CTA. */
+.checkout {
+  display: block;
+  width: 100%;
+  padding: 1.1em;
+  font-size: var(--text-body);
+  letter-spacing: var(--tracking-detail);
+  text-transform: uppercase;
+  text-align: center;
+  color: var(--color-warm);
+  background: var(--color-charcoal);
+  border-radius: var(--radius-pill);
+  transition: opacity 250ms var(--ease-fade);
+}
+
+.checkout:hover {
+  color: var(--color-warm);
+  opacity: 0.85;
+}
+
+.trust {
+  margin: 0.85em 0 0;
+  font-size: var(--text-detail);
+  line-height: var(--leading-detail);
+  text-align: center;
+  color: var(--color-charcoal);
+  opacity: 0.55;
+}
+
+/* --- Lege staat — gecentreerde hero, daaronder "you may also like" -------- */
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.9em;
+  padding: 3.25em 1.5em 2.5em;
+}
+
+.emptyEyebrow {
+  font-size: var(--text-detail);
+  line-height: var(--leading-detail);
+  letter-spacing: var(--tracking-detail);
+  text-transform: uppercase;
+  color: var(--color-gold);
+}
+
+.emptyHeading {
+  max-width: 13em;
+  margin: 0;
+  font-size: var(--text-heading-md);
+  line-height: var(--leading-heading-md);
+  color: var(--color-charcoal);
+}
+
+.emptyLink {
+  display: inline-block;
+  margin-top: 0.6em;
+  padding: 0.9em 1.8em;
+  font-size: var(--text-detail);
+  letter-spacing: var(--tracking-detail);
+  text-transform: uppercase;
+  color: var(--color-warm);
+  background: var(--color-charcoal);
+  border-radius: var(--radius-pill);
+  transition: opacity 250ms var(--ease-fade);
+}
+
+.emptyLink:hover {
+  color: var(--color-warm);
+  opacity: 0.85;
+}
+
+@media (max-width: 479px) {
+  .recommendList {
+    grid-template-columns: 1fr 1fr;
+  }
+}
