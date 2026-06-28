@@ -1,133 +1,173 @@
-import {Link} from 'react-router'
-import {Image} from '@shopify/hydrogen'
+import {Link, useSearchParams} from 'react-router'
 import type {ShopAllProductFragment} from 'storefrontapi.generated'
-import {LiningMoney} from '~/components/LiningMoney'
+import {ProductCard} from './ProductCard'
 import styles from './ShopAll.module.css'
 
-// Sidebar-filters (voorlopig visueel; nog geen filtering gekoppeld).
-const FILTERS = ['Body Oils', 'Face Oils', 'Sets']
-
-// Uitklapbare groepen (openen op hover). Opties afgestemd op ons assortiment:
-// de productvormen die we voeren en de kerningrediënten van de oils/serums.
-const FILTER_GROUPS = [
-  {label: 'Type', options: ['Oils', 'Serums', 'Mists', 'Parfums']},
-  {
-    label: 'Ingredients',
-    options: ['Sandalwood', 'Jojoba', 'Squalane', 'Rosehip', 'Bergamot'],
-  },
+// De echte collecties (zie Shopify) — als filters in de sidebar.
+const COLLECTIONS = [
+  {label: 'The Facial', handle: 'the-facial'},
+  {label: 'Scents', handle: 'scents'},
+  {label: 'Body', handle: 'body'},
+  {label: 'Sets', handle: 'sets'},
+  {label: 'Accessories', handle: 'accessories'},
 ]
 
-// Categorieën zoals in het design. De eerste sectie toont de producten die we
-// al hebben; de rest is nog niet ingericht → grijze placeholder-blokken die we
-// later vervangen door echte collections.
-const PLACEHOLDER_CATEGORIES = ['Body', 'Sets', 'Accessories']
-const PLACEHOLDERS_PER_CATEGORY = 3
+function parseList(value?: string | null): string[] {
+  if (!value) return []
+  try {
+    const parsed = JSON.parse(value)
+    return Array.isArray(parsed)
+      ? parsed.filter((x): x is string => typeof x === 'string')
+      : []
+  } catch {
+    return []
+  }
+}
 
 export function ShopAll({products}: {products: ShopAllProductFragment[]}) {
+  const [params] = useSearchParams()
+
+  const selCollection = params.get('collection')
+  const selType = params.get('type')
+  const selIngredient = params.get('ingredient')
+
+  // Filter-opties afgeleid uit de echte producten → blijven vanzelf in sync.
+  const types = [
+    ...new Set(products.map((p) => p.productType).filter(Boolean)),
+  ].sort() as string[]
+  const ingredients = [
+    ...new Set(products.flatMap((p) => parseList(p.keyIngredients?.value))),
+  ].sort()
+
+  // Bouw een href die de bestaande filters behoudt en één param zet/wist.
+  const buildHref = (key: string, value: string | null) => {
+    const next = new URLSearchParams(params)
+    if (value === null) next.delete(key)
+    else next.set(key, value)
+    const qs = next.toString()
+    return `/collections/all${qs ? `?${qs}` : ''}`
+  }
+
+  const visible = products.filter((product) => {
+    if (
+      selCollection &&
+      !product.collections.nodes.some((c) => c.handle === selCollection)
+    ) {
+      return false
+    }
+    if (selType && product.productType !== selType) return false
+    if (selIngredient && !parseList(product.keyIngredients?.value).includes(selIngredient)) {
+      return false
+    }
+    return true
+  })
+
+  const activeCollection = COLLECTIONS.find((c) => c.handle === selCollection)
+  const heading = activeCollection ? activeCollection.label : 'All products'
+
   return (
     <section className={styles.shop}>
       <div className={`layout-grid ${styles.inner}`}>
         <div className={styles.sidebar}>
           <div className={styles.filterBlock}>
-            <span className={styles.filtersLabel}>Filters</span>
+            <span className={styles.filtersLabel}>Collections</span>
             <ul className={styles.filterList}>
-              {FILTERS.map((filter) => (
-                <li key={filter}>
-                  <button type="button" className={styles.filterItem}>
-                    {filter}
-                  </button>
-                </li>
-              ))}
+              <li>
+                <Link
+                  prefetch="intent"
+                  to={buildHref('collection', null)}
+                  className={`${styles.filterItem} ${!selCollection ? styles.filterItemActive : ''}`}
+                >
+                  All
+                </Link>
+              </li>
+              {COLLECTIONS.map((collection) => {
+                const active = collection.handle === selCollection
+                return (
+                  <li key={collection.handle}>
+                    <Link
+                      prefetch="intent"
+                      to={buildHref('collection', active ? null : collection.handle)}
+                      className={`${styles.filterItem} ${active ? styles.filterItemActive : ''}`}
+                    >
+                      {collection.label}
+                    </Link>
+                  </li>
+                )
+              })}
             </ul>
           </div>
 
-          {FILTER_GROUPS.map((group) => (
-            <div key={group.label} className={styles.group}>
-              <button type="button" className={styles.groupToggle}>
-                {group.label}
-              </button>
-              <ul className={styles.groupList}>
-                {group.options.map((option) => (
-                  <li key={option}>
-                    <button type="button" className={styles.groupItem}>
-                      {option}
-                    </button>
+          {/* Type-filter (afgeleid van productType). */}
+          <div className={styles.group}>
+            <span
+              className={`${styles.groupToggle} ${selType ? styles.groupToggleActive : ''}`}
+            >
+              Type
+            </span>
+            <ul className={styles.groupList}>
+              {types.map((type) => {
+                const active = type === selType
+                return (
+                  <li key={type}>
+                    <Link
+                      prefetch="intent"
+                      to={buildHref('type', active ? null : type)}
+                      className={`${styles.groupItem} ${active ? styles.groupItemActive : ''}`}
+                    >
+                      {type}
+                    </Link>
                   </li>
-                ))}
-              </ul>
-            </div>
-          ))}
+                )
+              })}
+            </ul>
+          </div>
+
+          {/* Ingredient-filter (afgeleid van custom.key_ingredients). */}
+          <div className={styles.group}>
+            <span
+              className={`${styles.groupToggle} ${selIngredient ? styles.groupToggleActive : ''}`}
+            >
+              Ingredients
+            </span>
+            <ul className={styles.groupList}>
+              {ingredients.map((ingredient) => {
+                const active = ingredient === selIngredient
+                return (
+                  <li key={ingredient}>
+                    <Link
+                      prefetch="intent"
+                      to={buildHref('ingredient', active ? null : ingredient)}
+                      className={`${styles.groupItem} ${active ? styles.groupItemActive : ''}`}
+                    >
+                      {ingredient}
+                    </Link>
+                  </li>
+                )
+              })}
+            </ul>
+          </div>
         </div>
 
         <div className={styles.content}>
-          {/* Top-sectie: de producten die we al hebben (zonder kop). De
-              onzichtbare spacer houdt exact de hoogte van de "Filters"-label
-              aan, zodat deze toplijn op één lijn ligt met die in de sidebar. */}
           <div className={styles.category}>
-            <header className={styles.categoryHeaderTop}>
-              <span className={styles.headSpacer} aria-hidden="true">
-                Filters
-              </span>
+            <header className={styles.categoryHeader}>
+              <h2 className={styles.heading}>{heading}</h2>
               <hr className={styles.rule} />
             </header>
-            <ul className={styles.grid}>
-              {products.map((product) => (
-                <ProductCard key={product.id} product={product} />
-              ))}
-            </ul>
-          </div>
 
-          {/* Nog niet ingerichte categorieën → grijze placeholders. */}
-          {PLACEHOLDER_CATEGORIES.map((title) => (
-            <div key={title} className={styles.category}>
-              <header className={styles.categoryHeader}>
-                <h2 className={styles.heading}>{title}</h2>
-                <hr className={styles.rule} />
-              </header>
+            {visible.length > 0 ? (
               <ul className={styles.grid}>
-                {Array.from({length: PLACEHOLDERS_PER_CATEGORY}).map((_, i) => (
-                  <li key={i} className={`${styles.card} ${styles.placeholder}`}>
-                    <div className={styles.media} />
-                  </li>
+                {visible.map((product) => (
+                  <ProductCard key={product.id} product={product} />
                 ))}
               </ul>
-            </div>
-          ))}
+            ) : (
+              <p className={styles.empty}>No products match these filters.</p>
+            )}
+          </div>
         </div>
       </div>
     </section>
-  )
-}
-
-function ProductCard({product}: {product: ShopAllProductFragment}) {
-  return (
-    <li className={styles.card}>
-      <Link to={`/products/${product.handle}`} className={styles.cardLink}>
-        <div className={styles.media}>
-          {product.featuredImage ? (
-            <Image
-              data={product.featuredImage}
-              aspectRatio="348/420"
-              sizes="(min-width: 768px) 25vw, 50vw"
-              className={styles.image}
-            />
-          ) : (
-            <div className={styles.image} />
-          )}
-        </div>
-
-        <div className={styles.meta}>
-          <div className={styles.titleGroup}>
-            {product.typeProduct?.value && (
-              <span className={styles.eyebrow}>{product.typeProduct.value}</span>
-            )}
-            <h3 className={styles.name}>{product.title}</h3>
-          </div>
-          <div className={styles.price}>
-            <LiningMoney data={product.priceRange.minVariantPrice} />
-          </div>
-        </div>
-      </Link>
-    </li>
   )
 }

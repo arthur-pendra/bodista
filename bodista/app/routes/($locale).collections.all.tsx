@@ -1,6 +1,7 @@
 import type {Route} from './+types/($locale).collections.all';
 import {useLoaderData} from 'react-router';
 import {ShopAll} from '~/components/shop/ShopAll';
+import {PRODUCT_CARD_FRAGMENT} from '~/components/shop/ProductCard';
 
 export const meta: Route.MetaFunction = () => {
   return [{title: 'Bodista | Shop All'}];
@@ -34,34 +35,29 @@ export default function Collection() {
 }
 
 // NOTE: https://shopify.dev/docs/api/storefront/latest/objects/product
+// Elk product draagt zijn collectie-handles mee, zodat de Shop All-pagina
+// client-side op collectie kan filteren (collecties = filters).
 const SHOP_ALL_QUERY = `#graphql
   fragment ShopAllProduct on Product {
-    id
-    title
-    handle
-    typeProduct: metafield(namespace: "custom", key: "type_product") {
-      value
-    }
-    priceRange {
-      minVariantPrice {
-        amount
-        currencyCode
+    ...ProductCard
+    productType
+    collections(first: 10) {
+      nodes {
+        handle
+        title
       }
     }
-    featuredImage {
-      id
-      url
-      altText
-      width
-      height
+    keyIngredients: metafield(namespace: "custom", key: "key_ingredients") {
+      value
     }
   }
   query ShopAll($country: CountryCode, $language: LanguageCode)
     @inContext(country: $country, language: $language) {
-    products(first: 24, sortKey: UPDATED_AT, reverse: true) {
+    products(first: 50, sortKey: UPDATED_AT, reverse: true) {
       nodes {
         ...ShopAllProduct
       }
     }
   }
+  ${PRODUCT_CARD_FRAGMENT}
 ` as const;

@@ -21,7 +21,7 @@ export function HeroHeader() {
             <br />
             rare heritage botanicals, and the radical act of doing less.
           </p>
-          <a className={styles.heroLink} href="/collections">
+          <a className={styles.heroLink} href="/collections/all">
             free your skin now
             <svg
               className={styles.heroLinkArrow}

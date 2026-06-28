@@ -68,6 +68,13 @@
   opacity: 0.55;
 }
 
+/* Actieve filter — gemarkeerd met de gouden accentkleur (geen italic/underline). */
+.filterItemActive,
+.filterItemActive:hover {
+  color: var(--color-gold);
+  opacity: 1;
+}
+
 /* Uitklapbare groep: label + lijst die op hover opent. */
 .group {
   border-top: 1px solid var(--color-hairline);
@@ -133,6 +140,24 @@
 
 .groupItem:hover {
   opacity: 0.55;
+}
+
+.groupItemActive,
+.groupItemActive:hover {
+  color: var(--color-gold);
+  opacity: 1;
+}
+
+/* Groep-label kleurt mee als er binnen die groep een filter actief is. */
+.groupToggleActive {
+  color: var(--color-charcoal);
+}
+
+.empty {
+  margin: 0;
+  font-size: var(--text-detail);
+  line-height: var(--leading-detail);
+  color: var(--color-silver);
 }
 
 /* ---- Content (kolom 7–24) ------------------------------------------------- */

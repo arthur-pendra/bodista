@@ -1,0 +1,471 @@
+/* ==========================================================================
+   ProductPage (PDP) — component-specifieke styling.
+   Base (typografie, kleuren, tokens) komt uit global.css. Layout via het
+   gedeelde 24-koloms .layout-grid: beeld = kolom 1–12, info = kolom 15–24
+   (sticky). Waardes in em → Osmo scaling; px alleen voor hairlines, rem voor
+   tap-target-vloeren. Afbeeldingen renderen in px via <Image>.
+   ========================================================================== */
+
+.page {
+  /* Full-bleed: breek uit de 1em zijmarge van `body > main` zodat .layout-grid
+     exact op de GridOverlay (viewport-rand + --grid-margin) lijnt. */
+  margin-left: -1em;
+  margin-right: -1em;
+  padding-top: calc(var(--header-height) + 4em);
+  padding-bottom: 6em;
+}
+
+.inner {
+  align-items: start;
+  row-gap: 0;
+}
+
+/* ---- Beeld (kolom 1–12) --------------------------------------------------- */
+
+.galleryCol {
+  grid-column: 1 / 13;
+}
+
+.gallery {
+  display: flex;
+  flex-direction: column;
+  gap: var(--grid-gutter);
+}
+
+.galleryMain {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  background-color: var(--color-warm);
+}
+
+.galleryImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.thumbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--grid-gutter);
+}
+
+.thumb {
+  width: 5em;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background-color: var(--color-warm);
+  cursor: pointer;
+  padding: 0;
+  outline: 1px solid transparent;
+  outline-offset: 2px;
+  transition: outline-color 0.2s ease, opacity 0.2s ease;
+}
+
+.thumb:hover {
+  opacity: 0.85;
+}
+
+.thumbActive {
+  outline-color: var(--color-charcoal);
+}
+
+/* ---- Info (kolom 15–24, sticky) ------------------------------------------ */
+
+.info {
+  grid-column: 15 / 25;
+  align-self: start;
+  position: sticky;
+  top: calc(var(--header-height) + 2em);
+  display: flex;
+  flex-direction: column;
+}
+
+.eyebrow {
+  margin: 0 0 0.75em;
+  font-size: var(--text-detail);
+  line-height: var(--leading-detail);
+  letter-spacing: var(--tracking-detail);
+  text-transform: uppercase;
+  color: var(--color-gold);
+}
+
+.title {
+  margin: 0;
+  font-size: var(--text-heading-lg);
+  font-weight: 400;
+  line-height: var(--leading-heading-lg);
+  letter-spacing: -0.01em;
+  color: var(--color-charcoal);
+}
+
+.price {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6em;
+  margin-top: 0.75em;
+  font-size: var(--text-body-lg);
+  line-height: var(--leading-detail);
+  color: var(--color-charcoal);
+}
+
+.compareAt {
+  color: var(--color-silver);
+  text-decoration: line-through;
+}
+
+/* ---- Variant-opties ------------------------------------------------------- */
+
+.option {
+  margin-top: 2em;
+}
+
+.optionName {
+  display: block;
+  margin-bottom: 0.857em;
+  font-size: var(--text-detail);
+  line-height: var(--leading-detail);
+  letter-spacing: var(--tracking-detail);
+  text-transform: uppercase;
+  color: var(--color-silver);
+}
+
+.optionValues {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6em;
+}
+
+.optionValue {
+  min-height: 2.75rem;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 1.1em;
+  font-size: var(--text-body);
+  line-height: 1;
+  color: var(--color-charcoal);
+  background: transparent;
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.optionValue:hover {
+  border-color: var(--color-charcoal);
+}
+
+.optionValueSelected {
+  border-color: var(--color-charcoal);
+  color: var(--color-charcoal);
+}
+
+.swatch {
+  display: inline-block;
+  width: 1.25em;
+  height: 1.25em;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.swatch img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ---- Aankoopkeuze (one-time / subscribe) --------------------------------- */
+
+.purchase {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75em;
+  margin-top: 2em;
+}
+
+.purchaseRow {
+  display: flex;
+  align-items: center;
+  gap: 0.75em;
+  padding: 1.1em 1.25em;
+  border: 1px solid var(--color-hairline);
+  border-radius: 0.5em;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+}
+
+.purchaseRow:hover {
+  border-color: var(--color-charcoal);
+}
+
+.purchaseRowActive {
+  border-color: var(--color-charcoal);
+}
+
+.purchaseRowStacked {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 1em;
+  cursor: default;
+}
+
+.purchaseHead {
+  display: flex;
+  align-items: center;
+  gap: 0.75em;
+  cursor: pointer;
+}
+
+.purchaseLabel {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  font-size: var(--text-body);
+  color: var(--color-charcoal);
+}
+
+.purchaseNote {
+  margin-top: 0.25em;
+  font-size: var(--text-detail);
+  line-height: var(--leading-detail);
+  color: var(--color-silver);
+}
+
+.purchasePrice {
+  margin-left: auto;
+  font-size: var(--text-body);
+  color: var(--color-charcoal);
+}
+
+.radio {
+  flex: none;
+  width: 1.1em;
+  height: 1.1em;
+  margin: 0;
+  accent-color: var(--color-charcoal);
+}
+
+.frequencies {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+  padding-left: 1.85em;
+}
+
+.frequency {
+  display: flex;
+  align-items: center;
+  gap: 0.75em;
+  padding: 0.75em 1em;
+  border: 1px solid var(--color-hairline);
+  border-radius: 0.5em;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+}
+
+.frequency:hover,
+.frequencyActive {
+  border-color: var(--color-charcoal);
+}
+
+.frequencyName {
+  flex: 1;
+  font-size: var(--text-detail);
+  color: var(--color-charcoal);
+}
+
+.frequencyPrice {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6em;
+  font-size: var(--text-detail);
+  color: var(--color-charcoal);
+}
+
+.save {
+  font-size: var(--text-detail);
+  letter-spacing: var(--tracking-detail);
+  text-transform: uppercase;
+  color: var(--color-gold);
+}
+
+/* ---- Add to cart — primaire CTA (pill, gelijk aan cart-checkout) ---------- */
+
+.addToCart {
+  display: block;
+  width: 100%;
+  margin-top: 2em;
+  padding: 1.1em;
+  font-size: var(--text-body);
+  letter-spacing: var(--tracking-detail);
+  text-transform: uppercase;
+  text-align: center;
+  color: var(--color-warm);
+  background: var(--color-charcoal);
+  border: 0;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  transition: opacity 250ms var(--ease-fade);
+}
+
+.addToCart:hover {
+  opacity: 0.85;
+}
+
+.addToCart:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ---- Accordions (Description / Ingredients / How to use) ------------------ */
+
+.accordions {
+  margin-top: 2.5em;
+  border-top: 1px solid var(--color-hairline);
+}
+
+.accordion {
+  border-bottom: 1px solid var(--color-hairline);
+}
+
+.accordionSummary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25em 0;
+  font-size: var(--text-heading-sm);
+  line-height: var(--leading-heading-sm);
+  color: var(--color-charcoal);
+  list-style: none;
+  cursor: pointer;
+}
+
+.accordionSummary::-webkit-details-marker {
+  display: none;
+}
+
+/* Plus → kruis-toggle, opgebouwd uit twee hairlines. */
+.accordionIcon {
+  position: relative;
+  flex: none;
+  width: 0.85em;
+  height: 0.85em;
+}
+
+.accordionIcon::before,
+.accordionIcon::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0.85em;
+  height: 1px;
+  background: var(--color-charcoal);
+  transform: translate(-50%, -50%);
+  transition: transform 0.25s var(--ease-osmo), opacity 0.25s var(--ease-osmo);
+}
+
+.accordionIcon::after {
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+
+.accordion[open] .accordionIcon::after {
+  opacity: 0;
+  transform: translate(-50%, -50%) rotate(0deg);
+}
+
+.accordionBody {
+  padding: 0 0 1.5em;
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  color: var(--color-body);
+}
+
+.richText p {
+  margin: 0 0 1em;
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+}
+
+.richText p:last-child {
+  margin-bottom: 0;
+}
+
+.plainText {
+  margin: 0;
+  white-space: pre-line;
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+}
+
+/* ---- Complete your routine ------------------------------------------------ */
+
+.routine {
+  margin-top: 6em;
+  padding: 0 var(--grid-margin);
+}
+
+.routineHeader {
+  display: flex;
+  align-items: center;
+  gap: 1em;
+  margin-bottom: 2em;
+}
+
+.routineHeading {
+  flex: none;
+  margin: 0;
+  font-size: var(--text-heading-md);
+  font-weight: 400;
+  line-height: var(--leading-heading-sm);
+  letter-spacing: -0.01em;
+  color: var(--color-charcoal);
+}
+
+.rule {
+  flex: 1;
+  height: 0;
+  margin: 0;
+  border: 0;
+  border-top: 1px solid var(--color-hairline);
+}
+
+.routineGrid {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  column-gap: var(--grid-gutter);
+  row-gap: 2.5em;
+}
+
+/* ---- Responsive (mobiel = 12-koloms grid) -------------------------------- */
+
+@media (max-width: 767px) {
+  .page {
+    padding-top: calc(var(--header-height) + 2em);
+    padding-bottom: 4em;
+  }
+
+  .galleryCol {
+    grid-column: 1 / -1;
+  }
+
+  .info {
+    grid-column: 1 / -1;
+    position: static;
+    margin-top: 2.5em;
+  }
+
+  .title {
+    font-size: var(--text-heading-md);
+    line-height: var(--leading-heading-md);
+  }
+
+  .routineGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

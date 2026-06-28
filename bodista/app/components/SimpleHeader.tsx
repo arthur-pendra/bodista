@@ -433,16 +433,17 @@ function ShopContent({
           <ul className={styles.megaLinks}>
             {SHOP_TABS.map((t) => (
               <li key={t.key}>
-                <button
-                  type="button"
+                <Link
+                  prefetch="intent"
+                  to={t.href}
                   className={`${styles.megaLink} ${styles.shopFilter} ${t.key === tab ? styles.shopFilterActive : ''}`}
                   onPointerEnter={(e) => {
                     if (e.pointerType === 'mouse') setTab(t.key)
                   }}
-                  onClick={() => setTab(t.key)}
+                  onClick={onNavigate}
                 >
                   {t.label}
-                </button>
+                </Link>
               </li>
             ))}
           </ul>
@@ -753,6 +754,8 @@ function BodistaWordmark() {
   return (
     <svg
       className={styles.mark}
+      width="161"
+      height="30"
       viewBox="0 0 161 30"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

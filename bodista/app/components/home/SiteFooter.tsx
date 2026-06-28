@@ -1,3 +1,4 @@
+import {Link} from 'react-router'
 import {Wordmark} from '~/components/Wordmark'
 import styles from './SiteFooter.module.css'
 
@@ -5,7 +6,14 @@ const INFORMATION = ['botonical', 'Face', 'Routines']
 
 const SOCIAL = ['Instagram', 'Facebook', 'Tiktok', 'Youtube']
 
-const SHOP = ['Body', 'Face', 'Routines', 'Cloths', 'Scalp']
+// De echte collecties (zie Shopify).
+const SHOP = [
+  {label: 'The Facial', href: '/collections/all?collection=the-facial'},
+  {label: 'Scents', href: '/collections/all?collection=scents'},
+  {label: 'Body', href: '/collections/all?collection=body'},
+  {label: 'Sets', href: '/collections/all?collection=sets'},
+  {label: 'Accessories', href: '/collections/all?collection=accessories'},
+]
 
 const ArrowIcon = () => (
   <svg
@@ -118,17 +126,17 @@ export function SiteFooter() {
             <nav aria-label="Shop">
               <ul className={styles.links}>
                 {SHOP.map((item) => (
-                  <li key={item}>
-                    <a className={styles.link} href="/">
-                      {item}
-                    </a>
+                  <li key={item.label}>
+                    <Link className={styles.link} to={item.href}>
+                      {item.label}
+                    </Link>
                   </li>
                 ))}
               </ul>
             </nav>
-            <a className={styles.muted} href="/">
+            <Link className={styles.muted} to="/collections/all">
               shop all
-            </a>
+            </Link>
           </div>
 
           {/* Verticale scheidingslijnen vlak vóór elk nav-item (kolom 9/14/19). */}

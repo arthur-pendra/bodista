@@ -207,7 +207,7 @@ function CartEmpty() {
         Add your favourite rituals to your cart.
       </p>
       <Link
-        to="/collections"
+        to="/collections/all"
         onClick={close}
         prefetch="viewport"
         className={styles.emptyLink}

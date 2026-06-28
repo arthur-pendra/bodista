@@ -7,66 +7,21 @@
  * dus naar bestaande routes/secties. Pas labels/links hier centraal aan.
  */
 
-export type ShopProduct = {
-  name: string
-  type: string
-  /** Prijs zonder valutateken; het € wordt los gerenderd (ui-nums). */
-  price: string
-  handle: string
-}
-
 export type ShopTab = {
   key: string
   label: string
   href: string
-  products: ShopProduct[]
 }
 
+// De echte collecties (zie Shopify). Tabs linken rechtstreeks naar de
+// collectie-pagina's; de uitgelichte product-cards rechts komen uit de
+// live menuProducts-query.
 export const SHOP_TABS: ShopTab[] = [
-  {
-    key: 'face',
-    label: 'face',
-    href: '/collections',
-    products: [
-      {name: 'The Serum', type: 'water phase', price: '48', handle: 'the-serum'},
-      {name: 'The Face Oil', type: 'oil phase', price: '62', handle: 'the-face-oil'},
-      {name: 'The Cleanser', type: 'first step', price: '44', handle: 'the-cleanser'},
-      {name: 'The Mist', type: 'finishing veil', price: '38', handle: 'the-mist'},
-    ],
-  },
-  {
-    key: 'body',
-    label: 'body',
-    href: '/collections',
-    products: [
-      {name: 'The Body Oil', type: 'nourishing', price: '58', handle: 'the-body-oil'},
-      {name: 'The Body Wash', type: 'cleansing', price: '36', handle: 'the-body-wash'},
-      {name: 'The Salt Scrub', type: 'renewing', price: '46', handle: 'the-salt-scrub'},
-      {name: 'The Hand Balm', type: 'protecting', price: '28', handle: 'the-hand-balm'},
-    ],
-  },
-  {
-    key: 'serie',
-    label: 'serie',
-    href: '/collections',
-    products: [
-      {name: 'The Ritual', type: 'full protocol', price: '180', handle: 'the-ritual'},
-      {name: 'The Duo', type: 'oil & water', price: '98', handle: 'the-duo'},
-      {name: 'The Discovery', type: 'starter set', price: '64', handle: 'the-discovery'},
-      {name: 'The Refill', type: 'sustained', price: '52', handle: 'the-refill'},
-    ],
-  },
-  {
-    key: 'accessoires',
-    label: 'Accessoires',
-    href: '/collections',
-    products: [
-      {name: 'The Cloth', type: 'organic cotton', price: '18', handle: 'the-cloth'},
-      {name: 'The Dropper', type: 'precise dosing', price: '12', handle: 'the-dropper'},
-      {name: 'The Dish', type: 'ceramic rest', price: '24', handle: 'the-dish'},
-      {name: 'The Pouch', type: 'linen travel', price: '22', handle: 'the-pouch'},
-    ],
-  },
+  {key: 'the-facial', label: 'The Facial', href: '/collections/all?collection=the-facial'},
+  {key: 'scents', label: 'Scents', href: '/collections/all?collection=scents'},
+  {key: 'body', label: 'Body', href: '/collections/all?collection=body'},
+  {key: 'sets', label: 'Sets', href: '/collections/all?collection=sets'},
+  {key: 'accessories', label: 'Accessories', href: '/collections/all?collection=accessories'},
 ]
 
 export type ExploreLink = {
@@ -85,7 +40,7 @@ export const EXPLORE_COLUMNS: ExploreColumn[] = [
     heading: 'the brand',
     links: [
       {label: 'Botanical', href: '/blogs/journal'},
-      {label: 'Face', href: '/collections'},
+      {label: 'Face', href: '/collections/all?collection=the-facial'},
       {label: 'Bodista', href: '/'},
       {label: 'Learn More', href: '/blogs/journal'},
     ],
