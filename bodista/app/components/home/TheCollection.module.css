@@ -156,7 +156,7 @@
 
 .media {
   position: relative;
-  aspect-ratio: 348 / 465;
+  aspect-ratio: 348 / 420;
   overflow: hidden;
   border-radius: 0;
   background-color: var(--color-warm);

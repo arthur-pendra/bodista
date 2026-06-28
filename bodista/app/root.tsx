@@ -134,10 +134,20 @@ function loadDeferredData({context}: Route.LoaderArgs) {
       console.error(error);
       return null;
     });
+
+  // Producten voor het Shop mega-menu in de header (op elke pagina beschikbaar).
+  const menuProducts = storefront
+    .query(MENU_PRODUCTS_QUERY)
+    .catch((error: Error) => {
+      console.error(error);
+      return null;
+    });
+
   return {
     cart: cart.get(),
     isLoggedIn: customerAccount.isLoggedIn(),
     footer,
+    menuProducts,
   };
 }
 
@@ -207,3 +217,35 @@ export function ErrorBoundary() {
     </div>
   );
 }
+
+const MENU_PRODUCTS_QUERY = `#graphql
+  fragment MenuProduct on Product {
+    id
+    title
+    handle
+    typeProduct: metafield(namespace: "custom", key: "type_product") {
+      value
+    }
+    priceRange {
+      minVariantPrice {
+        amount
+        currencyCode
+      }
+    }
+    featuredImage {
+      id
+      url
+      altText
+      width
+      height
+    }
+  }
+  query MenuProducts ($country: CountryCode, $language: LanguageCode)
+    @inContext(country: $country, language: $language) {
+    products(first: 8, sortKey: UPDATED_AT, reverse: true) {
+      nodes {
+        ...MenuProduct
+      }
+    }
+  }
+` as const;

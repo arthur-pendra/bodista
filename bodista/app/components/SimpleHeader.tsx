@@ -1,58 +1,449 @@
-import {Suspense} from 'react'
-import {Await, Link, NavLink, useAsyncValue} from 'react-router'
-import {useOptimisticCart} from '@shopify/hydrogen'
-import type {CartApiQueryFragment} from 'storefrontapi.generated'
+import {Suspense, useEffect, useRef, useState, useCallback} from 'react'
+import {Await, Link, NavLink, useAsyncValue, useLocation} from 'react-router'
+import {Image, useOptimisticCart} from '@shopify/hydrogen'
+import gsap from 'gsap'
+import type {
+  CartApiQueryFragment,
+  MenuProductsQuery,
+} from 'storefrontapi.generated'
 import {useAside} from '~/components/Aside'
+import {LiningMoney} from '~/components/LiningMoney'
+import {SHOP_TABS, EXPLORE_COLUMNS, EXPLORE_CARDS} from '~/components/megaMenu'
 import styles from './SimpleHeader.module.css'
 
 interface SimpleHeaderProps {
   cart: Promise<CartApiQueryFragment | null>
+  menuProducts: Promise<MenuProductsQuery | null>
 }
 
-export function SimpleHeader({cart}: SimpleHeaderProps) {
+type MenuProduct = NonNullable<
+  MenuProductsQuery['products']
+>['nodes'][number]
+
+type MenuKey = 'shop' | 'explore'
+const MENUS: MenuKey[] = ['shop', 'explore']
+
+export function SimpleHeader({cart, menuProducts}: SimpleHeaderProps) {
   const {open} = useAside()
+  const location = useLocation()
+
+  const rootRef = useRef<HTMLDivElement>(null)
+  const tlRef = useRef<Partial<Record<MenuKey, gsap.core.Timeline>>>({})
+  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const [active, setActive] = useState<MenuKey | null>(null)
+
+  // Bouw de open/close-timelines één keer (placeholder-content is statisch).
+  useEffect(() => {
+    if (!rootRef.current) return
+
+    const ctx = gsap.context(() => {
+      const reduce = window.matchMedia(
+        '(prefers-reduced-motion: reduce)',
+      ).matches
+
+      MENUS.forEach((key) => {
+        const panel = rootRef.current!.querySelector<HTMLElement>(
+          `[data-mega-panel="${key}"]`,
+        )
+        if (!panel) return
+        const bg = panel.querySelector<HTMLElement>('[data-mega-bg]')
+        const items = panel.querySelectorAll<HTMLElement>('[data-mega-item]')
+
+        gsap.set(panel, {autoAlpha: 0})
+        gsap.set(bg, {scaleY: 0, transformOrigin: 'top center'})
+        gsap.set(items, {autoAlpha: 0, y: reduce ? 0 : 24})
+
+        const tl = gsap.timeline({paused: true})
+        tl.set(panel, {autoAlpha: 1})
+          .to(bg, {
+            scaleY: 1,
+            duration: reduce ? 0.001 : 0.55,
+            ease: 'expo.out',
+          })
+          .to(
+            items,
+            {
+              autoAlpha: 1,
+              y: 0,
+              duration: reduce ? 0.001 : 0.5,
+              stagger: reduce ? 0 : 0.05,
+              ease: 'power3.out',
+            },
+            reduce ? '<' : 0.12,
+          )
+        tlRef.current[key] = tl
+      })
+
+      const backdrop = rootRef.current!.querySelector('[data-mega-backdrop]')
+      gsap.set(backdrop, {autoAlpha: 0})
+    }, rootRef)
+
+    return () => ctx.revert()
+  }, [])
+
+  // Speel/keer de juiste timeline op basis van de actieve menu.
+  useEffect(() => {
+    MENUS.forEach((key) => {
+      const tl = tlRef.current[key]
+      if (!tl) return
+      if (key === active) tl.play()
+      else tl.reverse()
+    })
+
+    const backdrop = rootRef.current?.querySelector('[data-mega-backdrop]')
+    if (backdrop) {
+      gsap.to(backdrop, {
+        autoAlpha: active ? 1 : 0,
+        duration: 0.3,
+        ease: 'power2.out',
+        overwrite: true,
+      })
+    }
+  }, [active])
+
+  // Sluit bij navigatie naar een andere route.
+  useEffect(() => {
+    setActive(null)
+  }, [location.pathname])
+
+  // Sluit met Escape.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setActive(null)
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [])
+
+  const clearClose = useCallback(() => {
+    if (closeTimer.current) {
+      clearTimeout(closeTimer.current)
+      closeTimer.current = null
+    }
+  }, [])
+
+  const openMenu = useCallback(
+    (key: MenuKey) => {
+      clearClose()
+      setActive(key)
+    },
+    [clearClose],
+  )
+
+  const scheduleClose = useCallback(() => {
+    clearClose()
+    closeTimer.current = setTimeout(() => setActive(null), 120)
+  }, [clearClose])
+
+  const toggleMenu = useCallback((key: MenuKey) => {
+    setActive((prev) => (prev === key ? null : key))
+  }, [])
+
+  // Hover alleen met een echte muis; touch valt terug op klik (toggle).
+  const handlePointerEnter = (key: MenuKey) => (e: React.PointerEvent) => {
+    if (e.pointerType === 'mouse') openMenu(key)
+  }
+  const handlePointerLeave = (e: React.PointerEvent) => {
+    if (e.pointerType === 'mouse') scheduleClose()
+  }
 
   return (
-    <header className={styles.header}>
-      <nav className={styles.group}>
-        <Link prefetch="intent" to="/collections" className={styles.link}>
-          Shop
-        </Link>
-        <Link prefetch="intent" to="/blogs/journal" className={styles.link}>
-          Explore
-        </Link>
-      </nav>
+    <div ref={rootRef} className={styles.root} data-menu-open={active ?? 'closed'}>
+      <button
+        type="button"
+        aria-hidden="true"
+        tabIndex={-1}
+        data-mega-backdrop
+        className={styles.backdrop}
+        onClick={() => setActive(null)}
+      />
 
-      <NavLink
-        prefetch="intent"
-        to="/"
-        end
-        className={styles.logo}
-        aria-label="Bodista — home"
-      >
-        <BodistaWordmark />
-      </NavLink>
+      <header className={styles.header}>
+        <nav className={styles.group}>
+          <MenuTrigger
+            label="Shop"
+            isOpen={active === 'shop'}
+            onClick={() => toggleMenu('shop')}
+            onPointerEnter={handlePointerEnter('shop')}
+            onPointerLeave={handlePointerLeave}
+          />
+          <MenuTrigger
+            label="Explore"
+            isOpen={active === 'explore'}
+            onClick={() => toggleMenu('explore')}
+            onPointerEnter={handlePointerEnter('explore')}
+            onPointerLeave={handlePointerLeave}
+          />
+        </nav>
 
-      <nav className={styles.group}>
-        <button
-          type="button"
-          className={styles.link}
-          onClick={() => open('search')}
+        <NavLink
+          prefetch="intent"
+          to="/"
+          end
+          className={styles.logo}
+          aria-label="Bodista — home"
         >
-          Search
-        </button>
-        <NavLink prefetch="intent" to="/account" className={styles.link}>
-          Account
+          <BodistaWordmark />
         </NavLink>
-        <button
-          type="button"
-          className={styles.link}
-          onClick={() => open('cart')}
-        >
-          Cart (<CartCount cart={cart} />)
-        </button>
-      </nav>
-    </header>
+
+        <nav className={styles.group}>
+          <button
+            type="button"
+            className={styles.link}
+            onClick={() => open('search')}
+          >
+            Search
+          </button>
+          <NavLink prefetch="intent" to="/account" className={styles.link}>
+            Account
+          </NavLink>
+          <button
+            type="button"
+            className={styles.link}
+            onClick={() => open('cart')}
+          >
+            Cart (<CartCount cart={cart} />)
+          </button>
+        </nav>
+      </header>
+
+      <ShopPanel
+        menuProducts={menuProducts}
+        onPointerEnter={() => clearClose()}
+        onPointerLeave={handlePointerLeave}
+        onNavigate={() => setActive(null)}
+      />
+      <ExplorePanel
+        onPointerEnter={() => clearClose()}
+        onPointerLeave={handlePointerLeave}
+        onNavigate={() => setActive(null)}
+      />
+    </div>
+  )
+}
+
+function MenuTrigger({
+  label,
+  isOpen,
+  onClick,
+  onPointerEnter,
+  onPointerLeave,
+}: {
+  label: string
+  isOpen: boolean
+  onClick: () => void
+  onPointerEnter: (e: React.PointerEvent) => void
+  onPointerLeave: (e: React.PointerEvent) => void
+}) {
+  return (
+    <button
+      type="button"
+      className={`${styles.link} ${styles.trigger} ${isOpen ? styles.triggerOpen : ''}`}
+      aria-expanded={isOpen}
+      aria-haspopup="true"
+      onClick={onClick}
+      onPointerEnter={onPointerEnter}
+      onPointerLeave={onPointerLeave}
+    >
+      {label}
+    </button>
+  )
+}
+
+type PanelProps = {
+  onPointerEnter: () => void
+  onPointerLeave: (e: React.PointerEvent) => void
+  onNavigate: () => void
+}
+
+function ShopPanel({
+  menuProducts,
+  onPointerEnter,
+  onPointerLeave,
+  onNavigate,
+}: PanelProps & {menuProducts: Promise<MenuProductsQuery | null>}) {
+  // Tabs zijn voorlopig puur visueel; de type-filtering wordt later gekoppeld.
+  const [tab, setTab] = useState(SHOP_TABS[0].key)
+
+  return (
+    <div
+      data-mega-panel="shop"
+      className={styles.panel}
+      onPointerEnter={onPointerEnter}
+      onPointerLeave={onPointerLeave}
+    >
+      <div data-mega-bg className={styles.panelBg} />
+      <div className={`layout-grid ${styles.panelInner}`}>
+        {/* Links: filters (categorieën) + alle collecties. Filtering komt later. */}
+        <div className={styles.megaLeft} data-mega-item>
+          <span className={styles.megaHeading}>filters</span>
+          <ul className={styles.megaLinks}>
+            {SHOP_TABS.map((t) => (
+              <li key={t.key}>
+                <button
+                  type="button"
+                  className={`${styles.megaLink} ${styles.shopFilter} ${t.key === tab ? styles.shopFilterActive : ''}`}
+                  onPointerEnter={(e) => {
+                    if (e.pointerType === 'mouse') setTab(t.key)
+                  }}
+                  onClick={() => setTab(t.key)}
+                >
+                  {t.label}
+                </button>
+              </li>
+            ))}
+          </ul>
+          <Link
+            prefetch="intent"
+            to="/collections"
+            className={styles.megaMuted}
+            onClick={onNavigate}
+          >
+            all collection
+          </Link>
+        </div>
+
+        <span className={styles.megaVline} aria-hidden="true" data-mega-item />
+
+        {/* Rechts: drie vierkante product cards. */}
+        <ul className={styles.shopCards} data-mega-item>
+          <Suspense fallback={null}>
+            <Await resolve={menuProducts}>
+              {(response) => {
+                const products = response?.products?.nodes ?? []
+                return products
+                  .slice(0, 3)
+                  .map((product) => (
+                    <ShopCard
+                      key={product.id}
+                      product={product}
+                      onNavigate={onNavigate}
+                    />
+                  ))
+              }}
+            </Await>
+          </Suspense>
+        </ul>
+      </div>
+    </div>
+  )
+}
+
+function ShopCard({
+  product,
+  onNavigate,
+}: {
+  product: MenuProduct
+  onNavigate: () => void
+}) {
+  return (
+    <li className={styles.card}>
+      <Link
+        prefetch="intent"
+        to={`/products/${product.handle}`}
+        className={styles.cardLink}
+        onClick={onNavigate}
+      >
+        <span className={styles.cardMedia}>
+          {product.featuredImage && (
+            <Image
+              data={product.featuredImage}
+              aspectRatio="1/1"
+              sizes="(min-width: 768px) 22vw, 45vw"
+              className={styles.cardImage}
+            />
+          )}
+        </span>
+        <span className={styles.cardMeta}>
+          <span className={styles.cardText}>
+            {product.typeProduct?.value && (
+              <span className={styles.cardType}>
+                {product.typeProduct.value}
+              </span>
+            )}
+            <span className={styles.cardName}>{product.title}</span>
+          </span>
+          <span className={styles.cardPrice}>
+            <LiningMoney data={product.priceRange.minVariantPrice} />
+          </span>
+        </span>
+      </Link>
+    </li>
+  )
+}
+
+function ExplorePanel({onPointerEnter, onPointerLeave, onNavigate}: PanelProps) {
+  return (
+    <div
+      data-mega-panel="explore"
+      className={styles.panel}
+      onPointerEnter={onPointerEnter}
+      onPointerLeave={onPointerLeave}
+    >
+      <div data-mega-bg className={styles.panelBg} />
+      <div className={`layout-grid ${styles.panelInner}`}>
+        {/* Links: tekst-kolommen in footer-stijl. */}
+        <div className={styles.exploreCols} data-mega-item>
+          {EXPLORE_COLUMNS.map((column) => (
+            <div key={column.heading} className={styles.exploreCol}>
+              <span className={styles.megaHeading}>{column.heading}</span>
+              <ul className={styles.megaLinks}>
+                {column.links.map((link) => (
+                  <li key={link.label}>
+                    {link.external ? (
+                      <a
+                        href={link.href}
+                        target="_blank"
+                        rel="noreferrer"
+                        className={styles.megaLink}
+                        onClick={onNavigate}
+                      >
+                        {link.label}
+                      </a>
+                    ) : (
+                      <Link
+                        prefetch="intent"
+                        to={link.href}
+                        className={styles.megaLink}
+                        onClick={onNavigate}
+                      >
+                        {link.label}
+                      </Link>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+
+        <span className={styles.megaVline} aria-hidden="true" data-mega-item />
+
+        {/* Rechts: twee vierkante foto-cards. */}
+        <ul className={styles.exploreCards} data-mega-item>
+          {EXPLORE_CARDS.map((card) => (
+            <li key={card.label} className={styles.card}>
+              <Link
+                prefetch="intent"
+                to={card.href}
+                className={styles.cardLink}
+                onClick={onNavigate}
+              >
+                <span className={styles.cardMedia}>
+                  <img src={card.src} alt="" className={styles.cardImage} />
+                </span>
+                <span className={styles.cardMeta}>
+                  <span className={styles.cardText}>
+                    <span className={styles.cardType}>{card.sub}</span>
+                    <span className={styles.cardName}>{card.label}</span>
+                  </span>
+                </span>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
   )
 }
 

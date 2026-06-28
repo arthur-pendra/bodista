@@ -1,6 +1,14 @@
-/* Super basic header — transparante balk over de hero.
-   pointer-events op de balk uit, op de links aan, zodat de hero
-   eronder klikbaar blijft. */
+/* ==========================================================================
+   Header + Mega-menu (Shop / Explore)
+   Header: transparante balk over de hero. De mega-panelen vallen full-bleed
+   vanaf de bovenkant; de header blijft erbovenop en klikbaar.
+   ========================================================================== */
+
+.root {
+  display: contents;
+}
+
+/* --- Header-balk ---------------------------------------------------------- */
 .header {
   position: fixed;
   top: 0;
@@ -61,4 +69,286 @@
 .link:focus-visible {
   opacity: 1;
   text-decoration: none;
+}
+
+/* --- Triggers (Shop / Explore) ------------------------------------------- */
+.trigger {
+  display: inline-flex;
+  align-items: center;
+}
+
+.triggerOpen {
+  opacity: 1;
+}
+
+/* --- Backdrop (dimt de pagina onder het panel) --------------------------- */
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  border: 0;
+  padding: 0;
+  background: rgba(34, 34, 34, 0.28);
+  cursor: default;
+  visibility: hidden;
+}
+
+/* --- Panel-basis ---------------------------------------------------------- */
+.panel {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 70;
+  visibility: hidden;
+}
+
+.panelBg {
+  position: absolute;
+  inset: 0;
+  background: var(--color-page);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.1);
+}
+
+.panelInner {
+  position: relative;
+  box-sizing: border-box;
+  /* Geen vaste hoogte nodig: de cards spannen in beide menu's 5 kolommen, dus
+     Shop en Explore krijgen vanzelf dezelfde hoogte. */
+  padding-top: 4.75em;
+  padding-bottom: 3em;
+  row-gap: 2em;
+}
+
+/* ==========================================================================
+   Mega-menu — gedeelde layout (Shop + Explore lijken op elkaar)
+   Links tekstkolom(men) in footer-stijl, verticale divider, rechts vierkante
+   foto-cards. Alles op het 24-koloms .layout-grid, net als de footer; de cards
+   spannen in beide menu's 5 kolommen → gelijke kaartgrootte en menuhoogte.
+   ========================================================================== */
+
+/* Alles op rij 1 zodat de divider-lijn (eigen kolom) mag overlappen. */
+.megaLeft,
+.exploreCols,
+.megaVline,
+.shopCards,
+.exploreCards {
+  grid-row: 1;
+}
+
+/* ---- Linker tekstkolom(men) ---- */
+.megaLeft {
+  grid-column: 1 / 10;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.exploreCols {
+  grid-column: 1 / 15;
+  display: flex;
+  gap: var(--grid-gutter);
+}
+
+.exploreCol {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+/* Kop-aanduiding — footer-stijl: klein, gedempt. */
+.megaHeading {
+  display: block;
+  margin: 0 0 2em;
+  font-size: var(--text-detail);
+  font-weight: 400;
+  line-height: var(--leading-detail);
+  color: var(--color-charcoal);
+  opacity: 0.5;
+}
+
+/* Links — footer-stijl: text-body. */
+.megaLinks {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.megaLinks li {
+  margin: 0;
+}
+
+.megaLink {
+  font-family: 'Novela Display', Georgia, serif;
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  color: var(--color-charcoal);
+  text-decoration: none;
+}
+
+/* Shop-filters zijn knoppen met dezelfde look; actief = goud. */
+.shopFilter {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  text-align: left;
+  cursor: pointer;
+}
+
+.shopFilterActive {
+  color: var(--color-gold);
+}
+
+/* "meer"-link onderaan de linkerkolom — footer-stijl muted. */
+.megaMuted {
+  margin-top: auto;
+  padding-top: 2em;
+  font-size: var(--text-detail);
+  line-height: var(--leading-body);
+  color: var(--color-charcoal);
+  text-decoration: none;
+  opacity: 0.5;
+}
+
+/* ---- Verticale divider — hairline op de gridlijn (footer-patroon) ---- */
+.megaVline {
+  width: 0;
+  justify-self: end;
+  border-left: 1px solid var(--color-hairline);
+  pointer-events: none;
+}
+
+[data-mega-panel='shop'] .megaVline {
+  grid-column: 9;
+}
+
+[data-mega-panel='explore'] .megaVline {
+  grid-column: 14;
+}
+
+/* ---- Rechter foto-cards ---- */
+.shopCards {
+  grid-column: 10 / -1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--grid-gutter);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.exploreCards {
+  grid-column: 15 / -1;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--grid-gutter);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.card {
+  margin: 0;
+}
+
+.cardLink {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85em;
+  color: var(--color-charcoal);
+  text-decoration: none;
+}
+
+.cardMedia {
+  position: relative;
+  display: block;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background-color: var(--color-warm);
+}
+
+.cardImage {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.cardMeta {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1em;
+}
+
+.cardText {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2em;
+}
+
+.cardType {
+  font-size: var(--text-detail);
+  letter-spacing: var(--tracking-detail);
+  text-transform: lowercase;
+  color: var(--color-gold);
+}
+
+.cardName {
+  font-size: var(--text-body-lg);
+  line-height: var(--leading-body-lg);
+  color: var(--color-charcoal);
+}
+
+.cardPrice {
+  font-size: var(--text-body);
+  line-height: var(--leading-detail);
+  color: var(--color-charcoal);
+  white-space: nowrap;
+}
+
+/* ==========================================================================
+   Responsive
+   ========================================================================== */
+
+@media (max-width: 991px) {
+  .header {
+    padding: 0.75em 1.25em;
+  }
+}
+
+@media (max-width: 767px) {
+  .panelInner {
+    padding-top: 4.25em;
+    padding-bottom: 2em;
+    row-gap: 1.5em;
+  }
+
+  /* Alles stapelt onder elkaar; grid-plaatsing en divider vervallen. */
+  .megaLeft,
+  .exploreCols,
+  .shopCards,
+  .exploreCards {
+    grid-column: 1 / -1;
+    grid-row: auto;
+  }
+
+  .megaVline {
+    display: none;
+  }
+
+  .megaMuted {
+    margin-top: 1em;
+    padding-top: 0;
+  }
+
+  .shopCards,
+  .exploreCards {
+    grid-template-columns: repeat(2, 1fr);
+    row-gap: 1.5em;
+  }
 }

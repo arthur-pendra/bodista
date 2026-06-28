@@ -4,6 +4,7 @@ import type {
   CartApiQueryFragment,
   FooterQuery,
   HeaderQuery,
+  MenuProductsQuery,
 } from 'storefrontapi.generated';
 import {Aside} from '~/components/Aside';
 import {SiteFooter} from '~/components/home/SiteFooter';
@@ -23,6 +24,7 @@ interface PageLayoutProps {
   header: HeaderQuery;
   isLoggedIn: Promise<boolean>;
   publicStoreDomain: string;
+  menuProducts: Promise<MenuProductsQuery | null>;
   children?: React.ReactNode;
 }
 
@@ -32,13 +34,14 @@ export function PageLayout({
   header,
   isLoggedIn,
   publicStoreDomain,
+  menuProducts,
 }: PageLayoutProps) {
   return (
     <Aside.Provider>
       <CartAside cart={cart} />
       <SearchAside />
       <MobileMenuAside header={header} publicStoreDomain={publicStoreDomain} />
-      <SimpleHeader cart={cart} />
+      <SimpleHeader cart={cart} menuProducts={menuProducts} />
       {import.meta.env.DEV && <GridOverlay />}
       <main>{children}</main>
       <SiteFooter />
