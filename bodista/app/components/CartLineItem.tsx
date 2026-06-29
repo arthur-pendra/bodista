@@ -283,6 +283,10 @@ function CartLineSizeToggle({
               className={`reset ${toggleStyles.option}`}
               aria-pressed={active}
               disabled={active || !!isOptimistic || !size.available}
+              // Schuif het randje meteen op klik — wacht niet op de server-
+              // bevestiging van de variant-wissel. De [currentIndex]-effect
+              // corrigeert later naar de werkelijke maat indien nodig.
+              onClick={() => moveTo(index, true)}
             >
               <span className="ui-nums">
                 <Figures>{size.value}</Figures>

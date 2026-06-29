@@ -30,7 +30,7 @@ export function Aside({
 }: {
   children?: React.ReactNode;
   type: AsideType;
-  heading: React.ReactNode;
+  heading?: React.ReactNode;
 }) {
   const {type: activeType, close} = useAside();
   const expanded = type === activeType;
@@ -62,10 +62,10 @@ export function Aside({
       <button className="close-outside" onClick={close} />
       <aside>
         <header>
-          <h3>{heading}</h3>
           <button className="close reset" onClick={close} aria-label="Close">
             &times;
           </button>
+          {heading && <h3>{heading}</h3>}
         </header>
         <main>{children}</main>
       </aside>

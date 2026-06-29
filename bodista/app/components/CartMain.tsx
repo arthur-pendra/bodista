@@ -6,6 +6,7 @@ import type {
   MenuProductsQuery,
 } from 'storefrontapi.generated';
 import {useAside} from '~/components/Aside';
+import {reconcileOptimisticCart} from '~/lib/optimisticCart';
 import {CartLineItem, type CartLine} from '~/components/CartLineItem';
 import {CartSummary} from './CartSummary';
 import {CartRecommendations} from './CartRecommendations';
@@ -54,8 +55,10 @@ export function CartMain({
   recommendations,
 }: CartMainProps) {
   // De useOptimisticCart-hook past pending acties direct toe zodat de gebruiker
-  // meteen feedback ziet bij het wijzigen van de cart.
-  const cart = useOptimisticCart(originalCart);
+  // meteen feedback ziet bij het wijzigen van de cart. reconcileOptimisticCart
+  // leidt daar bovenop de bedragen (regelprijs/subtotaal/totaal) direct af,
+  // zodat ook de prijzen en de free-shipping-balk meteen meebewegen.
+  const cart = reconcileOptimisticCart(useOptimisticCart(originalCart));
   const activeRecs = recommendations;
 
   const cartHasItems = (cart?.totalQuantity ?? 0) > 0;
@@ -69,13 +72,13 @@ export function CartMain({
       <div className={rootClass}>
         <div className={styles.scroll}>
           <CartEmpty />
+          {activeRecs && (
+            <CartRecommendations
+              recommendations={activeRecs}
+              inCartHandles={new Set<string>()}
+            />
+          )}
         </div>
-        {activeRecs && (
-          <CartRecommendations
-            recommendations={activeRecs}
-            inCartHandles={new Set<string>()}
-          />
-        )}
       </div>
     );
   }
@@ -111,14 +114,14 @@ export function CartMain({
             );
           })}
         </ul>
-      </div>
 
-      {activeRecs && (
-        <CartRecommendations
-          recommendations={activeRecs}
-          inCartHandles={inCartHandles}
-        />
-      )}
+        {activeRecs && (
+          <CartRecommendations
+            recommendations={activeRecs}
+            inCartHandles={inCartHandles}
+          />
+        )}
+      </div>
 
       <CartSummary cart={cart} layout={layout} />
     </div>

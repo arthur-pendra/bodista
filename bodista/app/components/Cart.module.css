@@ -286,6 +286,12 @@
   box-sizing: border-box;
 }
 
+/* Zet de ml-opties dichter op elkaar dan de standaard toggle-gap (0.875em).
+   Dubbele class wint van .toggle uit SlidingToggle.module.css (laadt later). */
+.sizeToggle.sizeToggle {
+  gap: 0.4em;
+}
+
 .sizeToggle button:global(.reset) {
   display: inline-flex;
   align-items: center;

@@ -71,6 +71,21 @@
   text-decoration: none;
 }
 
+/* Cart open: til de hele header boven de cart-overlay (z 1000) en verberg álle
+   menu-items behalve de bestaande cartknop. Zo bedekt de cart het menu, maar
+   blijft die ene knop (rechtsboven, op z'n eigen plek) zichtbaar — geen tweede
+   knop. Klikken op die knop sluit de cart (toggle, zie SimpleHeader.tsx). */
+.cartOpen {
+  z-index: 1001;
+}
+
+.cartOpen .logo,
+.cartOpen .group:first-of-type,
+.cartOpen .group:last-of-type > :not(:last-child) {
+  opacity: 0;
+  pointer-events: none;
+}
+
 /* --- Triggers (Shop / Explore) ------------------------------------------- */
 .trigger {
   display: inline-flex;

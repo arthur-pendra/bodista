@@ -451,20 +451,21 @@ button:not(.reset) {
 
 aside {
   background: var(--color-page);
-  height: 100vh;
+  height: 100dvh;
   width: min(var(--aside-width), 100vw);
   position: fixed;
   right: calc(-1 * var(--aside-width));
   top: 0;
-  transition: transform 200ms ease-in-out;
+  transition: transform 500ms var(--ease-osmo);
 }
 
 aside header {
   align-items: center;
   border-bottom: 1px solid var(--color-hairline);
   display: flex;
+  gap: 1em;
   height: var(--header-height);
-  justify-content: space-between;
+  justify-content: flex-start;
   padding: 0 1.25em;
 }
 
@@ -506,16 +507,19 @@ aside li {
 }
 
 .overlay {
-  background: rgba(0, 0, 0, 0.2);
+  background: rgba(0, 0, 0, 0);
   bottom: 0;
   left: 0;
-  opacity: 0;
   pointer-events: none;
   position: fixed;
   right: 0;
   top: 0;
-  transition: opacity 400ms ease-in-out;
-  transition: opacity 400ms;
+  /* Only the dim backdrop fades — the panel itself never fades, it just
+     slides. Flip visibility off after the 500ms slide so the slide-out stays
+     visible. */
+  transition:
+    background-color 500ms var(--ease-osmo),
+    visibility 0s linear 500ms;
   visibility: hidden;
   z-index: 1000;
 }
@@ -532,13 +536,25 @@ aside li {
 }
 
 .overlay.expanded {
-  opacity: 1;
+  background: rgba(0, 0, 0, 0.2);
   pointer-events: auto;
+  /* Opening: become visible immediately (no delay) while the panel slides in. */
+  transition:
+    background-color 500ms var(--ease-osmo),
+    visibility 0s linear 0s;
   visibility: visible;
 }
 
 .overlay.expanded aside {
   transform: translateX(calc(var(--aside-width) * -1));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  aside,
+  .overlay,
+  .overlay.expanded {
+    transition-duration: 0s;
+  }
 }
 
 /* ==========================================================================

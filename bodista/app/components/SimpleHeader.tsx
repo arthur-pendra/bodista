@@ -26,7 +26,7 @@ type MenuKey = 'shop' | 'explore' | 'search'
 const MENUS: MenuKey[] = ['shop', 'explore', 'search']
 
 export function SimpleHeader({cart, menuProducts}: SimpleHeaderProps) {
-  const {open} = useAside()
+  const {open, close, type} = useAside()
   const location = useLocation()
 
   const rootRef = useRef<HTMLDivElement>(null)
@@ -290,7 +290,9 @@ export function SimpleHeader({cart, menuProducts}: SimpleHeaderProps) {
         onClick={() => setActive(null)}
       />
 
-      <header className={styles.header}>
+      <header
+        className={`${styles.header} ${type === 'cart' ? styles.cartOpen : ''}`}
+      >
         {/* Leave/enter op de hele groep: tussen Shop en Explore bewegen sluit
             dus niet — pas als je de groep én het menu verlaat sluit het. */}
         <nav
@@ -343,7 +345,7 @@ export function SimpleHeader({cart, menuProducts}: SimpleHeaderProps) {
           <button
             type="button"
             className={styles.link}
-            onClick={() => open('cart')}
+            onClick={() => (type === 'cart' ? close() : open('cart'))}
           >
             Cart (<CartCount cart={cart} />)
           </button>

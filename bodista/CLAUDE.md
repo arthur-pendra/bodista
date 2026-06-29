@@ -118,6 +118,11 @@ Examples of instructions → CSS:
 - **Buttons are pill-shaped** (full radius via `--radius-pill`). Applies automatically to every real action/CTA button (`button:not(.reset)`). Text/icon buttons with the `.reset` class are excluded (they stay bare).
 - **Never an underline hover** on links or text. Globally disabled (`a:hover`, `.link:hover`, `button.reset:hover`) — do not re-add `text-decoration: underline` on hover anywhere. Hover feedback may use opacity/color, not underline.
 
+## Shopify access
+
+- The Shopify store for this project is **bodista**. Do **not** operate on "Dare to Dream Apparel" — the built-in claude.ai Shopify MCP connected to that wrong store once; ignore it.
+- Shopify access goes **via Composio** (`mcp__claude_ai_composio__*` tools), connection `shopify` (account `shopify_passer-suwe`). Route all Shopify reads/writes through Composio and verify the active store is bodista before any write.
+
 ## Conventions
 
 - Functional components, arrow functions, no semicolons (`prettier` = `@shopify/prettier-config`).
