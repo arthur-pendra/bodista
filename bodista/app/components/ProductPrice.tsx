@@ -1,5 +1,5 @@
-import {Money} from '@shopify/hydrogen';
 import type {MoneyV2} from '@shopify/hydrogen/storefront-api-types';
+import {LiningMoney} from '~/components/LiningMoney';
 
 export function ProductPrice({
   price,
@@ -12,13 +12,13 @@ export function ProductPrice({
     <div className="product-price">
       {compareAtPrice ? (
         <div className="product-price-on-sale">
-          {price ? <Money data={price} /> : null}
+          {price ? <LiningMoney data={price} /> : null}
           <s>
-            <Money data={compareAtPrice} />
+            <LiningMoney data={compareAtPrice} />
           </s>
         </div>
       ) : price ? (
-        <Money data={price} />
+        <LiningMoney data={price} />
       ) : (
         <span>&nbsp;</span>
       )}

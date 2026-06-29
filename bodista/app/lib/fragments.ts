@@ -22,6 +22,12 @@ export const CART_QUERY_FRAGMENT = `#graphql
         ...Money
       }
     }
+    sellingPlanAllocation {
+      sellingPlan {
+        id
+        name
+      }
+    }
     merchandise {
       ... on ProductVariant {
         id
@@ -47,6 +53,26 @@ export const CART_QUERY_FRAGMENT = `#graphql
           title
           id
           vendor
+          variants(first: 20) {
+            nodes {
+              id
+              availableForSale
+              selectedOptions {
+                name
+                value
+              }
+            }
+          }
+          sellingPlanGroups(first: 5) {
+            nodes {
+              sellingPlans(first: 10) {
+                nodes {
+                  id
+                  name
+                }
+              }
+            }
+          }
         }
         selectedOptions {
           name
@@ -78,6 +104,12 @@ export const CART_QUERY_FRAGMENT = `#graphql
         ...Money
       }
     }
+    sellingPlanAllocation {
+      sellingPlan {
+        id
+        name
+      }
+    }
     merchandise {
       ... on ProductVariant {
         id
@@ -102,6 +134,26 @@ export const CART_QUERY_FRAGMENT = `#graphql
           title
           id
           vendor
+          variants(first: 20) {
+            nodes {
+              id
+              availableForSale
+              selectedOptions {
+                name
+                value
+              }
+            }
+          }
+          sellingPlanGroups(first: 5) {
+            nodes {
+              sellingPlans(first: 10) {
+                nodes {
+                  id
+                  name
+                }
+              }
+            }
+          }
         }
         selectedOptions {
           name

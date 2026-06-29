@@ -1,8 +1,6 @@
 import {useOptimisticCart} from '@shopify/hydrogen';
 import type {MoneyV2} from '@shopify/hydrogen/storefront-api-types';
-import {useEffect, useState} from 'react';
 import {Link} from 'react-router';
-import {DEMO_CART, DEMO_RECS} from './cartDemo';
 import type {
   CartApiQueryFragment,
   MenuProductsQuery,
@@ -57,24 +55,8 @@ export function CartMain({
 }: CartMainProps) {
   // De useOptimisticCart-hook past pending acties direct toe zodat de gebruiker
   // meteen feedback ziet bij het wijzigen van de cart.
-  const optimisticCart = useOptimisticCart(originalCart);
-
-  // DEV cart-preview — toont de gevulde drawer met placeholder-data via
-  // ?cartdemo=1 (alleen dev, zolang er geen voorraad is). Zie cartDemo.ts.
-  const [demo, setDemo] = useState(false);
-  useEffect(() => {
-    if (
-      import.meta.env.DEV &&
-      new URLSearchParams(window.location.search).has('cartdemo')
-    ) {
-      setDemo(true);
-    }
-  }, []);
-
-  const cart = demo
-    ? (DEMO_CART as unknown as typeof optimisticCart)
-    : optimisticCart;
-  const activeRecs = demo ? Promise.resolve(DEMO_RECS) : recommendations;
+  const cart = useOptimisticCart(originalCart);
+  const activeRecs = recommendations;
 
   const cartHasItems = (cart?.totalQuantity ?? 0) > 0;
   const childrenMap = getLineItemChildrenMap(cart?.lines?.nodes ?? []);
@@ -87,13 +69,13 @@ export function CartMain({
       <div className={rootClass}>
         <div className={styles.scroll}>
           <CartEmpty />
-          {activeRecs && (
-            <CartRecommendations
-              recommendations={activeRecs}
-              inCartHandles={new Set<string>()}
-            />
-          )}
         </div>
+        {activeRecs && (
+          <CartRecommendations
+            recommendations={activeRecs}
+            inCartHandles={new Set<string>()}
+          />
+        )}
       </div>
     );
   }
@@ -129,14 +111,14 @@ export function CartMain({
             );
           })}
         </ul>
-
-        {activeRecs && (
-          <CartRecommendations
-            recommendations={activeRecs}
-            inCartHandles={inCartHandles}
-          />
-        )}
       </div>
+
+      {activeRecs && (
+        <CartRecommendations
+          recommendations={activeRecs}
+          inCartHandles={inCartHandles}
+        />
+      )}
 
       <CartSummary cart={cart} layout={layout} />
     </div>

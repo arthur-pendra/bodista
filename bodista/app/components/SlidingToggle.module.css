@@ -1,0 +1,44 @@
+/* ==========================================================================
+   SlidingToggle — herbruikbaar segmented-control / toggle randje
+   Eén 1px pill-border dat met GSAP tussen de opties schuift.
+   Base (typografie, kleuren, --radius-pill) komt uit global.css.
+   ========================================================================== */
+
+.toggle {
+  position: relative;
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  gap: 0.875em;
+  margin: 0;
+  padding: 0;
+}
+
+/* Het schuivende randje. x + width worden door GSAP gezet; start onzichtbaar
+   tot de eerste (font-correcte) meting binnen is. */
+.indicator {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 100%;
+  border: 1px solid var(--color-charcoal);
+  border-radius: var(--radius-pill);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* De klikbare optie. .reset stript de UA-chrome; hier de pill-padding.
+   Dubbele class-specificiteit (:global(.reset).option) zodat dit wint van
+   de globale `button.reset:not(:has(> *))` hoogte-regel. */
+:global(.reset).option {
+  position: relative;
+  z-index: 1;
+  height: auto;
+  padding: 0.55em 1.2em;
+  font-size: var(--text-body);
+  line-height: 1;
+  color: var(--color-charcoal);
+  white-space: nowrap;
+  cursor: pointer;
+}

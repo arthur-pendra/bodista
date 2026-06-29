@@ -6,11 +6,8 @@ import {
 } from 'react-router';
 import type {Route} from './+types/($locale).account.orders._index';
 import {useRef} from 'react';
-import {
-  Money,
-  getPaginationVariables,
-  flattenConnection,
-} from '@shopify/hydrogen';
+import {getPaginationVariables, flattenConnection} from '@shopify/hydrogen';
+import {LiningMoney} from '~/components/LiningMoney';
 import {
   buildOrderSearchQuery,
   parseOrderFilters,
@@ -213,7 +210,7 @@ function OrderItem({order}: {order: OrderItemFragment}) {
         )}
         <p>{order.financialStatus}</p>
         {fulfillmentStatus && <p>{fulfillmentStatus}</p>}
-        <Money data={order.totalPrice} />
+        <LiningMoney data={order.totalPrice} />
         <Link to={`/account/orders/${btoa(order.id)}`}>View Order →</Link>
       </fieldset>
       <br />

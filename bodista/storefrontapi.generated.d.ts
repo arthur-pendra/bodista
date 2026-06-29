@@ -33,6 +33,9 @@ export type CartLineFragment = Pick<
       Pick<StorefrontAPI.MoneyV2, 'currencyCode' | 'amount'>
     >;
   };
+  sellingPlanAllocation?: StorefrontAPI.Maybe<{
+    sellingPlan: Pick<StorefrontAPI.SellingPlan, 'id' | 'name'>;
+  }>;
   merchandise: Pick<
     StorefrontAPI.ProductVariant,
     'id' | 'availableForSale' | 'requiresShipping' | 'title'
@@ -44,7 +47,27 @@ export type CartLineFragment = Pick<
     image?: StorefrontAPI.Maybe<
       Pick<StorefrontAPI.Image, 'id' | 'url' | 'altText' | 'width' | 'height'>
     >;
-    product: Pick<StorefrontAPI.Product, 'handle' | 'title' | 'id' | 'vendor'>;
+    product: Pick<
+      StorefrontAPI.Product,
+      'handle' | 'title' | 'id' | 'vendor'
+    > & {
+      variants: {
+        nodes: Array<
+          Pick<StorefrontAPI.ProductVariant, 'id' | 'availableForSale'> & {
+            selectedOptions: Array<
+              Pick<StorefrontAPI.SelectedOption, 'name' | 'value'>
+            >;
+          }
+        >;
+      };
+      sellingPlanGroups: {
+        nodes: Array<{
+          sellingPlans: {
+            nodes: Array<Pick<StorefrontAPI.SellingPlan, 'id' | 'name'>>;
+          };
+        }>;
+      };
+    };
     selectedOptions: Array<
       Pick<StorefrontAPI.SelectedOption, 'name' | 'value'>
     >;
@@ -66,6 +89,9 @@ export type CartLineComponentFragment = Pick<
       Pick<StorefrontAPI.MoneyV2, 'currencyCode' | 'amount'>
     >;
   };
+  sellingPlanAllocation?: StorefrontAPI.Maybe<{
+    sellingPlan: Pick<StorefrontAPI.SellingPlan, 'id' | 'name'>;
+  }>;
   merchandise: Pick<
     StorefrontAPI.ProductVariant,
     'id' | 'availableForSale' | 'requiresShipping' | 'title'
@@ -77,7 +103,27 @@ export type CartLineComponentFragment = Pick<
     image?: StorefrontAPI.Maybe<
       Pick<StorefrontAPI.Image, 'id' | 'url' | 'altText' | 'width' | 'height'>
     >;
-    product: Pick<StorefrontAPI.Product, 'handle' | 'title' | 'id' | 'vendor'>;
+    product: Pick<
+      StorefrontAPI.Product,
+      'handle' | 'title' | 'id' | 'vendor'
+    > & {
+      variants: {
+        nodes: Array<
+          Pick<StorefrontAPI.ProductVariant, 'id' | 'availableForSale'> & {
+            selectedOptions: Array<
+              Pick<StorefrontAPI.SelectedOption, 'name' | 'value'>
+            >;
+          }
+        >;
+      };
+      sellingPlanGroups: {
+        nodes: Array<{
+          sellingPlans: {
+            nodes: Array<Pick<StorefrontAPI.SellingPlan, 'id' | 'name'>>;
+          };
+        }>;
+      };
+    };
     selectedOptions: Array<
       Pick<StorefrontAPI.SelectedOption, 'name' | 'value'>
     >;
@@ -95,6 +141,9 @@ export type CartLineComponentFragment = Pick<
           Pick<StorefrontAPI.MoneyV2, 'currencyCode' | 'amount'>
         >;
       };
+      sellingPlanAllocation?: StorefrontAPI.Maybe<{
+        sellingPlan: Pick<StorefrontAPI.SellingPlan, 'id' | 'name'>;
+      }>;
       merchandise: Pick<
         StorefrontAPI.ProductVariant,
         'id' | 'availableForSale' | 'requiresShipping' | 'title'
@@ -112,7 +161,24 @@ export type CartLineComponentFragment = Pick<
         product: Pick<
           StorefrontAPI.Product,
           'handle' | 'title' | 'id' | 'vendor'
-        >;
+        > & {
+          variants: {
+            nodes: Array<
+              Pick<StorefrontAPI.ProductVariant, 'id' | 'availableForSale'> & {
+                selectedOptions: Array<
+                  Pick<StorefrontAPI.SelectedOption, 'name' | 'value'>
+                >;
+              }
+            >;
+          };
+          sellingPlanGroups: {
+            nodes: Array<{
+              sellingPlans: {
+                nodes: Array<Pick<StorefrontAPI.SellingPlan, 'id' | 'name'>>;
+              };
+            }>;
+          };
+        };
         selectedOptions: Array<
           Pick<StorefrontAPI.SelectedOption, 'name' | 'value'>
         >;
@@ -158,6 +224,9 @@ export type CartApiQueryFragment = Pick<
               Pick<StorefrontAPI.MoneyV2, 'currencyCode' | 'amount'>
             >;
           };
+          sellingPlanAllocation?: StorefrontAPI.Maybe<{
+            sellingPlan: Pick<StorefrontAPI.SellingPlan, 'id' | 'name'>;
+          }>;
           merchandise: Pick<
             StorefrontAPI.ProductVariant,
             'id' | 'availableForSale' | 'requiresShipping' | 'title'
@@ -175,7 +244,29 @@ export type CartApiQueryFragment = Pick<
             product: Pick<
               StorefrontAPI.Product,
               'handle' | 'title' | 'id' | 'vendor'
-            >;
+            > & {
+              variants: {
+                nodes: Array<
+                  Pick<
+                    StorefrontAPI.ProductVariant,
+                    'id' | 'availableForSale'
+                  > & {
+                    selectedOptions: Array<
+                      Pick<StorefrontAPI.SelectedOption, 'name' | 'value'>
+                    >;
+                  }
+                >;
+              };
+              sellingPlanGroups: {
+                nodes: Array<{
+                  sellingPlans: {
+                    nodes: Array<
+                      Pick<StorefrontAPI.SellingPlan, 'id' | 'name'>
+                    >;
+                  };
+                }>;
+              };
+            };
             selectedOptions: Array<
               Pick<StorefrontAPI.SelectedOption, 'name' | 'value'>
             >;
@@ -196,6 +287,9 @@ export type CartApiQueryFragment = Pick<
               Pick<StorefrontAPI.MoneyV2, 'currencyCode' | 'amount'>
             >;
           };
+          sellingPlanAllocation?: StorefrontAPI.Maybe<{
+            sellingPlan: Pick<StorefrontAPI.SellingPlan, 'id' | 'name'>;
+          }>;
           merchandise: Pick<
             StorefrontAPI.ProductVariant,
             'id' | 'availableForSale' | 'requiresShipping' | 'title'
@@ -213,7 +307,29 @@ export type CartApiQueryFragment = Pick<
             product: Pick<
               StorefrontAPI.Product,
               'handle' | 'title' | 'id' | 'vendor'
-            >;
+            > & {
+              variants: {
+                nodes: Array<
+                  Pick<
+                    StorefrontAPI.ProductVariant,
+                    'id' | 'availableForSale'
+                  > & {
+                    selectedOptions: Array<
+                      Pick<StorefrontAPI.SelectedOption, 'name' | 'value'>
+                    >;
+                  }
+                >;
+              };
+              sellingPlanGroups: {
+                nodes: Array<{
+                  sellingPlans: {
+                    nodes: Array<
+                      Pick<StorefrontAPI.SellingPlan, 'id' | 'name'>
+                    >;
+                  };
+                }>;
+              };
+            };
             selectedOptions: Array<
               Pick<StorefrontAPI.SelectedOption, 'name' | 'value'>
             >;
@@ -234,6 +350,9 @@ export type CartApiQueryFragment = Pick<
                   Pick<StorefrontAPI.MoneyV2, 'currencyCode' | 'amount'>
                 >;
               };
+              sellingPlanAllocation?: StorefrontAPI.Maybe<{
+                sellingPlan: Pick<StorefrontAPI.SellingPlan, 'id' | 'name'>;
+              }>;
               merchandise: Pick<
                 StorefrontAPI.ProductVariant,
                 'id' | 'availableForSale' | 'requiresShipping' | 'title'
@@ -251,7 +370,29 @@ export type CartApiQueryFragment = Pick<
                 product: Pick<
                   StorefrontAPI.Product,
                   'handle' | 'title' | 'id' | 'vendor'
-                >;
+                > & {
+                  variants: {
+                    nodes: Array<
+                      Pick<
+                        StorefrontAPI.ProductVariant,
+                        'id' | 'availableForSale'
+                      > & {
+                        selectedOptions: Array<
+                          Pick<StorefrontAPI.SelectedOption, 'name' | 'value'>
+                        >;
+                      }
+                    >;
+                  };
+                  sellingPlanGroups: {
+                    nodes: Array<{
+                      sellingPlans: {
+                        nodes: Array<
+                          Pick<StorefrontAPI.SellingPlan, 'id' | 'name'>
+                        >;
+                      };
+                    }>;
+                  };
+                };
                 selectedOptions: Array<
                   Pick<StorefrontAPI.SelectedOption, 'name' | 'value'>
                 >;

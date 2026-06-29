@@ -1,6 +1,7 @@
 import {redirect, useLoaderData} from 'react-router';
 import type {Route} from './+types/($locale).account.orders.$id';
-import {Money, Image} from '@shopify/hydrogen';
+import {Image} from '@shopify/hydrogen';
+import {LiningMoney} from '~/components/LiningMoney';
 import type {
   OrderLineItemFullFragment,
   OrderQuery,
@@ -119,7 +120,7 @@ export default function OrderRoute() {
                   {discountPercentage ? (
                     <span>-{discountPercentage}% OFF</span>
                   ) : (
-                    discountValue && <Money data={discountValue!} />
+                    discountValue && <LiningMoney data={discountValue!} />
                   )}
                 </td>
               </tr>
@@ -132,7 +133,7 @@ export default function OrderRoute() {
                 <p>Subtotal</p>
               </th>
               <td>
-                <Money data={order.subtotal!} />
+                <LiningMoney data={order.subtotal!} />
               </td>
             </tr>
             <tr>
@@ -143,7 +144,7 @@ export default function OrderRoute() {
                 <p>Tax</p>
               </th>
               <td>
-                <Money data={order.totalTax!} />
+                <LiningMoney data={order.totalTax!} />
               </td>
             </tr>
             <tr>
@@ -154,7 +155,7 @@ export default function OrderRoute() {
                 <p>Total</p>
               </th>
               <td>
-                <Money data={order.totalPrice!} />
+                <LiningMoney data={order.totalPrice!} />
               </td>
             </tr>
           </tfoot>
@@ -211,11 +212,11 @@ function OrderLineRow({lineItem}: {lineItem: OrderLineItemFullFragment}) {
         </div>
       </td>
       <td>
-        <Money data={lineItem.price!} />
+        <LiningMoney data={lineItem.price!} />
       </td>
       <td>{lineItem.quantity}</td>
       <td>
-        <Money data={lineItem.totalDiscount!} />
+        <LiningMoney data={lineItem.totalDiscount!} />
       </td>
     </tr>
   );

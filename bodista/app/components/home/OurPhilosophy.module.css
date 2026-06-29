@@ -60,20 +60,9 @@
 }
 
 .tags {
-  /* Duw de tags onderin de tekstkolom, op één lijn met de onderkant van de
-     pill-media rechts. */
+  /* Duw de toggle onderin de tekstkolom, op één lijn met de onderkant van de
+     pill-media rechts. Flex/gap/pill-styling zit in SlidingToggle zelf. */
   margin: auto 0 0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.875em;
-  padding: 0;
-  list-style: none;
-}
-
-.tag {
-  /* Styling tijdelijk weggehaald — alleen de basisgrootte (text-body).
-     De pill-styling komt later opnieuw terug. */
-  font-size: var(--text-body); /* 16px */
 }
 
 /* ---- Media-kolom (rechts) ------------------------------------------------- */

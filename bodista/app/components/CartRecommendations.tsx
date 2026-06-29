@@ -68,7 +68,7 @@ function RecommendationCard({product}: {product: MenuProduct}) {
             <Image
               data={product.featuredImage}
               aspectRatio="1/1.1"
-              sizes="220px"
+              sizes="160px"
             />
           )}
         </Link>
@@ -77,7 +77,22 @@ function RecommendationCard({product}: {product: MenuProduct}) {
             className={`reset ${styles.recommendAdd}`}
             lines={[{merchandiseId: variant.id, quantity: 1}]}
           >
-            <span aria-hidden="true">+</span>
+            <span className={styles.recommendAddIcon} aria-hidden="true">
+              <svg viewBox="0 0 16 16" fill="none">
+                <path
+                  d="M1 8h14"
+                  stroke="currentColor"
+                  strokeWidth="1"
+                  strokeLinecap="round"
+                />
+                <path
+                  d="M8 1v14"
+                  stroke="currentColor"
+                  strokeWidth="1"
+                  strokeLinecap="round"
+                />
+              </svg>
+            </span>
             <span className="sr-only">Add {product.title} to cart</span>
           </AddToCartButton>
         )}

@@ -10,6 +10,12 @@
   display: flex;
   flex-direction: column;
   color: var(--color-charcoal);
+  /* Alles in de cart een tikje kleiner: verklein lokaal de grotere type-tokens.
+     De al kleine maten (--text-detail, --text-caption) laten we ongemoeid. */
+  --text-heading-md: 1.4em;
+  --text-heading-sm: 1.15em;
+  --text-body-lg: 1.0625em;
+  --text-body: 0.9375em;
 }
 
 .cartAside {
@@ -30,6 +36,29 @@
   flex: 1 1 auto;
   overflow-y: auto;
   overscroll-behavior: contain;
+  /* Elegante, slanke scrollbar i.p.v. de native (Windows) scrollbar. px voor de
+     breedte — chrome mag niet meeschalen. Kleur uit het charcoal-token via
+     color-mix, dus geen losse hex. */
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: color-mix(in srgb, var(--color-charcoal) 28%, transparent)
+    transparent;
+}
+
+.scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scroll::-webkit-scrollbar-thumb {
+  background-color: color-mix(in srgb, var(--color-charcoal) 28%, transparent);
+  border-radius: 100px;
+}
+
+.scroll::-webkit-scrollbar-thumb:hover {
+  background-color: color-mix(in srgb, var(--color-charcoal) 48%, transparent);
 }
 
 .cartPage .scroll {
@@ -99,8 +128,9 @@
 
 .lineMedia {
   flex: 0 0 auto;
+  align-self: flex-start; /* niet meerekken met de regelhoogte */
   width: 4.75em;
-  aspect-ratio: 1 / 1.1;
+  height: 5.225em; /* vaste verhouding 1 / 1.1 — nooit hoger/lager */
   overflow: hidden;
   background: var(--color-warm);
 }
@@ -159,6 +189,78 @@
   color: var(--color-gold);
 }
 
+/* --- Size- en abonnement-keuze (pills) ------------------------------------ */
+/* Gedeelde pill-rij voor size-keuze én abonnement-intervallen. */
+.options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4em;
+  margin-top: 0.15em;
+}
+
+.optionPill {
+  padding: 0.35em 0.8em;
+  min-height: 1.5rem;
+  font-size: var(--text-detail);
+  line-height: 1;
+  color: var(--color-charcoal);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-pill);
+  transition:
+    opacity 200ms var(--ease-fade),
+    background-color 200ms var(--ease-fade),
+    color 200ms var(--ease-fade);
+}
+
+.optionPill:not(:disabled):hover {
+  opacity: 0.6;
+}
+
+/* Niet-leverbare maat (geen voorraad) — gedempt, behalve de actieve pill. */
+.optionPill:disabled:not(.optionPillActive) {
+  opacity: 0.35;
+}
+
+/* .optionPill-prefix wint van de globale `button.reset { background: inherit }`
+   zodat de actieve pill daadwerkelijk charcoal gevuld is. */
+.optionPill.optionPillActive {
+  color: var(--color-warm);
+  background: var(--color-charcoal);
+  border-color: var(--color-charcoal);
+}
+
+/* --- Abonnement-regel ----------------------------------------------------- */
+.sub {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4em;
+  margin-top: 0.1em;
+}
+
+.subLine {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6em;
+  font-size: var(--text-detail);
+  line-height: var(--leading-detail);
+  letter-spacing: var(--tracking-detail);
+  text-transform: lowercase;
+  color: var(--color-gold);
+}
+
+.subChange {
+  font-size: var(--text-detail);
+  letter-spacing: var(--tracking-detail);
+  text-transform: lowercase;
+  color: var(--color-charcoal);
+  opacity: 0.5;
+  transition: opacity 200ms var(--ease-fade);
+}
+
+.subChange:hover {
+  opacity: 1;
+}
+
 .lineBottom {
   display: flex;
   align-items: center;
@@ -167,22 +269,61 @@
   margin-top: 0.5em;
 }
 
-/* Stepper — pill met hairline; knoppen zijn .reset (geen global pill-button). */
-.stepper {
-  display: inline-flex;
+/* Size-toggle + stepper naast elkaar (links); prijs staat rechts. --ctrl-h =
+   gedeelde hoogte voor beide controls zodat ze exact even hoog/uitgelijnd zijn. */
+.controls {
+  --ctrl-h: 2.25em;
+  display: flex;
   align-items: center;
-  border: 1px solid var(--color-hairline);
-  border-radius: var(--radius-pill);
+  gap: 0.875em;
+  flex-wrap: wrap;
 }
 
-.stepperBtn {
+/* Size-toggle: ongewijzigde SlidingToggle-stijl (schuivend randje, zoals
+   OurPhilosophy). Alleen even hoog gemaakt als de stepper-pill — box-sizing
+   border-box zodat het 1px randje binnen --ctrl-h valt (geen globale reset). */
+.sizeToggle > span {
+  box-sizing: border-box;
+}
+
+.sizeToggle button:global(.reset) {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 2em;
-  height: 2em;
-  min-width: 24px;
-  min-height: 24px;
+  height: var(--ctrl-h);
+  padding-block: 0;
+  box-sizing: border-box;
+}
+
+/* Stepper — pill in dezelfde charcoal-stijl als het toggle-randje. Knoppen zijn
+   .reset (geen global pill-button). Zelfde hoogte (--ctrl-h) als de toggle. */
+.stepper {
+  display: inline-flex;
+  align-items: stretch;
+  height: var(--ctrl-h);
+  box-sizing: border-box;
+  border: 1px solid var(--color-charcoal);
+  border-radius: var(--radius-pill);
+}
+
+/* De CartForm-wrap is standaard een block waardoor de knop bovenin blijft staan
+   (− en + net te hoog). Als flex vult de knop de volle pill-hoogte → gecentreerd. */
+.stepper form {
+  display: flex;
+}
+
+/* .stepper-prefix verhoogt de specificiteit boven de globale
+   `button.reset:not(:has(> *))`-hoogteregel (height/line-height 1.5em), die
+   anders de knop te kort maakt en de − en + bovenin laat staan. height 100%
+   vult de volle pill-hoogte → tekens exact gecentreerd. */
+.stepper .stepperBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  min-width: 2em;
+  min-height: 1.5rem;
+  padding: 0 0.7em;
   font-size: var(--text-body);
   line-height: 1;
   color: var(--color-charcoal);
@@ -198,9 +339,12 @@
 }
 
 .qty {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   min-width: 1.75em;
-  text-align: center;
-  font-size: var(--text-detail);
+  font-size: var(--text-body);
+  line-height: 1;
 }
 
 .linePrice {
@@ -231,13 +375,17 @@
 }
 
 /* --- "You may also like" -------------------------------------------------- */
+/* Vaste sectie onderin de drawer (boven de checkout-footer) — scrollt niet mee
+   met de regels. De kaartjes staan in een horizontaal swipebare rij. */
 .recommend {
-  padding: 1.4em 1.25em 0.5em;
+  flex: 0 0 auto;
+  padding: 1.1em 1.25em 1em;
+  border-top: 1px solid var(--color-hairline);
 }
 
 .recommendHead {
   display: block;
-  margin-bottom: 1em;
+  margin-bottom: 0.85em;
   font-size: var(--text-detail);
   line-height: var(--leading-detail);
   letter-spacing: var(--tracking-detail);
@@ -246,16 +394,28 @@
   opacity: 0.5;
 }
 
+/* Horizontaal swipen i.p.v. een grid. Scrollbar verborgen — de afgesneden
+   kaartjes aan de rand zijn de swipe-hint. Snap voor een nette uitlijning. */
 .recommendList {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  display: flex;
   gap: var(--grid-gutter);
   margin: 0;
   padding: 0;
   list-style: none;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none; /* Firefox */
+}
+
+.recommendList::-webkit-scrollbar {
+  display: none; /* Chromium, Safari */
 }
 
 .recommendCard {
+  flex: 0 0 auto;
+  width: 9.5em;
+  scroll-snap-align: start;
   display: flex;
   flex-direction: column;
   gap: 0.65em;
@@ -265,7 +425,7 @@
 .recommendMedia {
   position: relative;
   display: block;
-  aspect-ratio: 1 / 1.1;
+  aspect-ratio: 348 / 420;
   overflow: hidden;
   background: var(--color-warm);
 }
@@ -277,35 +437,42 @@
   object-fit: cover;
 }
 
-/* Quick-add zweeft rechtsonder op de afbeelding. */
-.recommendAdd {
+/* Quick-add — zelfde stijl als TheCollection (gouden cirkel met plus,
+   bottom-center), maar altijd zichtbaar: geen hover-reveal of uitklap.
+   .recommendMedia-prefix wint van de globale `button.reset { background: inherit }`
+   (anders verdwijnt de gouden cirkel). */
+.recommendMedia .recommendAdd {
   position: absolute;
-  right: 0.5em;
-  bottom: 0.5em;
+  bottom: 1em;
+  left: 50%;
+  transform: translateX(-50%);
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 2em;
-  height: 2em;
-  min-width: 24px;
-  min-height: 24px;
-  font-size: var(--text-body-lg);
-  line-height: 1;
+  width: 1.875em;
+  height: 1.875em;
+  min-width: 1.5rem;
+  min-height: 1.5rem;
   color: var(--color-charcoal);
-  background: var(--color-warm);
+  background-color: var(--color-gold);
   border-radius: var(--radius-pill);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
-  transition:
-    transform 250ms var(--ease-osmo),
-    opacity 200ms var(--ease-fade);
-}
-
-.recommendAdd:hover {
-  transform: scale(1.08);
+  transition: opacity 200ms var(--ease-fade);
 }
 
 .recommendAdd:disabled {
   opacity: 0.5;
+}
+
+.recommendAddIcon {
+  display: block;
+  width: 0.75em;
+  height: 0.75em;
+}
+
+.recommendAddIcon svg {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 
 .recommendText {
@@ -314,17 +481,18 @@
   gap: 0.15em;
 }
 
+/* Tag/eyebrow — zelfde micro-caption als TheCollection (niet --text-detail). */
 .recommendType {
-  font-size: var(--text-detail);
-  line-height: var(--leading-detail);
+  font-size: var(--text-caption);
+  line-height: var(--leading-caption);
   letter-spacing: var(--tracking-detail);
-  text-transform: lowercase;
   color: var(--color-gold);
 }
 
 .recommendName {
   font-size: var(--text-body);
-  line-height: var(--leading-body);
+  line-height: var(--leading-detail);
+  letter-spacing: -0.017em;
   color: var(--color-charcoal);
 }
 
@@ -439,7 +607,37 @@
   opacity: 0.9;
 }
 
-/* Subtotaal. */
+/* Kleine regels boven het totaal (subtotaal + korting). */
+.summaryRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin: 0;
+  padding: 0.15em 0;
+  font-size: var(--text-detail);
+  line-height: var(--leading-detail);
+  color: var(--color-charcoal);
+}
+
+.summaryRow dt {
+  letter-spacing: var(--tracking-detail);
+  text-transform: lowercase;
+  opacity: 0.7;
+}
+
+.summaryRow dd {
+  margin: 0;
+}
+
+.summaryDiscount {
+  color: var(--color-gold);
+}
+
+.summaryDiscount dt {
+  opacity: 1;
+}
+
+/* Subtotaal / totaal (de prominente regel). */
 .subtotal {
   display: flex;
   align-items: baseline;
@@ -461,18 +659,11 @@
   color: var(--color-charcoal);
 }
 
-.taxNote {
-  margin: 0.15em 0 1em;
-  font-size: var(--text-detail);
-  line-height: var(--leading-detail);
-  color: var(--color-charcoal);
-  opacity: 0.55;
-}
-
 /* Checkout — link gestyled als volle pill-CTA. */
 .checkout {
   display: block;
   width: 100%;
+  margin-top: 1em;
   padding: 1.1em;
   font-size: var(--text-body);
   letter-spacing: var(--tracking-detail);
@@ -489,13 +680,23 @@
   opacity: 0.85;
 }
 
-.trust {
-  margin: 0.85em 0 0;
+/* Terms / privacy onder de CTA — kleine microcopy, links in gold. */
+.terms {
+  margin: 0.9em 0 0;
   font-size: var(--text-detail);
   line-height: var(--leading-detail);
-  text-align: center;
   color: var(--color-charcoal);
-  opacity: 0.55;
+  opacity: 0.6;
+}
+
+.termsLink {
+  color: var(--color-gold);
+  transition: opacity 200ms var(--ease-fade);
+}
+
+.termsLink:hover {
+  color: var(--color-gold);
+  opacity: 0.7;
 }
 
 /* --- Lege staat — gecentreerde hero, daaronder "you may also like" -------- */
@@ -542,8 +743,3 @@
   opacity: 0.85;
 }
 
-@media (max-width: 479px) {
-  .recommendList {
-    grid-template-columns: 1fr 1fr;
-  }
-}

@@ -57,6 +57,7 @@ export function Aside({
       aria-modal
       className={`overlay ${expanded ? 'expanded' : ''}`}
       role="dialog"
+      data-lenis-prevent
     >
       <button className="close-outside" onClick={close} />
       <aside>
