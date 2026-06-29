@@ -83,83 +83,76 @@
   flex-direction: column;
 }
 
+/* Eyebrow — producttype in goud, boven de titel (title case, geen uppercase). */
 .eyebrow {
-  margin: 0 0 0.75em;
+  margin: 0 0 0.35em;
   font-size: var(--text-detail);
   line-height: var(--leading-detail);
-  letter-spacing: var(--tracking-detail);
-  text-transform: uppercase;
+  letter-spacing: 0.02em;
   color: var(--color-gold);
 }
 
+/* Titel — zelfde schaal als de home-koppen (--text-heading-md). */
 .title {
   margin: 0;
-  font-size: var(--text-heading-lg);
+  font-size: var(--text-heading-md);
   font-weight: 400;
-  line-height: var(--leading-heading-lg);
+  line-height: var(--leading-heading-md);
   letter-spacing: -0.01em;
   color: var(--color-charcoal);
 }
 
-.price {
-  display: flex;
-  align-items: baseline;
-  gap: 0.6em;
-  margin-top: 0.75em;
-  font-size: var(--text-body-lg);
-  line-height: var(--leading-detail);
-  color: var(--color-charcoal);
+/* Beschrijving — volledige tekst, lopende stijl. */
+.description {
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  color: var(--color-body);
 }
 
-.compareAt {
-  color: var(--color-silver);
-  text-decoration: line-through;
+.description p {
+  margin: 0 0 1em;
 }
 
-/* ---- Variant-opties ------------------------------------------------------- */
-
-.option {
-  margin-top: 2em;
+.description p:last-child {
+  margin-bottom: 0;
 }
 
-.optionName {
-  display: block;
-  margin-bottom: 0.857em;
-  font-size: var(--text-detail);
-  line-height: var(--leading-detail);
-  letter-spacing: var(--tracking-detail);
-  text-transform: uppercase;
-  color: var(--color-silver);
+/* Hairline-divider tussen blokken (maat → beschrijving, label → keuze). */
+.divider {
+  height: 0;
+  margin: 1.5em 0;
+  border: 0;
+  border-top: 1px solid var(--color-hairline);
 }
 
-.optionValues {
-  display: flex;
-  flex-wrap: wrap;
+/* ---- Variant-opties (maat) — hergebruikt de cart sliding-toggle ----------
+   Het schuivende charcoal randje komt uit SlidingToggle.module. Toevoeging hier:
+   elke optie krijgt zélf een lichte warm-witte pill-achtergrond. De dubbele
+   class wint van .toggle / :global(.reset).option (die later laden). */
+
+.sizeToggle.sizeToggle {
+  margin-top: 1.5em;
   gap: 0.6em;
 }
 
-.optionValue {
-  min-height: 2.75rem;
+/* Het schuivende randje border-box (1px binnen de pill) en bóven de opties
+   tillen — anders dekt de warm-witte pill-achtergrond het charcoal randje af.
+   pointer-events: none (uit SlidingToggle) houdt de klik op de opties. */
+.sizeToggle > span {
+  box-sizing: border-box;
+  z-index: 2;
+}
+
+.sizeToggle button:global(.reset),
+.sizeToggle a:global(.reset) {
   display: inline-flex;
   align-items: center;
-  padding: 0 1.1em;
-  font-size: var(--text-body);
-  line-height: 1;
-  color: var(--color-charcoal);
-  background: transparent;
-  border: 1px solid var(--color-hairline);
+  justify-content: center;
+  min-height: 2.75rem;
+  padding: 0.6em 1.6em;
+  background: var(--color-warm);
   border-radius: var(--radius-pill);
-  cursor: pointer;
-  transition: border-color 0.2s ease, color 0.2s ease;
-}
-
-.optionValue:hover {
-  border-color: var(--color-charcoal);
-}
-
-.optionValueSelected {
-  border-color: var(--color-charcoal);
-  color: var(--color-charcoal);
+  box-sizing: border-box;
 }
 
 .swatch {
@@ -176,147 +169,148 @@
   object-fit: cover;
 }
 
-/* ---- Aankoopkeuze (one-time / subscribe) --------------------------------- */
+/* ---- Choose your plan (single purchase / auto-replenish) ----------------- */
 
-.purchase {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75em;
+.plan {
   margin-top: 2em;
 }
 
-.purchaseRow {
-  display: flex;
-  align-items: center;
-  gap: 0.75em;
-  padding: 1.1em 1.25em;
-  border: 1px solid var(--color-hairline);
-  border-radius: 0.5em;
-  cursor: pointer;
-  transition: border-color 0.2s ease;
-}
-
-.purchaseRow:hover {
-  border-color: var(--color-charcoal);
-}
-
-.purchaseRowActive {
-  border-color: var(--color-charcoal);
-}
-
-.purchaseRowStacked {
-  flex-direction: column;
-  align-items: stretch;
-  gap: 1em;
-  cursor: default;
-}
-
-.purchaseHead {
-  display: flex;
-  align-items: center;
-  gap: 0.75em;
-  cursor: pointer;
-}
-
-.purchaseLabel {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
+.planLabel {
+  margin: 0;
   font-size: var(--text-body);
-  color: var(--color-charcoal);
-}
-
-.purchaseNote {
-  margin-top: 0.25em;
-  font-size: var(--text-detail);
-  line-height: var(--leading-detail);
+  line-height: var(--leading-body);
   color: var(--color-silver);
 }
 
-.purchasePrice {
-  margin-left: auto;
+/* Buy once / subscribe — dezelfde sliding-toggle als de maat-keuze: twee gelijke
+   lichte pillen met een charcoal randje dat ertussen schuift. */
+.planToggle.planToggle {
+  display: flex;
+  gap: 0.75em;
+  margin-top: 0.75em;
+}
+
+/* Schuivend randje border-box én boven de opties (anders dekt de pill-vulling
+   het af); pointer-events: none uit SlidingToggle houdt de klik op de opties. */
+.planToggle > span {
+  box-sizing: border-box;
+  z-index: 2;
+}
+
+.planToggle button:global(.reset) {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+  min-height: 3.25rem;
+  padding: 0 1.25em;
+  background: var(--color-warm);
+  border-radius: var(--radius-pill);
+  box-sizing: border-box;
+}
+
+.planName {
   font-size: var(--text-body);
   color: var(--color-charcoal);
 }
 
-.radio {
-  flex: none;
-  width: 1.1em;
-  height: 1.1em;
-  margin: 0;
-  accent-color: var(--color-charcoal);
-}
-
-.frequencies {
-  display: flex;
-  flex-direction: column;
+.planPrice {
+  display: inline-flex;
+  align-items: baseline;
   gap: 0.5em;
-  padding-left: 1.85em;
+  font-size: var(--text-body);
+  color: var(--color-charcoal);
 }
 
-.frequency {
+.planCompareAt {
+  color: var(--color-silver);
+  text-decoration: line-through;
+}
+
+/* ---- Aantal-stepper + add to cart (gelijke hoogte, zachte pillen) --------- */
+
+.buyRow {
   display: flex;
-  align-items: center;
   gap: 0.75em;
-  padding: 0.75em 1em;
-  border: 1px solid var(--color-hairline);
-  border-radius: 0.5em;
+  margin-top: 0.75em;
+}
+
+/* AddToCartButton wikkelt de knop in een <form> (CartForm). Die form is het
+   flex-kind van .buyRow, dus die moet de resterende breedte pakken — anders
+   blijft de knop op tekstbreedte staan. */
+.buyRow > form {
+  display: flex;
+  flex: 1;
+  max-width: none;
+}
+
+.stepper {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.1em;
+  padding: 0 0.6em;
+  background: var(--color-warm);
+  border-radius: var(--radius-pill);
+}
+
+.stepper button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.75rem;
+  font-size: var(--text-body-lg);
+  line-height: 1;
+  color: var(--color-charcoal);
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.stepper button:hover {
+  opacity: 0.6;
+}
+
+.stepper button:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.stepperValue {
+  min-width: 1.1em;
+  font-size: var(--text-body);
+  text-align: center;
+  color: var(--color-charcoal);
+}
+
+.buyRow .addToCart {
+  flex: 1;
+  min-height: 3.25rem;
+  padding: 0 1.25em;
+  font-size: var(--text-body);
+  text-align: center;
+  color: var(--color-charcoal);
+  background: var(--color-warm);
+  border: 1px solid transparent;
+  border-radius: var(--radius-pill);
   cursor: pointer;
   transition: border-color 0.2s ease;
 }
 
-.frequency:hover,
-.frequencyActive {
+.buyRow .addToCart:hover {
   border-color: var(--color-charcoal);
 }
 
-.frequencyName {
-  flex: 1;
-  font-size: var(--text-detail);
-  color: var(--color-charcoal);
-}
-
-.frequencyPrice {
-  display: flex;
-  align-items: baseline;
-  gap: 0.6em;
-  font-size: var(--text-detail);
-  color: var(--color-charcoal);
-}
-
-.save {
-  font-size: var(--text-detail);
-  letter-spacing: var(--tracking-detail);
-  text-transform: uppercase;
-  color: var(--color-gold);
-}
-
-/* ---- Add to cart — primaire CTA (pill, gelijk aan cart-checkout) ---------- */
-
-.addToCart {
-  display: block;
-  width: 100%;
-  margin-top: 2em;
-  padding: 1.1em;
-  font-size: var(--text-body);
-  letter-spacing: var(--tracking-detail);
-  text-transform: uppercase;
-  text-align: center;
-  color: var(--color-warm);
-  background: var(--color-charcoal);
-  border: 0;
-  border-radius: var(--radius-pill);
-  cursor: pointer;
-  transition: opacity 250ms var(--ease-fade);
-}
-
-.addToCart:hover {
-  opacity: 0.85;
-}
-
-.addToCart:disabled {
+.buyRow .addToCart:disabled {
   opacity: 0.4;
   cursor: not-allowed;
+}
+
+.shippingNote {
+  margin: 1.5em 0 0;
+  font-size: var(--text-detail);
+  line-height: var(--leading-detail);
+  color: var(--color-body);
 }
 
 /* ---- Accordions (Description / Ingredients / How to use) ------------------ */
@@ -458,11 +452,6 @@
     grid-column: 1 / -1;
     position: static;
     margin-top: 2.5em;
-  }
-
-  .title {
-    font-size: var(--text-heading-md);
-    line-height: var(--leading-heading-md);
   }
 
   .routineGrid {

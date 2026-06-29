@@ -1,16 +1,12 @@
-import {Suspense} from 'react'
-import {Await, Link, useNavigate, useSearchParams} from 'react-router'
+import {Suspense, useState} from 'react'
+import {Await, useSearchParams} from 'react-router'
 import {type MappedProductOptions} from '@shopify/hydrogen'
-import type {
-  Maybe,
-  ProductOptionValueSwatch,
-} from '@shopify/hydrogen/storefront-api-types'
 import type {ProductCardFragment, ProductFragment} from 'storefrontapi.generated'
 import {AddToCartButton} from '~/components/AddToCartButton'
 import {useAside} from '~/components/Aside'
-import {LiningMoney} from '~/components/LiningMoney'
 import {ProductCard} from '~/components/shop/ProductCard'
 import {ProductGallery} from './ProductGallery'
+import {ProductSizeToggle} from './ProductSizeToggle'
 import {PurchaseOptions} from './PurchaseOptions'
 import styles from './ProductPage.module.css'
 
@@ -25,9 +21,9 @@ export function ProductPage({
   productOptions: MappedProductOptions[]
   recommendations: Promise<ProductCardFragment[]>
 }) {
-  const navigate = useNavigate()
   const {open} = useAside()
   const [searchParams, setSearchParams] = useSearchParams()
+  const [quantity, setQuantity] = useState(1)
 
   const selectedSellingPlanId = searchParams.get('selling_plan')
 
@@ -66,80 +62,21 @@ export function ProductPage({
           {eyebrow && <p className={styles.eyebrow}>{eyebrow}</p>}
           <h1 className={styles.title}>{title}</h1>
 
-          <div className={styles.price}>
-            {selectedVariant?.price && (
-              <LiningMoney data={selectedVariant.price} />
-            )}
-            {selectedVariant?.compareAtPrice && (
-              <span className={styles.compareAt}>
-                <LiningMoney data={selectedVariant.compareAtPrice} />
-              </span>
-            )}
-          </div>
+          {/* Variant-keuze (bv. maat) als sliding-toggle. Eén waarde → niet tonen. */}
+          {productOptions.map((option) =>
+            option.optionValues.length === 1 ? null : (
+              <ProductSizeToggle key={option.name} option={option} />
+            ),
+          )}
 
-          {/* Variant-keuze (bv. maat). Eén waarde → niet tonen. */}
-          {productOptions.map((option) => {
-            if (option.optionValues.length === 1) return null
-            return (
-              <div className={styles.option} key={option.name}>
-                <span className={styles.optionName}>{option.name}</span>
-                <div className={styles.optionValues}>
-                  {option.optionValues.map((value) => {
-                    const {
-                      name,
-                      handle,
-                      variantUriQuery,
-                      selected,
-                      available: valueAvailable,
-                      exists,
-                      isDifferentProduct,
-                      swatch,
-                    } = value
+          <hr className={styles.divider} />
 
-                    const className = `${styles.optionValue} ${
-                      selected ? styles.optionValueSelected : ''
-                    }`
-
-                    if (isDifferentProduct) {
-                      return (
-                        <Link
-                          key={option.name + name}
-                          className={className}
-                          prefetch="intent"
-                          preventScrollReset
-                          replace
-                          to={`/products/${handle}?${variantUriQuery}`}
-                          style={{opacity: valueAvailable ? 1 : 0.4}}
-                        >
-                          <ProductOptionSwatch swatch={swatch} name={name} />
-                        </Link>
-                      )
-                    }
-
-                    return (
-                      <button
-                        type="button"
-                        key={option.name + name}
-                        className={`reset ${className}`}
-                        disabled={!exists}
-                        style={{opacity: valueAvailable ? 1 : 0.4}}
-                        onClick={() => {
-                          if (!selected) {
-                            void navigate(`?${variantUriQuery}`, {
-                              replace: true,
-                              preventScrollReset: true,
-                            })
-                          }
-                        }}
-                      >
-                        <ProductOptionSwatch swatch={swatch} name={name} />
-                      </button>
-                    )
-                  })}
-                </div>
-              </div>
-            )
-          })}
+          {descriptionHtml && (
+            <div
+              className={styles.description}
+              dangerouslySetInnerHTML={{__html: descriptionHtml}}
+            />
+          )}
 
           <PurchaseOptions
             groups={sellingPlanGroups}
@@ -149,35 +86,56 @@ export function ProductPage({
             onSelect={setSellingPlan}
           />
 
-          <AddToCartButton
-            className={styles.addToCart}
-            disabled={!available}
-            onClick={() => open('cart')}
-            lines={
-              selectedVariant
-                ? [
-                    {
-                      merchandiseId: selectedVariant.id,
-                      quantity: 1,
-                      selectedVariant,
-                      sellingPlanId: selectedSellingPlanId ?? undefined,
-                    },
-                  ]
-                : []
-            }
-          >
-            {available ? 'Add to cart' : 'Sold out'}
-          </AddToCartButton>
+          <div className={styles.buyRow}>
+            <div className={styles.stepper}>
+              <button
+                type="button"
+                className="reset"
+                aria-label="Decrease quantity"
+                disabled={quantity <= 1}
+                onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+              >
+                &minus;
+              </button>
+              <span className={styles.stepperValue} aria-live="polite">
+                {quantity}
+              </span>
+              <button
+                type="button"
+                className="reset"
+                aria-label="Increase quantity"
+                onClick={() => setQuantity((q) => q + 1)}
+              >
+                +
+              </button>
+            </div>
+
+            <AddToCartButton
+              className={styles.addToCart}
+              disabled={!available}
+              onClick={() => open('cart')}
+              lines={
+                selectedVariant
+                  ? [
+                      {
+                        merchandiseId: selectedVariant.id,
+                        quantity,
+                        selectedVariant,
+                        sellingPlanId: selectedSellingPlanId ?? undefined,
+                      },
+                    ]
+                  : []
+              }
+            >
+              {available ? 'add to cart' : 'sold out'}
+            </AddToCartButton>
+          </div>
+
+          <p className={styles.shippingNote}>
+            Complimentary shipping on all UK orders over £60
+          </p>
 
           <div className={styles.accordions}>
-            {descriptionHtml && (
-              <Accordion title="Description" defaultOpen>
-                <div
-                  className={styles.richText}
-                  dangerouslySetInnerHTML={{__html: descriptionHtml}}
-                />
-              </Accordion>
-            )}
             {ingredients && (
               <Accordion title="Ingredients">
                 <p className={styles.plainText}>{ingredients}</p>
@@ -246,25 +204,3 @@ function CompleteYourRoutine({
   )
 }
 
-function ProductOptionSwatch({
-  swatch,
-  name,
-}: {
-  swatch?: Maybe<ProductOptionValueSwatch> | undefined
-  name: string
-}) {
-  const image = swatch?.image?.previewImage?.url
-  const color = swatch?.color
-
-  if (!image && !color) return name
-
-  return (
-    <span
-      aria-label={name}
-      className={styles.swatch}
-      style={{backgroundColor: color || 'transparent'}}
-    >
-      {!!image && <img src={image} alt={name} />}
-    </span>
-  )
-}
