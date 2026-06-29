@@ -143,13 +143,17 @@
   z-index: 2;
 }
 
+/* Kleine/strakke pill-variant — gebruikt voor de maat-keuze (aantal ml). Lager,
+   nauwere padding en een iets kleiner font dan de grote pillen (add to cart /
+   buy once). De grote variant blijft de site-brede default. */
 .sizeToggle button:global(.reset),
 .sizeToggle a:global(.reset) {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 2.75rem;
-  padding: 0.6em 1.6em;
+  min-height: 1.55rem;
+  padding: 0.15em 1.2em;
+  font-size: 0.8em;
   background: var(--color-warm);
   border-radius: var(--radius-pill);
   box-sizing: border-box;
@@ -203,7 +207,7 @@
   align-items: center;
   justify-content: center;
   gap: 0.5em;
-  min-height: 3.25rem;
+  min-height: 2.5rem;
   padding: 0 1.25em;
   background: var(--color-warm);
   border-radius: var(--radius-pill);
@@ -285,7 +289,7 @@
 
 .buyRow .addToCart {
   flex: 1;
-  min-height: 3.25rem;
+  min-height: 2.5rem;
   padding: 0 1.25em;
   font-size: var(--text-body);
   text-align: center;
