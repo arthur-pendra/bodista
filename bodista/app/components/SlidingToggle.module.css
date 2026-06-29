@@ -22,7 +22,7 @@
   left: 0;
   width: 0;
   height: 100%;
-  border: 1px solid var(--color-charcoal);
+  border: 0.75px solid var(--color-charcoal);
   border-radius: var(--radius-pill);
   opacity: 0;
   pointer-events: none;
