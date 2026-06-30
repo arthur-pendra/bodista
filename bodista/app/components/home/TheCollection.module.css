@@ -55,69 +55,8 @@
   color: var(--color-charcoal);
 }
 
-.filters {
-  display: flex;
-  align-items: center;
-  font-size: var(--text-body); /* 16px */
-  line-height: 1;
-}
-
-/* Filter-items zijn standaard verborgen en vouwen open bij hover over de
-   filtergroep (incl. de "+ Filters"-knop). */
-.filterList {
-  display: flex;
-  align-items: center;
-  gap: 1em;
-  overflow: hidden;
-  max-width: 0;
-  margin-right: 0;
-  opacity: 0;
-  transition:
-    max-width 0.45s ease,
-    margin-right 0.45s ease,
-    opacity 0.3s ease;
-}
-
-.filters:hover .filterList,
-.filters:focus-within .filterList {
-  max-width: 40em;
-  margin-right: 1em;
-  opacity: 1;
-}
-
-.filter {
-  padding: 0;
-  background: none;
-  border: none;
-  font: inherit;
-  color: var(--color-charcoal);
-  opacity: 0.5;
-  cursor: pointer;
-  transition: opacity 0.2s ease;
-}
-
-.filter:hover {
-  opacity: 1;
-}
-
-.filterToggle {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.25em;
-  padding: 0;
-  background: none;
-  border: none;
-  font: inherit;
-  color: var(--color-charcoal);
-  cursor: pointer;
-}
-
-.filterPlus {
-  display: block;
-  font-size: 1.3em; /* glyph — bewuste uitzondering: "+"-teken, geen type-scale tekst */
-  line-height: 1;
-  transform: translateY(-1px);
-}
+/* De collectie-filter (sliding-pill toggle) staat rechts in .header; de styling
+   zit in CollectionFilter.module.css (gedeeld met de shop). */
 
 /* ---- Divider -------------------------------------------------------------- */
 

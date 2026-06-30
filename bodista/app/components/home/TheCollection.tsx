@@ -3,9 +3,13 @@ import {Image} from '@shopify/hydrogen'
 import type {RecommendedProductFragment} from 'storefrontapi.generated'
 import {Figures} from '~/components/Figures'
 import {LiningMoney} from '~/components/LiningMoney'
+import {CollectionFilter} from '~/components/shop/CollectionFilter'
 import styles from './TheCollection.module.css'
 
-const FILTERS = ['oils', 'serums', 'bodymist', 'cloths']
+// Op de home stuurt de filter niet client-side, maar linkt naar de bijbehorende
+// collectie op de shop-pagina (All → de volledige Shop All).
+const buildHref = (handle: string | null) =>
+  handle === null ? '/collections/all' : `/collections/all?collection=${handle}`
 
 export function TheCollection({
   products,
@@ -26,19 +30,7 @@ export function TheCollection({
               Your skin is the formulator.
             </h2>
           </div>
-          <div className={styles.filters}>
-            <div className={styles.filterList}>
-              {FILTERS.map((filter) => (
-                <button key={filter} type="button" className={styles.filter}>
-                  {filter}
-                </button>
-              ))}
-            </div>
-            <button type="button" className={styles.filterToggle}>
-              <span className={styles.filterPlus}>+</span>
-              Filters
-            </button>
-          </div>
+          <CollectionFilter active={null} buildHref={buildHref} />
         </header>
 
         <hr className={styles.divider} />

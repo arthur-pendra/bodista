@@ -1,0 +1,31 @@
+/* ==========================================================================
+   CollectionFilter — kleine sliding-pill toggle (gedeeld: shop + home)
+   Hergebruikt het schuivende charcoal randje uit SlidingToggle.module. Kleine
+   variant t.o.v. de standaard pillen: lager, nauwere padding, kleiner font —
+   zit rechtsboven op de heading-lijn. Elke optie krijgt een lichte warm-witte
+   pill-achtergrond (Our Philosophy-stijl). Dubbele class wint van
+   :global(.reset).option.
+   ========================================================================== */
+
+.filter.filter {
+  gap: 0.6em;
+}
+
+.filter a:global(.reset) {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.55rem;
+  padding: 0.15em 1em;
+  font-size: 0.8em;
+  background: color-mix(in srgb, var(--color-warm) 25%, transparent);
+  border-radius: var(--radius-pill);
+  box-sizing: border-box;
+}
+
+/* Het schuivende randje als border-box én boven de opties tillen — anders dekt
+   de pill-vulling het charcoal randje af. pointer-events: none (uit
+   SlidingToggle) houdt de klik op de opties. */
+.filter > span {
+  box-sizing: border-box;
+  z-index: 2;
+}
