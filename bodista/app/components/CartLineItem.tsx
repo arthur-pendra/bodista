@@ -56,8 +56,26 @@ export function CartLineItem({
     merchandise.product?.sellingPlanGroups?.nodes?.flatMap(
       (group) => group.sellingPlans?.nodes ?? [],
     ) ?? [];
-  const currentPlan = line.sellingPlanAllocation?.sellingPlan ?? null;
+  const serverPlanId = line.sellingPlanAllocation?.sellingPlan?.id ?? null;
   const [subOpen, setSubOpen] = useState(false);
+
+  // Optimistische keuze: Hydrogens useOptimisticCart past `sellingPlanAllocation`
+  // niet meteen toe, dus zonder dit "springt" de tag pas na de server-round-trip.
+  // `undefined` = geen override (toon server), anders de zojuist gekozen plan-id
+  // (of null voor one-time). Zodra de server onze keuze bevestigt, laten we los.
+  const [pendingPlanId, setPendingPlanId] = useState<string | null | undefined>(
+    undefined,
+  );
+  useEffect(() => {
+    if (pendingPlanId !== undefined && pendingPlanId === serverPlanId) {
+      setPendingPlanId(undefined);
+    }
+  }, [pendingPlanId, serverPlanId]);
+
+  const activePlanId = pendingPlanId !== undefined ? pendingPlanId : serverPlanId;
+  const activePlan = activePlanId
+    ? subPlans.find((plan) => plan.id === activePlanId) ?? null
+    : null;
 
   const compareAt = line?.cost?.compareAtAmountPerQuantity;
   const total = line?.cost?.totalAmount;
@@ -99,15 +117,15 @@ export function CartLineItem({
               <button
                 type="button"
                 className={`reset ${styles.subTag} ${
-                  currentPlan ? styles.subTagActive : ''
+                  activePlan ? styles.subTagActive : ''
                 }`}
                 aria-expanded={subOpen}
                 onClick={() => setSubOpen((value) => !value)}
               >
                 <span className="ui-nums">
                   <Figures>
-                    {currentPlan
-                      ? `subscription · ${formatInterval(currentPlan.name)}`
+                    {activePlan
+                      ? `subscription · ${formatInterval(activePlan.name)}`
                       : '+ subscribe'}
                   </Figures>
                 </span>
@@ -127,8 +145,11 @@ export function CartLineItem({
           <CartLineSubscriptionOptions
             line={line}
             plans={subPlans}
-            current={currentPlan}
-            onSelect={() => setSubOpen(false)}
+            activePlanId={activePlanId}
+            onSelect={(sellingPlanId) => {
+              setPendingPlanId(sellingPlanId);
+              setSubOpen(false);
+            }}
           />
         )}
 
@@ -349,13 +370,13 @@ type SellingPlanOption = NonNullable<
 function CartLineSubscriptionOptions({
   line,
   plans,
-  current,
+  activePlanId,
   onSelect,
 }: {
   line: CartLine;
   plans: SellingPlanOption[];
-  current: {id: string; name: string} | null;
-  onSelect: () => void;
+  activePlanId: string | null;
+  onSelect: (sellingPlanId: string | null) => void;
 }) {
   const {id: lineId, quantity, merchandise, isOptimistic} = line;
 
@@ -372,9 +393,7 @@ function CartLineSubscriptionOptions({
 
   const activeIndex = Math.max(
     0,
-    options.findIndex((option) =>
-      current ? option.sellingPlanId === current.id : option.sellingPlanId === null,
-    ),
+    options.findIndex((option) => option.sellingPlanId === activePlanId),
   );
 
   const rootRef = useRef<HTMLDivElement>(null);
@@ -469,7 +488,7 @@ function CartLineSubscriptionOptions({
               disabled={active || !!isOptimistic}
               // Randje schuift mee onder de cursor; klik commit + sluit.
               onMouseEnter={() => moveTo(index, true)}
-              onClick={onSelect}
+              onClick={() => onSelect(option.sellingPlanId)}
             >
               <span className="ui-nums">
                 <Figures>{option.label}</Figures>

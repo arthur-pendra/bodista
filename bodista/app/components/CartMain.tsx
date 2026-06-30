@@ -9,7 +9,6 @@ import {useAside} from '~/components/Aside';
 import {reconcileOptimisticCart} from '~/lib/optimisticCart';
 import {CartLineItem, type CartLine} from '~/components/CartLineItem';
 import {CartSummary} from './CartSummary';
-import {CartRecommendations} from './CartRecommendations';
 import {LiningMoney} from './LiningMoney';
 import styles from './Cart.module.css';
 
@@ -49,17 +48,12 @@ function getLineItemChildrenMap(lines: CartLine[]): LineItemChildrenMap {
  * The main cart component that displays the cart items and summary.
  * It is used by both the /cart route and the cart aside dialog.
  */
-export function CartMain({
-  layout,
-  cart: originalCart,
-  recommendations,
-}: CartMainProps) {
+export function CartMain({layout, cart: originalCart}: CartMainProps) {
   // De useOptimisticCart-hook past pending acties direct toe zodat de gebruiker
   // meteen feedback ziet bij het wijzigen van de cart. reconcileOptimisticCart
   // leidt daar bovenop de bedragen (regelprijs/subtotaal/totaal) direct af,
   // zodat ook de prijzen en de free-shipping-balk meteen meebewegen.
   const cart = reconcileOptimisticCart(useOptimisticCart(originalCart));
-  const activeRecs = recommendations;
 
   const cartHasItems = (cart?.totalQuantity ?? 0) > 0;
   const childrenMap = getLineItemChildrenMap(cart?.lines?.nodes ?? []);
@@ -72,23 +66,10 @@ export function CartMain({
       <div className={rootClass}>
         <div className={styles.scroll}>
           <CartEmpty />
-          {activeRecs && (
-            <CartRecommendations
-              recommendations={activeRecs}
-              inCartHandles={new Set<string>()}
-            />
-          )}
         </div>
       </div>
     );
   }
-
-  // Handles van producten al in de cart — zo filteren we ze uit de suggesties.
-  const inCartHandles = new Set(
-    (cart?.lines?.nodes ?? [])
-      .map((line) => line.merchandise?.product?.handle)
-      .filter(Boolean) as string[],
-  );
 
   return (
     <div className={rootClass}>
@@ -114,13 +95,6 @@ export function CartMain({
             );
           })}
         </ul>
-
-        {activeRecs && (
-          <CartRecommendations
-            recommendations={activeRecs}
-            inCartHandles={inCartHandles}
-          />
-        )}
       </div>
 
       <CartSummary cart={cart} layout={layout} />

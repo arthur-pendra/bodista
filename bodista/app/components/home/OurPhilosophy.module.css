@@ -61,8 +61,24 @@
 
 .tags {
   /* Duw de toggle onderin de tekstkolom, op één lijn met de onderkant van de
-     pill-media rechts. Flex/gap/pill-styling zit in SlidingToggle zelf. */
+     pill-media rechts. Flex/gap/het schuivende randje komen uit SlidingToggle. */
   margin: auto 0 0;
+}
+
+/* Elke optie krijgt zélf een lichte warm-witte pill-achtergrond — net als de
+   maat-/plan-toggle op de productpagina. Het charcoal randje (SlidingToggle)
+   schuift eroverheen. Dubbele class wint van :global(.reset).option. */
+.tags button:global(.reset) {
+  background: color-mix(in srgb, var(--color-warm) 25%, transparent);
+  border-radius: var(--radius-pill);
+}
+
+/* Het schuivende randje als border-box én boven de opties tillen, anders dekt
+   de pill-vulling het charcoal randje af. pointer-events: none (uit
+   SlidingToggle) houdt de klik op de opties. */
+.tags > span {
+  box-sizing: border-box;
+  z-index: 2;
 }
 
 /* ---- Media-kolom (rechts) ------------------------------------------------- */
