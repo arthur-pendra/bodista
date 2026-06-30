@@ -157,6 +157,43 @@
   gap: 0.75em;
 }
 
+/* Titel + subscription-tag naast elkaar. De tag mag op een eigen regel breken
+   bij krappe ruimte, maar blijft "achter" de naam. */
+.lineHeading {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.4em 0.5em;
+}
+
+/* Subscription-tag — kleine pill in de cart-stijl. Default charcoal-outline;
+   bij een actieve subscription gouden accent. Klikt de optie-pillen open. */
+.subTag {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  padding: 0.1em 0.7em;
+  font-size: var(--text-detail);
+  letter-spacing: var(--tracking-detail);
+  text-transform: lowercase;
+  color: var(--color-charcoal);
+  background: color-mix(in srgb, var(--color-warm) 25%, transparent);
+  border: 0.75px solid var(--color-charcoal);
+  border-radius: var(--radius-pill);
+  transition: opacity 200ms var(--ease-fade);
+}
+
+.subTag:hover {
+  opacity: 0.6;
+}
+
+.subTagActive {
+  color: var(--color-gold);
+  border-color: var(--color-gold);
+}
+
 .lineName {
   font-size: var(--text-body-lg);
   line-height: var(--leading-body-lg);
@@ -170,8 +207,10 @@
 
 .lineRemove {
   flex: 0 0 auto;
-  font-size: var(--text-detail);
-  line-height: var(--leading-detail);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-body);
   color: var(--color-charcoal);
   opacity: 0.45;
   transition: opacity 200ms var(--ease-fade);
@@ -179,6 +218,18 @@
 
 .lineRemove:hover {
   opacity: 0.85;
+}
+
+.lineRemoveIcon {
+  display: block;
+  width: 1em;
+  height: 1em;
+}
+
+.lineRemoveIcon svg {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 
 .lineVariant {
@@ -189,78 +240,40 @@
   color: var(--color-gold);
 }
 
-/* --- Size- en abonnement-keuze (pills) ------------------------------------ */
-/* Gedeelde pill-rij voor size-keuze én abonnement-intervallen. */
-.options {
-  display: flex;
-  flex-wrap: wrap;
+/* --- Abonnement-keuze — sliding-toggle (zelfde als de size-toggle) --------- */
+/* Kleine pillen met een charcoal randje dat met GSAP naar de keuze schuift
+   (volgt de cursor bij hover, commit + sluit op klik). */
+.subToggle.subToggle {
+  margin-top: 0.5em;
   gap: 0.4em;
-  margin-top: 0.15em;
 }
 
-.optionPill {
-  padding: 0.35em 0.8em;
-  min-height: 1.5rem;
-  font-size: var(--text-detail);
-  line-height: 1;
-  color: var(--color-charcoal);
-  border: 1px solid var(--color-hairline);
-  border-radius: var(--radius-pill);
-  transition:
-    opacity 200ms var(--ease-fade),
-    background-color 200ms var(--ease-fade),
-    color 200ms var(--ease-fade);
+/* Randje border-box én boven de opties tillen — anders dekt de warm-witte
+   pill-vulling het charcoal randje af. */
+.subToggle > span {
+  box-sizing: border-box;
+  z-index: 2;
 }
 
-.optionPill:not(:disabled):hover {
-  opacity: 0.6;
-}
-
-/* Niet-leverbare maat (geen voorraad) — gedempt, behalve de actieve pill. */
-.optionPill:disabled:not(.optionPillActive) {
-  opacity: 0.35;
-}
-
-/* .optionPill-prefix wint van de globale `button.reset { background: inherit }`
-   zodat de actieve pill daadwerkelijk charcoal gevuld is. */
-.optionPill.optionPillActive {
-  color: var(--color-warm);
-  background: var(--color-charcoal);
-  border-color: var(--color-charcoal);
-}
-
-/* --- Abonnement-regel ----------------------------------------------------- */
-.sub {
-  display: flex;
-  flex-direction: column;
-  gap: 0.4em;
-  margin-top: 0.1em;
-}
-
-.subLine {
+.subToggle button:global(.reset) {
   display: inline-flex;
   align-items: center;
-  gap: 0.6em;
-  font-size: var(--text-detail);
-  line-height: var(--leading-detail);
-  letter-spacing: var(--tracking-detail);
-  text-transform: lowercase;
+  justify-content: center;
+  min-height: 1.55rem;
+  padding: 0.15em 1em;
+  font-size: 0.8em;
+  background: color-mix(in srgb, var(--color-warm) 25%, transparent);
+  border-radius: var(--radius-pill);
+  box-sizing: border-box;
+}
+
+/* Actieve/geselecteerde keuze blijft duidelijk — gouden label (subscription-
+   accent), los van waar het hover-randje staat. */
+.subToggle button:global(.reset).subOptionActive {
   color: var(--color-gold);
 }
 
-.subChange {
-  font-size: var(--text-detail);
-  letter-spacing: var(--tracking-detail);
-  text-transform: lowercase;
-  color: var(--color-charcoal);
-  opacity: 0.5;
-  transition: opacity 200ms var(--ease-fade);
-}
-
-.subChange:hover {
-  opacity: 1;
-}
-
+/* --- Onderste regel (controls + prijs) ------------------------------------ */
 .lineBottom {
   display: flex;
   align-items: center;
@@ -272,7 +285,7 @@
 /* Size-toggle + stepper naast elkaar (links); prijs staat rechts. --ctrl-h =
    gedeelde hoogte voor beide controls zodat ze exact even hoog/uitgelijnd zijn. */
 .controls {
-  --ctrl-h: 2.25em;
+  --ctrl-h: 1.7rem;
   display: flex;
   align-items: center;
   gap: 0.875em;
@@ -297,7 +310,10 @@
   align-items: center;
   justify-content: center;
   height: var(--ctrl-h);
-  padding-block: 0;
+  padding: 0 1em;
+  font-size: 0.8em;
+  background: color-mix(in srgb, var(--color-warm) 25%, transparent);
+  border-radius: var(--radius-pill);
   box-sizing: border-box;
 }
 
@@ -308,7 +324,8 @@
   align-items: stretch;
   height: var(--ctrl-h);
   box-sizing: border-box;
-  border: 1px solid var(--color-charcoal);
+  background: color-mix(in srgb, var(--color-warm) 25%, transparent);
+  border: 0.75px solid var(--color-charcoal);
   border-radius: var(--radius-pill);
 }
 
@@ -327,10 +344,9 @@
   align-items: center;
   justify-content: center;
   height: 100%;
-  min-width: 2em;
-  min-height: 1.5rem;
-  padding: 0 0.7em;
-  font-size: var(--text-body);
+  min-width: 1.7em;
+  padding: 0 0.6em;
+  font-size: 0.8em;
   line-height: 1;
   color: var(--color-charcoal);
   transition: opacity 200ms var(--ease-fade);
@@ -348,8 +364,8 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 1.75em;
-  font-size: var(--text-body);
+  min-width: 1.6em;
+  font-size: 0.8em;
   line-height: 1;
 }
 
@@ -581,8 +597,8 @@
   letter-spacing: var(--tracking-detail);
   text-transform: lowercase;
   color: var(--color-charcoal);
-  background: transparent;
-  border: 1px solid var(--color-charcoal);
+  background: color-mix(in srgb, var(--color-warm) 25%, transparent);
+  border: 0.75px solid var(--color-charcoal);
   border-radius: var(--radius-pill);
   transition: opacity 200ms var(--ease-fade);
 }
@@ -665,25 +681,31 @@
   color: var(--color-charcoal);
 }
 
-/* Checkout — link gestyled als volle pill-CTA. */
+/* Checkout — kleine outline-pil in dezelfde stijl als de product-page knoppen
+   (dunne 0.75px charcoal-rand, zwakke warm-witte vulling). Volle breedte, maar
+   laag/strak — geen grote gevulde pill. */
 .checkout {
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 100%;
+  min-height: 1.7rem;
   margin-top: 1em;
-  padding: 1.1em;
-  font-size: var(--text-body);
+  padding: 0.15em 1.2em;
+  font-size: 0.8em;
   letter-spacing: var(--tracking-detail);
-  text-transform: uppercase;
+  text-transform: lowercase;
   text-align: center;
-  color: var(--color-warm);
-  background: var(--color-charcoal);
+  color: var(--color-charcoal);
+  background: color-mix(in srgb, var(--color-warm) 25%, transparent);
+  border: 0.75px solid var(--color-charcoal);
   border-radius: var(--radius-pill);
   transition: opacity 250ms var(--ease-fade);
 }
 
 .checkout:hover {
-  color: var(--color-warm);
-  opacity: 0.85;
+  color: var(--color-charcoal);
+  opacity: 0.6;
 }
 
 /* Terms / privacy onder de CTA — kleine microcopy, links in gold. */
@@ -734,18 +756,20 @@
 .emptyLink {
   display: inline-block;
   margin-top: 0.6em;
-  padding: 0.9em 1.8em;
-  font-size: var(--text-detail);
+  padding: 0.2em 1.2em;
+  min-height: 1.55rem;
+  font-size: 0.8em;
   letter-spacing: var(--tracking-detail);
-  text-transform: uppercase;
-  color: var(--color-warm);
-  background: var(--color-charcoal);
+  text-transform: lowercase;
+  color: var(--color-charcoal);
+  background: color-mix(in srgb, var(--color-warm) 25%, transparent);
+  border: 0.75px solid var(--color-charcoal);
   border-radius: var(--radius-pill);
   transition: opacity 250ms var(--ease-fade);
 }
 
 .emptyLink:hover {
-  color: var(--color-warm);
-  opacity: 0.85;
+  color: var(--color-charcoal);
+  opacity: 0.6;
 }
 

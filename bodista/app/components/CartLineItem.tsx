@@ -49,6 +49,16 @@ export function CartLineItem({
   const sizes = getSizeVariants(line);
   const hasSizeChoice = sizes.length > 1;
 
+  // Subscriptie: alle beschikbare plans van het product + het actieve plan (kan
+  // null zijn bij een eenmalige regel). Zolang het product plans heeft tonen we
+  // de tag — ook om een subscription te kunnen tóévoegen aan een one-time regel.
+  const subPlans =
+    merchandise.product?.sellingPlanGroups?.nodes?.flatMap(
+      (group) => group.sellingPlans?.nodes ?? [],
+    ) ?? [];
+  const currentPlan = line.sellingPlanAllocation?.sellingPlan ?? null;
+  const [subOpen, setSubOpen] = useState(false);
+
   const compareAt = line?.cost?.compareAtAmountPerQuantity;
   const total = line?.cost?.totalAmount;
 
@@ -76,14 +86,34 @@ export function CartLineItem({
 
       <div className={styles.lineBody}>
         <div className={styles.lineTop}>
-          <Link
-            prefetch="intent"
-            to={lineItemUrl}
-            className={styles.lineName}
-            onClick={() => layout === 'aside' && close()}
-          >
-            {product.title}
-          </Link>
+          <div className={styles.lineHeading}>
+            <Link
+              prefetch="intent"
+              to={lineItemUrl}
+              className={styles.lineName}
+              onClick={() => layout === 'aside' && close()}
+            >
+              {product.title}
+            </Link>
+            {subPlans.length > 0 && (
+              <button
+                type="button"
+                className={`reset ${styles.subTag} ${
+                  currentPlan ? styles.subTagActive : ''
+                }`}
+                aria-expanded={subOpen}
+                onClick={() => setSubOpen((value) => !value)}
+              >
+                <span className="ui-nums">
+                  <Figures>
+                    {currentPlan
+                      ? `subscription · ${formatInterval(currentPlan.name)}`
+                      : '+ subscribe'}
+                  </Figures>
+                </span>
+              </button>
+            )}
+          </div>
           <CartLineRemoveButton lineIds={[id]} disabled={!!line.isOptimistic} />
         </div>
 
@@ -93,7 +123,14 @@ export function CartLineItem({
           </span>
         )}
 
-        <CartLineSubscription line={line} />
+        {subOpen && subPlans.length > 0 && (
+          <CartLineSubscriptionOptions
+            line={line}
+            plans={subPlans}
+            current={currentPlan}
+            onSelect={() => setSubOpen(false)}
+          />
+        )}
 
         <div className={styles.lineBottom}>
           <div className={styles.controls}>
@@ -299,82 +336,148 @@ function CartLineSizeToggle({
   );
 }
 
+type SellingPlanOption = NonNullable<
+  CartLine['merchandise']['product']['sellingPlanGroups']
+>['nodes'][number]['sellingPlans']['nodes'][number];
+
 /**
- * Abonnement-weergave. Toont enkel op regels die een selling plan hebben:
- * "subscription · {interval}". Met "change" kun je naar een ander interval of
- * naar eenmalig (one-time) wisselen.
+ * Uitklapbare subscription-keuze (geopend vanuit de tag achter de producttitel).
+ * Kleine pillen in de cart-stijl: per interval één pill plus "one-time". Hiermee
+ * kun je het interval veranderen, naar eenmalig wisselen, óf — op een one-time
+ * regel — een subscription toevoegen.
  */
-function CartLineSubscription({line}: {line: CartLine}) {
+function CartLineSubscriptionOptions({
+  line,
+  plans,
+  current,
+  onSelect,
+}: {
+  line: CartLine;
+  plans: SellingPlanOption[];
+  current: {id: string; name: string} | null;
+  onSelect: () => void;
+}) {
   const {id: lineId, quantity, merchandise, isOptimistic} = line;
-  const current = line.sellingPlanAllocation?.sellingPlan;
-  const [open, setOpen] = useState(false);
 
-  if (!current) return null;
+  // De keuzes: elk interval + "one-time" (selling plan wissen). sellingPlanId
+  // null = eenmalig.
+  const options: {key: string; sellingPlanId: string | null; label: string}[] = [
+    ...plans.map((plan) => ({
+      key: plan.id,
+      sellingPlanId: plan.id,
+      label: formatInterval(plan.name),
+    })),
+    {key: 'one-time', sellingPlanId: null, label: 'one-time'},
+  ];
 
-  const plans =
-    merchandise.product?.sellingPlanGroups?.nodes?.flatMap(
-      (group) => group.sellingPlans?.nodes ?? [],
-    ) ?? [];
+  const activeIndex = Math.max(
+    0,
+    options.findIndex((option) =>
+      current ? option.sellingPlanId === current.id : option.sellingPlanId === null,
+    ),
+  );
+
+  const rootRef = useRef<HTMLDivElement>(null);
+  const indicatorRef = useRef<HTMLSpanElement>(null);
+  const itemsRef = useRef<(HTMLButtonElement | null)[]>([]);
+  const reduceRef = useRef(false);
+
+  const activeIndexRef = useRef(activeIndex);
+  activeIndexRef.current = activeIndex;
+
+  // Schuif het randje naar optie `index`. animate=false → direct plaatsen.
+  const moveTo = (index: number, animate: boolean) => {
+    const el = itemsRef.current[index];
+    const indicator = indicatorRef.current;
+    if (!el || !indicator) return;
+    gsap.to(indicator, {
+      x: el.offsetLeft,
+      width: el.offsetWidth,
+      opacity: 1,
+      duration: animate && !reduceRef.current ? SLIDE_DURATION : 0,
+      ease: SLIDE_EASE,
+      overwrite: true,
+    });
+  };
+
+  // Mount: plaats het randje op de actieve optie (zonder animatie), opnieuw na
+  // font-load en bij resize.
+  useEffect(() => {
+    const root = rootRef.current;
+    const indicator = indicatorRef.current;
+    if (!root || !indicator) return;
+
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+    reduceRef.current = mq.matches;
+    const onMq = (event: MediaQueryListEvent) => {
+      reduceRef.current = event.matches;
+    };
+    mq.addEventListener('change', onMq);
+
+    let mounted = true;
+    const place = () => {
+      if (mounted) moveTo(activeIndexRef.current, false);
+    };
+    place();
+    void document.fonts.ready.then(place);
+
+    const ro = new ResizeObserver(place);
+    ro.observe(root);
+
+    return () => {
+      mounted = false;
+      mq.removeEventListener('change', onMq);
+      ro.disconnect();
+      gsap.killTweensOf(indicator);
+    };
+  }, []);
 
   const updateLines = (sellingPlanId: string | null): CartLineUpdateInput[] => [
     {id: lineId, merchandiseId: merchandise.id, quantity, sellingPlanId},
   ];
 
   return (
-    <div className={styles.sub}>
-      <span className={styles.subLine}>
-        subscription ·{' '}
-        <span className="ui-nums">
-          <Figures>{formatInterval(current.name)}</Figures>
-        </span>
-        {plans.length > 0 && (
-          <button
-            type="button"
-            className={`reset ${styles.subChange}`}
-            onClick={() => setOpen((value) => !value)}
-            aria-expanded={open}
+    <div
+      ref={rootRef}
+      role="group"
+      aria-label="Subscription"
+      className={`${toggleStyles.toggle} ${styles.subToggle}`}
+      // Verlaat de rij → randje terug naar de actieve keuze.
+      onMouseLeave={() => moveTo(activeIndexRef.current, true)}
+    >
+      <span
+        ref={indicatorRef}
+        className={toggleStyles.indicator}
+        aria-hidden="true"
+      />
+      {options.map((option, index) => {
+        const active = index === activeIndex;
+        return (
+          <CartLineUpdateButton
+            key={option.key}
+            lines={updateLines(option.sellingPlanId)}
           >
-            change
-          </button>
-        )}
-      </span>
-
-      {open && (
-        <div
-          className={styles.options}
-          role="group"
-          aria-label="Change subscription"
-        >
-          {plans.map((plan) => {
-            const active = plan.id === current.id;
-            return (
-              <CartLineUpdateButton key={plan.id} lines={updateLines(plan.id)}>
-                <button
-                  type="submit"
-                  className={`reset ${styles.optionPill} ${
-                    active ? styles.optionPillActive : ''
-                  }`}
-                  aria-pressed={active}
-                  disabled={active || !!isOptimistic}
-                >
-                  <span className="ui-nums">
-                    <Figures>{formatInterval(plan.name)}</Figures>
-                  </span>
-                </button>
-              </CartLineUpdateButton>
-            );
-          })}
-          <CartLineUpdateButton lines={updateLines(null)}>
             <button
               type="submit"
-              className={`reset ${styles.optionPill}`}
-              disabled={!!isOptimistic}
+              ref={(el) => {
+                itemsRef.current[index] = el;
+              }}
+              className={`reset ${toggleStyles.option} ${
+                active ? styles.subOptionActive : ''
+              }`}
+              aria-pressed={active}
+              disabled={active || !!isOptimistic}
+              // Randje schuift mee onder de cursor; klik commit + sluit.
+              onMouseEnter={() => moveTo(index, true)}
+              onClick={onSelect}
             >
-              one-time
+              <span className="ui-nums">
+                <Figures>{option.label}</Figures>
+              </span>
             </button>
           </CartLineUpdateButton>
-        </div>
-      )}
+        );
+      })}
     </div>
   );
 }
@@ -442,8 +545,39 @@ function CartLineRemoveButton({
         className={`reset ${styles.lineRemove}`}
         disabled={disabled}
         type="submit"
+        aria-label="Remove"
       >
-        Remove
+        <span className={styles.lineRemoveIcon} aria-hidden="true">
+          <svg viewBox="0 0 16 16" fill="none">
+            <path
+              d="M2.75 4h10.5"
+              stroke="currentColor"
+              strokeWidth="1"
+              strokeLinecap="round"
+            />
+            <path
+              d="M6 4V2.9c0-.39.31-.7.7-.7h2.6c.39 0 .7.31.7.7V4"
+              stroke="currentColor"
+              strokeWidth="1"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+            <path
+              d="M4.1 4l.62 9.05c.03.5.45.9.95.9h4.66c.5 0 .92-.4.95-.9L11.9 4"
+              stroke="currentColor"
+              strokeWidth="1"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+            <path
+              d="M6.7 6.5v5M9.3 6.5v5"
+              stroke="currentColor"
+              strokeWidth="1"
+              strokeLinecap="round"
+            />
+          </svg>
+        </span>
+        <span className="sr-only">Remove</span>
       </button>
     </CartForm>
   );
