@@ -55,8 +55,50 @@
   color: var(--color-charcoal);
 }
 
-/* De collectie-filter (sliding-pill toggle) staat rechts in .header; de styling
-   zit in CollectionFilter.module.css (gedeeld met de shop). */
+/* Rechterkant van de header: de collectie-filter (sliding-pill toggle, styling
+   in CollectionFilter.module.css, gedeeld met de shop) + de slider-pijlen. */
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 1.5em;
+}
+
+.arrows {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+}
+
+/* Ronde icoon-knop — bewust .reset (geen auto-pill); we stylen 'm zelf. */
+.arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  min-height: 2.25rem;
+  border: 1px solid var(--color-hairline);
+  border-radius: 50%;
+  color: var(--color-charcoal);
+  cursor: pointer;
+  transition:
+    opacity 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.arrow svg {
+  width: 0.875em;
+  height: 0.875em;
+}
+
+.arrow:not(:disabled):hover {
+  border-color: var(--color-charcoal);
+}
+
+.arrow:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
 
 /* ---- Divider -------------------------------------------------------------- */
 
@@ -69,22 +111,50 @@
   border-top: 1px solid var(--color-hairline);
 }
 
-/* ---- Product grid --------------------------------------------------------- */
+/* ---- Product slider (GSAP Draggable) -------------------------------------
+   Smooth drag met momentum (InertiaPlugin) + harde rand (edgeResistance 1, geen
+   rubber-band) en snap per kaart op de grid. Kaartbreedte = exact één grid-
+   kolombreedte, 4-up desktop, 2-up mobiel. .viewport clipt op de schermrand
+   (full-bleed); .track is de flex-rij die GSAP via transform (x) verschuift. */
 
-.grid {
-  grid-column: 1 / -1;
-  display: grid;
-  /* 4-up op desktop (24 koloms), 2-up op mobiel (12 koloms): span 6 past beide. */
-  grid-template-columns: repeat(var(--grid-columns), 1fr);
-  column-gap: var(--grid-gutter);
-  row-gap: 2.5em;
+.viewport {
+  /* Full-bleed (sibling van .inner, dus buiten het grid): loopt tot de scherm-
+     rand zodat kaarten daar uit beeld glijden. De zij-padding = de grid-marge,
+     zodat de slides links nog exact op grid-lijn 1 starten en rechts op lijn 24
+     eindigen — de bleed gebeurt puur in de marges/erbuiten. */
+  overflow: hidden;
+  padding-left: var(--grid-margin);
+  padding-right: var(--grid-margin);
+  margin-top: 1.875em;
+  /* Grijp-cursor als affordance voor de drag. */
+  cursor: grab;
+}
+
+.viewport:active {
+  cursor: grabbing;
+}
+
+.track {
+  display: flex;
+  gap: var(--grid-gutter);
   margin: 0;
   padding: 0;
   list-style: none;
+  /* GSAP verschuift deze rij via transform → GPU-hint. */
+  will-change: transform;
 }
 
 .card {
-  grid-column: span 6;
+  /* 4-up desktop: vier gelijke kaarten met drie gutters ertussen. */
+  flex: 0 0 calc((100% - 3 * var(--grid-gutter)) / 4);
+  min-width: 0;
+}
+
+/* Voorkom dat de native link/afbeelding-drag de slider-drag kaapt. */
+.card a,
+.card img {
+  -webkit-user-drag: none;
+  user-select: none;
 }
 
 .cardLink {
@@ -268,7 +338,8 @@
     font-size: var(--text-heading-sm);
   }
 
-  .filters {
-    font-size: var(--text-body);
+  /* 2-up op mobiel: twee gelijke kaarten met één gutter ertussen. */
+  .card {
+    flex-basis: calc((100% - var(--grid-gutter)) / 2);
   }
 }
