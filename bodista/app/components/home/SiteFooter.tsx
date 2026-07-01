@@ -1,6 +1,72 @@
-import {Link} from 'react-router'
+import {Link, useFetcher} from 'react-router'
 import {Wordmark} from '~/components/Wordmark'
 import styles from './SiteFooter.module.css'
+
+type SubscribeResponse = {ok: boolean; error?: string}
+
+// Newsletter signup — posts to the Klaviyo resource route via useFetcher.
+// Double opt-in: on success Klaviyo emails a confirmation before adding.
+function NewsletterForm() {
+  const fetcher = useFetcher<SubscribeResponse>()
+  const busy = fetcher.state !== 'idle'
+  const success = fetcher.data?.ok === true
+  const error = fetcher.data && !fetcher.data.ok ? fetcher.data.error : undefined
+
+  return (
+    <fetcher.Form
+      className={styles.signup}
+      method="post"
+      action="/api/klaviyo-subscribe"
+    >
+      <label htmlFor="footer-email" className="sr-only">
+        Email address
+      </label>
+      <div className={styles.fields}>
+        <input
+          id="footer-email"
+          className={styles.input}
+          type="email"
+          name="email"
+          placeholder="your@mail.com"
+          autoComplete="email"
+          required
+          disabled={busy || success}
+        />
+        {/* Honeypot — hidden from users, catches bots. */}
+        <input
+          type="text"
+          name="company"
+          tabIndex={-1}
+          autoComplete="off"
+          aria-hidden="true"
+          className="sr-only"
+        />
+        <button
+          className={styles.submit}
+          type="submit"
+          disabled={busy || success}
+        >
+          {busy ? '…' : success ? 'thanks' : 'subscribe'}
+        </button>
+      </div>
+      {success ? (
+        <p className={styles.feedback}>
+          Check your inbox to confirm your subscription.
+        </p>
+      ) : error ? (
+        <p className={`${styles.feedback} ${styles.feedbackError}`}>{error}</p>
+      ) : (
+        <p className={styles.consent}>
+          By subscribing you agree to our{' '}
+          <a className={styles.consentLink} href="/">
+            Privacy Policy
+          </a>
+          . Unsubscribe anytime.
+        </p>
+      )}
+    </fetcher.Form>
+  )
+}
 
 const INFORMATION = ['botonical', 'Face', 'Routines']
 
@@ -48,34 +114,7 @@ export function SiteFooter() {
           {/* Newsletter */}
           <div className={styles.column}>
             <h2 className={styles.heading}>Newsletter</h2>
-            <form
-              className={styles.signup}
-              onSubmit={(event) => event.preventDefault()}
-            >
-              <label htmlFor="footer-email" className="sr-only">
-                Email address
-              </label>
-              <div className={styles.fields}>
-                <input
-                  id="footer-email"
-                  className={styles.input}
-                  type="email"
-                  name="email"
-                  placeholder="your@mail.com"
-                  autoComplete="email"
-                />
-                <button className={styles.submit} type="submit">
-                  subscribe
-                </button>
-              </div>
-              <p className={styles.consent}>
-                By subscribing you agree to our{' '}
-                <a className={styles.consentLink} href="/">
-                  Privacy Policy
-                </a>
-                . Unsubscribe anytime.
-              </p>
-            </form>
+            <NewsletterForm />
           </div>
 
           {/* Information */}

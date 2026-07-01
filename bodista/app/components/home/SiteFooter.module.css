@@ -168,6 +168,20 @@
   opacity: 0.5;
 }
 
+/* Feedback na inschrijven (succes/fout) — zelfde plek als .consent, maar
+   volledig zichtbaar zodat de melding opvalt. */
+.feedback {
+  margin: 1em 0 0;
+  font-size: var(--text-detail); /* 14px */
+  line-height: var(--leading-body);
+  color: var(--color-charcoal);
+}
+
+/* Fout krijgt de gouden accentkleur i.p.v. een rood (buiten de palette). */
+.feedbackError {
+  color: var(--color-gold);
+}
+
 /* Link in de consent-regel onderscheidt zich met een lijn eronder (geen
    hover-underline). */
 .consentLink {
@@ -204,6 +218,13 @@
 
 .input:focus {
   outline: none;
+}
+
+/* Disabled tijdens versturen / na succes. */
+.input:disabled,
+.fields .submit:disabled {
+  opacity: 0.6;
+  cursor: default;
 }
 
 /* .fields-scope wint van de globale button:not(.reset) pill-radius → lichte

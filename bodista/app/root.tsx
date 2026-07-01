@@ -78,6 +78,7 @@ export async function loader(args: Route.LoaderArgs) {
     ...deferredData,
     ...criticalData,
     publicStoreDomain: env.PUBLIC_STORE_DOMAIN,
+    klaviyoCompanyId: env.PUBLIC_KLAVIYO_COMPANY_ID,
     shop: getShopAnalytics({
       storefront,
       publicStorefrontId: env.PUBLIC_STOREFRONT_ID,
@@ -174,6 +175,7 @@ export function Layout({children}: {children?: React.ReactNode}) {
 }
 
 export default function App() {
+  const nonce = useNonce();
   const data = useRouteLoaderData<RootLoader>('root');
 
   if (!data) {
@@ -189,6 +191,14 @@ export default function App() {
       <PageLayout {...data}>
         <Outlet />
       </PageLayout>
+      {/* Klaviyo onsite tracking (Active on Site + profile identification). */}
+      {data.klaviyoCompanyId ? (
+        <script
+          async
+          nonce={nonce}
+          src={`https://static.klaviyo.com/onsite/js/klaviyo.js?company_id=${data.klaviyoCompanyId}`}
+        />
+      ) : null}
     </Analytics.Provider>
   );
 }

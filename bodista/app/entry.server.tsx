@@ -19,8 +19,22 @@ export default async function handleRequest(
       checkoutDomain: context.env.PUBLIC_CHECKOUT_DOMAIN,
       storeDomain: context.env.PUBLIC_STORE_DOMAIN,
     },
-    defaultSrc: ['blob:'],
+    // Klaviyo domains go on default-src so img-src/script-src keep inheriting
+    // the Shopify defaults (cdn.shopify.com) — setting those directives
+    // explicitly would break that inheritance and block Shopify images.
+    defaultSrc: [
+      'blob:',
+      'https://static.klaviyo.com',
+      'https://a.klaviyo.com',
+      'https://www.klaviyo.com',
+    ],
     workerSrc: ["'self'", 'blob:'],
+    // connect-src has its own Hydrogen default, so Klaviyo is merged in here.
+    connectSrc: [
+      'https://a.klaviyo.com',
+      'https://static.klaviyo.com',
+      'https://static-tracking.klaviyo.com',
+    ],
   });
 
   const body = await renderToReadableStream(
