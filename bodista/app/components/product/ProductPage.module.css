@@ -7,11 +7,14 @@
    ========================================================================== */
 
 .page {
+  /* Ruimte tussen de header en de content; tevens de afstand die de eerste
+     galerij-foto omhoog schuift om vlak onder de header te komen. */
+  --pdp-top-gap: 4em;
   /* Full-bleed: breek uit de 1em zijmarge van `body > main` zodat .layout-grid
      exact op de GridOverlay (viewport-rand + --grid-margin) lijnt. */
   margin-left: -1em;
   margin-right: -1em;
-  padding-top: calc(var(--header-height) + 4em);
+  padding-top: calc(var(--header-height) + var(--pdp-top-gap));
   padding-bottom: 6em;
 }
 
@@ -24,6 +27,15 @@
 
 .galleryCol {
   grid-column: 1 / 13;
+  /* Links full-bleed tot de viewport-rand, rechterkant blijft op grid-lijn 13:
+     negatieve margin + stretch verbreedt de kolom naar links (verandert alleen
+     de breedte, niet de rechterrand). */
+  margin-left: calc(-1 * var(--grid-margin));
+  /* Verticaal helemaal naar boven (y=0) zodat de fixed navbar eroverheen valt.
+     Transform = puur visueel, laat de layout-flow (en de sticky-info) intact. */
+  transform: translateY(
+    calc(-1 * (var(--header-height) + var(--pdp-top-gap)))
+  );
 }
 
 .gallery {
@@ -37,6 +49,13 @@
   aspect-ratio: 4 / 5;
   overflow: hidden;
   background-color: var(--color-warm);
+}
+
+/* Eerste foto = full-height hero: 100vh en (via de translateY op .galleryCol)
+   tegen de bovenrand, met de navbar eroverheen. */
+.galleryMain:first-child {
+  aspect-ratio: auto;
+  height: 100vh;
 }
 
 .galleryImage {
@@ -64,7 +83,16 @@
    ×5/4 = 62.5vw − 3.125em. Plus één --grid-gutter = de rij-afstand tot foto 2.
    Alleen op desktop; content dat hoger is dan de foto groeit gewoon mee. */
 .purchase {
-  min-height: calc(62.5vw - 3.125em + var(--grid-gutter));
+  /* Foto-1-regio: even hoog als de eerste (100vh) foto. De info-kolom start op
+     header + --pdp-top-gap, dus trek dat af. Deze hoogte lijnt óók de dropdowns
+     eronder uit op de TWEEDE foto (100vh + gutter). */
+  min-height: calc(
+    100vh + var(--grid-gutter) - var(--header-height) - var(--pdp-top-gap)
+  );
+  /* Blok 1 = statisch verticaal gecentreerd naast foto 1 (geen sticky). */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 /* Eyebrow — producttype in goud, boven de titel (title case, geen uppercase). */
@@ -163,8 +191,9 @@
 /* ---- Choose your plan (single purchase / auto-replenish) ----------------- */
 
 .plan {
-  /* Duidelijk lager plaatsen, los van de productbeschrijving erboven. */
-  margin-top: 10em;
+  /* Wat lucht t.o.v. de beschrijving. Bewust klein: het blok moet korter zijn
+     dan de 100vh-regio, anders is er geen ruimte om te centreren/pinnen. */
+  margin-top: 2em;
 }
 
 .planLabel {
@@ -363,12 +392,20 @@
 
 @media (max-width: 767px) {
   .page {
-    padding-top: calc(var(--header-height) + 2em);
+    --pdp-top-gap: 2em;
     padding-bottom: 4em;
   }
 
+  /* Kolommen stapelen → geen full-bleed verschuiving of full-height hero. */
   .galleryCol {
     grid-column: 1 / -1;
+    transform: none;
+    margin-left: 0;
+  }
+
+  .galleryMain:first-child {
+    aspect-ratio: 4 / 5;
+    height: auto;
   }
 
   .info {
@@ -377,9 +414,10 @@
     margin-top: 2.5em;
   }
 
-  /* Kolommen stapelen → geen gekoppelde foto-hoogte meer. */
+  /* Kolommen stapelen → geen gekoppelde foto-hoogte, geen centrering. */
   .purchase {
     min-height: 0;
+    justify-content: flex-start;
   }
 
   .routineGrid {

@@ -68,84 +68,86 @@ export function ProductPage({
         </div>
 
         <div className={styles.info}>
-          {/* Aankoopblok — even hoog als de eerste foto (min-height), zodat de
-              detail-dropdowns eronder pas vanaf de TWEEDE foto meescrollen. */}
+          {/* Foto-1-regio (min-height = eerste foto). De inhoud (purchaseInner)
+              staat sticky-gecentreerd en scrollt mee tot het einde van foto 1. */}
           <div className={styles.purchase}>
-            {eyebrow && <p className={styles.eyebrow}>{eyebrow}</p>}
-            <h1 className={styles.title}>{title}</h1>
+            <div className={styles.purchaseInner}>
+              {eyebrow && <p className={styles.eyebrow}>{eyebrow}</p>}
+              <h1 className={styles.title}>{title}</h1>
 
-            {/* Variant-keuze (bv. maat) als sliding-toggle. Eén waarde → niet tonen. */}
-            {productOptions.map((option) =>
-              option.optionValues.length === 1 ? null : (
-                <ProductSizeToggle key={option.name} option={option} />
-              ),
-            )}
+              {/* Variant-keuze (bv. maat) als sliding-toggle. Eén waarde → niet tonen. */}
+              {productOptions.map((option) =>
+                option.optionValues.length === 1 ? null : (
+                  <ProductSizeToggle key={option.name} option={option} />
+                ),
+              )}
 
-            <hr className={styles.divider} />
+              <hr className={styles.divider} />
 
-            {descriptionHtml && (
-              <div
-                className={styles.description}
-                dangerouslySetInnerHTML={{__html: descriptionHtml}}
+              {descriptionHtml && (
+                <div
+                  className={styles.description}
+                  dangerouslySetInnerHTML={{__html: descriptionHtml}}
+                />
+              )}
+
+              <PurchaseOptions
+                groups={sellingPlanGroups}
+                allocations={allocations}
+                oneTimePrice={selectedVariant?.price}
+                selectedSellingPlanId={selectedSellingPlanId}
+                onSelect={setSellingPlan}
               />
-            )}
 
-            <PurchaseOptions
-              groups={sellingPlanGroups}
-              allocations={allocations}
-              oneTimePrice={selectedVariant?.price}
-              selectedSellingPlanId={selectedSellingPlanId}
-              onSelect={setSellingPlan}
-            />
+              <div className={styles.buyRow}>
+                <div className={styles.stepper}>
+                  <button
+                    type="button"
+                    className="reset"
+                    aria-label="Decrease quantity"
+                    disabled={quantity <= 1}
+                    onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+                  >
+                    &minus;
+                  </button>
+                  <span className={styles.stepperValue} aria-live="polite">
+                    {quantity}
+                  </span>
+                  <button
+                    type="button"
+                    className="reset"
+                    aria-label="Increase quantity"
+                    onClick={() => setQuantity((q) => q + 1)}
+                  >
+                    +
+                  </button>
+                </div>
 
-            <div className={styles.buyRow}>
-              <div className={styles.stepper}>
-                <button
-                  type="button"
-                  className="reset"
-                  aria-label="Decrease quantity"
-                  disabled={quantity <= 1}
-                  onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+                <AddToCartButton
+                  className={styles.addToCart}
+                  disabled={!available}
+                  onClick={() => open('cart')}
+                  lines={
+                    selectedVariant
+                      ? [
+                          {
+                            merchandiseId: selectedVariant.id,
+                            quantity,
+                            selectedVariant,
+                            sellingPlanId: selectedSellingPlanId ?? undefined,
+                          },
+                        ]
+                      : []
+                  }
                 >
-                  &minus;
-                </button>
-                <span className={styles.stepperValue} aria-live="polite">
-                  {quantity}
-                </span>
-                <button
-                  type="button"
-                  className="reset"
-                  aria-label="Increase quantity"
-                  onClick={() => setQuantity((q) => q + 1)}
-                >
-                  +
-                </button>
+                  {available ? 'add to cart' : 'sold out'}
+                </AddToCartButton>
               </div>
 
-              <AddToCartButton
-                className={styles.addToCart}
-                disabled={!available}
-                onClick={() => open('cart')}
-                lines={
-                  selectedVariant
-                    ? [
-                        {
-                          merchandiseId: selectedVariant.id,
-                          quantity,
-                          selectedVariant,
-                          sellingPlanId: selectedSellingPlanId ?? undefined,
-                        },
-                      ]
-                    : []
-                }
-              >
-                {available ? 'add to cart' : 'sold out'}
-              </AddToCartButton>
+              <p className={styles.shippingNote}>
+                Complimentary shipping on all UK orders over £60
+              </p>
             </div>
-
-            <p className={styles.shippingNote}>
-              Complimentary shipping on all UK orders over £60
-            </p>
           </div>
 
           {/* Detail-dropdowns (metafield-gedreven, placeholder als leeg) —

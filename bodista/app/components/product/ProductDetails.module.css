@@ -9,10 +9,12 @@
   /* Geen top-marge: de hoogte van het aankoopblok (.purchase min-height) lijnt
      de dropdowns uit op de tweede foto. */
   margin-top: 0;
-  /* Sticky: pint vanaf foto 2 en scrollt mee langs de overige foto's; laat pas
-     los aan het einde van de sectie (de .info-kolom loopt tot de galerij-bodem). */
+  /* Sticky én verticaal gecentreerd (net als het aankoopblok): pint gecentreerd
+     in de viewport en scrollt mee langs foto 2..N, laat pas los aan het einde
+     van de sectie (de .info-kolom loopt tot de galerij-bodem). */
   position: sticky;
-  top: calc(var(--header-height) + 2em);
+  top: 50vh;
+  transform: translateY(-50%);
 }
 
 .list {
@@ -99,9 +101,11 @@
   }
 }
 
-/* Mobiel: kolommen stapelen → geen sticky, gewoon in de flow. */
+/* Mobiel: kolommen stapelen → geen sticky/centrering, gewoon in de flow. */
 @media (max-width: 767px) {
   .details {
     position: static;
+    transform: none;
+    top: auto;
   }
 }
