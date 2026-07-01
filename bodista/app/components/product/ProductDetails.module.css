@@ -6,21 +6,28 @@
    ========================================================================== */
 
 .details {
-  /* Geen top-marge: de hoogte van het aankoopblok (.purchase min-height) lijnt
-     de dropdowns uit op de tweede foto. */
+  /* Vult de resterende hoogte van de .info-kolom onder het aankoopblok — dat
+     is precies de hoogte van foto 2..N. Zo begint de sticky-lijst hieronder pas
+     ná de eerste foto en scrollt hij mee tot de galerij-bodem. */
   margin-top: 0;
-  /* Sticky én verticaal gecentreerd (net als het aankoopblok): pint gecentreerd
-     in de viewport en scrollt mee langs foto 2..N, laat pas los aan het einde
-     van de sectie (de .info-kolom loopt tot de galerij-bodem). */
-  position: sticky;
-  top: 50vh;
-  transform: translateY(-50%);
+  flex: 1;
+  min-height: 0;
 }
 
+/* De lijst pint gecentreerd IN de viewport (100vh hoge sticky + flex-center)
+   binnen .details. Omdat .details pas na foto 1 begint, komt de lijst pas vanaf
+   foto 2 in beeld — geen vroege piep onder foto 1 — en scrollt gecentreerd mee
+   tot hij aan het einde van .details (de laatste foto) loslaat. */
 .list {
   margin: 0;
   padding: 0;
   list-style: none;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .item {
@@ -104,8 +111,12 @@
 /* Mobiel: kolommen stapelen → geen sticky/centrering, gewoon in de flow. */
 @media (max-width: 767px) {
   .details {
+    flex: none;
+  }
+
+  .list {
     position: static;
-    transform: none;
-    top: auto;
+    height: auto;
+    display: block;
   }
 }
