@@ -1,0 +1,107 @@
+/* ==========================================================================
+   ProductDetails — dropdowns onder het aankoopblok op de PDP.
+   Hergebruikt de expand-mechaniek van The Facial (grid-template-rows 0fr→1fr
+   + plus/kruis-icoon). Base (type, kleur, tokens) uit global.css; px alleen
+   voor hairlines.
+   ========================================================================== */
+
+.details {
+  /* Geen top-marge: de hoogte van het aankoopblok (.purchase min-height) lijnt
+     de dropdowns uit op de tweede foto. */
+  margin-top: 0;
+  /* Sticky: pint vanaf foto 2 en scrollt mee langs de overige foto's; laat pas
+     los aan het einde van de sectie (de .info-kolom loopt tot de galerij-bodem). */
+  position: sticky;
+  top: calc(var(--header-height) + 2em);
+}
+
+.list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.item {
+  border-bottom: var(--border-hairline);
+}
+
+.item:first-child {
+  border-top: var(--border-hairline);
+}
+
+/* Toggle-rij: kaal (.reset), volle breedte, klikbaar. */
+.top {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1em;
+  padding: 0.9em 0;
+  cursor: pointer;
+  text-align: left;
+}
+
+.heading {
+  font-size: var(--text-body-lg);
+  line-height: var(--leading-body-lg);
+  letter-spacing: -0.01em;
+  color: var(--color-charcoal);
+}
+
+/* Plus/min in dezelfde stroke-stijl en -maat als The Facial en de arrows. */
+.icon {
+  flex-shrink: 0;
+  display: block;
+  width: 1.125em;
+  height: 1.125em;
+  color: var(--color-charcoal);
+}
+
+/* Open sectie verbergt de verticale balk → wordt een min. */
+.barV {
+  transition: opacity 0.25s ease;
+}
+
+.itemOpen .barV {
+  opacity: 0;
+}
+
+/* Open/dicht via grid-template-rows 0fr → 1fr (Osmo-techniek, zoals The Facial). */
+.bottom {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.6s cubic-bezier(0.625, 0.05, 0, 1);
+}
+
+.itemOpen .bottom {
+  grid-template-rows: 1fr;
+}
+
+.bottomWrap {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.body {
+  margin: 0;
+  padding-bottom: 1.25em;
+  /* Regeleinden uit de metafield/body renderen als lijstjes. */
+  white-space: pre-line;
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  color: var(--color-body);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bottom,
+  .barV {
+    transition: none;
+  }
+}
+
+/* Mobiel: kolommen stapelen → geen sticky, gewoon in de flow. */
+@media (max-width: 767px) {
+  .details {
+    position: static;
+  }
+}

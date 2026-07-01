@@ -69,7 +69,7 @@
 .shipping {
   flex: 0 0 auto;
   padding: 1em 1.25em 1.1em;
-  border-bottom: 1px solid var(--color-hairline);
+  border-bottom: var(--border-hairline);
 }
 
 .shippingLabel {
@@ -123,7 +123,7 @@
   gap: 1em;
   padding: 1.1em 0;
   margin: 0;
-  border-bottom: 1px solid var(--color-hairline);
+  border-bottom: var(--border-hairline);
 }
 
 .lineMedia {
@@ -168,7 +168,7 @@
   gap: 0.4em 0.5em;
 }
 
-/* Subscription-tag — kleine pill in de cart-stijl. Default charcoal-outline;
+/* Subscription-tag — kleine pill in de cart-stijl. Default hairline-outline;
    bij een actieve subscription gouden accent. Klikt de optie-pillen open. */
 .subTag {
   flex: 0 0 auto;
@@ -180,7 +180,7 @@
   text-transform: lowercase;
   color: var(--color-charcoal);
   background: color-mix(in srgb, var(--color-warm) 25%, transparent);
-  border: 0.75px solid var(--color-charcoal);
+  border: var(--border-hairline);
   border-radius: var(--radius-pill);
   transition: opacity 200ms var(--ease-fade);
 }
@@ -241,7 +241,7 @@
 }
 
 /* --- Abonnement-keuze — sliding-toggle (zelfde als de size-toggle) --------- */
-/* Kleine pillen met een charcoal randje dat met GSAP naar de keuze schuift
+/* Kleine pillen met een hairline randje dat met GSAP naar de keuze schuift
    (volgt de cursor bij hover, commit + sluit op klik). */
 .subToggle.subToggle {
   margin-top: 0.5em;
@@ -249,7 +249,7 @@
 }
 
 /* Randje border-box én boven de opties tillen — anders dekt de warm-witte
-   pill-vulling het charcoal randje af. */
+   pill-vulling het hairline randje af. */
 .subToggle > span {
   box-sizing: border-box;
   z-index: 2;
@@ -271,6 +271,7 @@
    accent), los van waar het hover-randje staat. */
 .subToggle button:global(.reset).subOptionActive {
   color: var(--color-gold);
+  opacity: 1;
 }
 
 /* --- Onderste regel (controls + prijs) ------------------------------------ */
@@ -325,7 +326,7 @@
   height: var(--ctrl-h);
   box-sizing: border-box;
   background: color-mix(in srgb, var(--color-warm) 25%, transparent);
-  border: 0.75px solid var(--color-charcoal);
+  border: var(--border-hairline);
   border-radius: var(--radius-pill);
 }
 
@@ -388,7 +389,7 @@
   margin: 0.5em 0 0;
   padding-left: 1.25em;
   list-style: none;
-  border-left: 1px solid var(--color-hairline);
+  border-left: var(--border-hairline);
 }
 
 .children .line {
@@ -402,7 +403,7 @@
 .recommend {
   flex: 0 0 auto;
   padding: 1.1em 1.25em 1em;
-  border-top: 1px solid var(--color-hairline);
+  border-top: var(--border-hairline);
 }
 
 .recommendHead {
@@ -529,7 +530,7 @@
   flex: 0 0 auto;
   padding: 1.1em 1.25em 1.25em;
   background: var(--color-page);
-  border-top: 1px solid var(--color-hairline);
+  border-top: var(--border-hairline);
 }
 
 /* Kortings-/giftcard-blok — inklapbaar. */
@@ -581,7 +582,7 @@
   font-size: var(--text-detail);
   color: var(--color-charcoal);
   background: var(--color-light);
-  border: 1px solid var(--color-hairline);
+  border: var(--border-hairline);
   border-radius: var(--radius-pill);
 }
 
@@ -598,7 +599,7 @@
   text-transform: lowercase;
   color: var(--color-charcoal);
   background: color-mix(in srgb, var(--color-warm) 25%, transparent);
-  border: 0.75px solid var(--color-charcoal);
+  border: var(--border-hairline);
   border-radius: var(--radius-pill);
   transition: opacity 200ms var(--ease-fade);
 }
@@ -665,7 +666,7 @@
   align-items: baseline;
   justify-content: space-between;
   padding: 0.6em 0 0.2em;
-  border-top: 1px solid var(--color-hairline);
+  border-top: var(--border-hairline);
 }
 
 .subtotalLabel {
@@ -698,7 +699,7 @@
   text-align: center;
   color: var(--color-charcoal);
   background: color-mix(in srgb, var(--color-warm) 25%, transparent);
-  border: 0.75px solid var(--color-charcoal);
+  border: var(--border-hairline);
   border-radius: var(--radius-pill);
   transition: opacity 250ms var(--ease-fade);
 }
@@ -763,7 +764,7 @@
   text-transform: lowercase;
   color: var(--color-charcoal);
   background: color-mix(in srgb, var(--color-warm) 25%, transparent);
-  border: 0.75px solid var(--color-charcoal);
+  border: var(--border-hairline);
   border-radius: var(--radius-pill);
   transition: opacity 250ms var(--ease-fade);
 }

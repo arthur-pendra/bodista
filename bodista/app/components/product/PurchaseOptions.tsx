@@ -25,7 +25,7 @@ function planLabel(plan: SellingPlan): string {
 
 /**
  * Aankoopkeuze: "buy once" óf "subscribe" als dezelfde sliding-toggle als de
- * maat-keuze — twee lichte pillen met een charcoal randje dat met GSAP naar de
+ * maat-keuze — twee lichte pillen met een hairline randje dat met GSAP naar de
  * actieve keuze schuift. Commit op klik (zet/wist de `selling_plan`-param via
  * onSelect). Subscribe pakt het eerste auto-replenish-plan; daaronder verschijnt
  * dan de frequentie-keuze (per maand, 2 maanden, …) als kleine pillen.

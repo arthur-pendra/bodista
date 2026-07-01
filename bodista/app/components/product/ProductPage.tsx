@@ -8,6 +8,7 @@ import {ProductCard} from '~/components/shop/ProductCard'
 import {ProductGallery} from './ProductGallery'
 import {ProductSizeToggle} from './ProductSizeToggle'
 import {PurchaseOptions} from './PurchaseOptions'
+import {ProductDetails, type ProductDetailSection} from './ProductDetails'
 import styles from './ProductPage.module.css'
 
 export function ProductPage({
@@ -41,8 +42,16 @@ export function ProductPage({
 
   const {title, descriptionHtml} = product
   const eyebrow = product.typeProduct?.value
-  const ingredients = product.ingredients?.value
-  const howToUse = product.howToUse?.value
+  // Detail-dropdowns uit het `custom.detail_sections` metafield (lijst van
+  // metaobjects met heading + body). Leeg → ProductDetails toont placeholders.
+  const detailSections: ProductDetailSection[] = (
+    product.detailSections?.references?.nodes ?? []
+  )
+    .map((node) => ({
+      heading: node?.heading?.value ?? '',
+      body: node?.body?.value ?? '',
+    }))
+    .filter((section) => section.heading)
   const sellingPlanGroups = product.sellingPlanGroups?.nodes ?? []
   const allocations = selectedVariant?.sellingPlanAllocations?.nodes ?? []
   const available = Boolean(selectedVariant?.availableForSale)
@@ -59,119 +68,94 @@ export function ProductPage({
         </div>
 
         <div className={styles.info}>
-          {eyebrow && <p className={styles.eyebrow}>{eyebrow}</p>}
-          <h1 className={styles.title}>{title}</h1>
+          {/* Aankoopblok — even hoog als de eerste foto (min-height), zodat de
+              detail-dropdowns eronder pas vanaf de TWEEDE foto meescrollen. */}
+          <div className={styles.purchase}>
+            {eyebrow && <p className={styles.eyebrow}>{eyebrow}</p>}
+            <h1 className={styles.title}>{title}</h1>
 
-          {/* Variant-keuze (bv. maat) als sliding-toggle. Eén waarde → niet tonen. */}
-          {productOptions.map((option) =>
-            option.optionValues.length === 1 ? null : (
-              <ProductSizeToggle key={option.name} option={option} />
-            ),
-          )}
+            {/* Variant-keuze (bv. maat) als sliding-toggle. Eén waarde → niet tonen. */}
+            {productOptions.map((option) =>
+              option.optionValues.length === 1 ? null : (
+                <ProductSizeToggle key={option.name} option={option} />
+              ),
+            )}
 
-          <hr className={styles.divider} />
+            <hr className={styles.divider} />
 
-          {descriptionHtml && (
-            <div
-              className={styles.description}
-              dangerouslySetInnerHTML={{__html: descriptionHtml}}
+            {descriptionHtml && (
+              <div
+                className={styles.description}
+                dangerouslySetInnerHTML={{__html: descriptionHtml}}
+              />
+            )}
+
+            <PurchaseOptions
+              groups={sellingPlanGroups}
+              allocations={allocations}
+              oneTimePrice={selectedVariant?.price}
+              selectedSellingPlanId={selectedSellingPlanId}
+              onSelect={setSellingPlan}
             />
-          )}
 
-          <PurchaseOptions
-            groups={sellingPlanGroups}
-            allocations={allocations}
-            oneTimePrice={selectedVariant?.price}
-            selectedSellingPlanId={selectedSellingPlanId}
-            onSelect={setSellingPlan}
-          />
+            <div className={styles.buyRow}>
+              <div className={styles.stepper}>
+                <button
+                  type="button"
+                  className="reset"
+                  aria-label="Decrease quantity"
+                  disabled={quantity <= 1}
+                  onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+                >
+                  &minus;
+                </button>
+                <span className={styles.stepperValue} aria-live="polite">
+                  {quantity}
+                </span>
+                <button
+                  type="button"
+                  className="reset"
+                  aria-label="Increase quantity"
+                  onClick={() => setQuantity((q) => q + 1)}
+                >
+                  +
+                </button>
+              </div>
 
-          <div className={styles.buyRow}>
-            <div className={styles.stepper}>
-              <button
-                type="button"
-                className="reset"
-                aria-label="Decrease quantity"
-                disabled={quantity <= 1}
-                onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+              <AddToCartButton
+                className={styles.addToCart}
+                disabled={!available}
+                onClick={() => open('cart')}
+                lines={
+                  selectedVariant
+                    ? [
+                        {
+                          merchandiseId: selectedVariant.id,
+                          quantity,
+                          selectedVariant,
+                          sellingPlanId: selectedSellingPlanId ?? undefined,
+                        },
+                      ]
+                    : []
+                }
               >
-                &minus;
-              </button>
-              <span className={styles.stepperValue} aria-live="polite">
-                {quantity}
-              </span>
-              <button
-                type="button"
-                className="reset"
-                aria-label="Increase quantity"
-                onClick={() => setQuantity((q) => q + 1)}
-              >
-                +
-              </button>
+                {available ? 'add to cart' : 'sold out'}
+              </AddToCartButton>
             </div>
 
-            <AddToCartButton
-              className={styles.addToCart}
-              disabled={!available}
-              onClick={() => open('cart')}
-              lines={
-                selectedVariant
-                  ? [
-                      {
-                        merchandiseId: selectedVariant.id,
-                        quantity,
-                        selectedVariant,
-                        sellingPlanId: selectedSellingPlanId ?? undefined,
-                      },
-                    ]
-                  : []
-              }
-            >
-              {available ? 'add to cart' : 'sold out'}
-            </AddToCartButton>
+            <p className={styles.shippingNote}>
+              Complimentary shipping on all UK orders over £60
+            </p>
           </div>
 
-          <p className={styles.shippingNote}>
-            Complimentary shipping on all UK orders over £60
-          </p>
-
-          <div className={styles.accordions}>
-            {ingredients && (
-              <Accordion title="Ingredients">
-                <p className={styles.plainText}>{ingredients}</p>
-              </Accordion>
-            )}
-            {howToUse && (
-              <Accordion title="How to use">
-                <p className={styles.plainText}>{howToUse}</p>
-              </Accordion>
-            )}
-          </div>
+          {/* Detail-dropdowns (metafield-gedreven, placeholder als leeg) —
+              scrollen onder het aankoopblok, naast de lagere foto's. */}
+          <ProductDetails sections={detailSections} />
         </div>
       </div>
 
       <CompleteYourRoutine recommendations={recommendations} />
     </div>
-  )
-}
-
-function Accordion({
-  title,
-  defaultOpen = false,
-  children,
-}: {
-  title: string
-  defaultOpen?: boolean
-  children: React.ReactNode
-}) {
-  return (
-    <details className={styles.accordion} open={defaultOpen}>
-      <summary className={styles.accordionSummary}>
-        <span>{title}</span>
-        <span className={styles.accordionIcon} aria-hidden="true" />
-      </summary>
-      <div className={styles.accordionBody}>{children}</div>
-    </details>
   )
 }
 

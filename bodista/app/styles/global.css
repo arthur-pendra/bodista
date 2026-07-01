@@ -90,6 +90,7 @@
   /* --- Structurele chrome: GEEN merk-tekstkleur, alleen vlakken/lijnen ------- */
   --color-page: #e5e0d5; /* warme pagina-achtergrond (body fill) */
   --color-hairline: rgba(0, 0, 0, 0.10); /* hairline borders & dividers — zwart op 18% */
+  --border-hairline: 1px solid var(--color-hairline); /* gedeelde hairline-rand — pills, toggles, dividers (1px: crisp, scaalt niet) */
 
   /* --- Scaffolding-only: Hydrogen default-UI (cart, sitemap, stylesheet,
      footer-menu). Niet in eigen componenten gebruiken. ----------------------- */

@@ -1,6 +1,6 @@
 /* ==========================================================================
    CollectionFilter — kleine sliding-pill toggle (gedeeld: shop + home)
-   Hergebruikt het schuivende charcoal randje uit SlidingToggle.module. Kleine
+   Hergebruikt het schuivende hairline randje uit SlidingToggle.module. Kleine
    variant t.o.v. de standaard pillen: lager, nauwere padding, kleiner font —
    zit rechtsboven op de heading-lijn. Elke optie krijgt een lichte warm-witte
    pill-achtergrond (Our Philosophy-stijl). Dubbele class wint van
@@ -23,7 +23,7 @@
 }
 
 /* Het schuivende randje als border-box én boven de opties tillen — anders dekt
-   de pill-vulling het charcoal randje af. pointer-events: none (uit
+   de pill-vulling het hairline randje af. pointer-events: none (uit
    SlidingToggle) houdt de klik op de opties. */
 .filter > span {
   box-sizing: border-box;

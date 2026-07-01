@@ -22,7 +22,7 @@
   left: 0;
   width: 0;
   height: 100%;
-  border: 0.75px solid var(--color-charcoal);
+  border: var(--border-hairline);
   border-radius: var(--radius-pill);
   opacity: 0;
   pointer-events: none;
@@ -41,4 +41,15 @@
   color: var(--color-charcoal);
   white-space: nowrap;
   cursor: pointer;
+  /* Niet-geselecteerde opties iets terughoudend, zodat de actieve keuze
+     visueel voorop staat (het hairline randje is subtiel). Vol op de actieve. */
+  opacity: 0.55;
+  transition: opacity 0.3s var(--ease-osmo);
+}
+
+/* De actieve/geselecteerde optie op vol. SlidingToggle markeert met
+   aria-pressed, CollectionFilter (Link) met aria-current — beide dekken. */
+:global(.reset).option[aria-pressed='true'],
+:global(.reset).option[aria-current='true'] {
+  opacity: 1;
 }

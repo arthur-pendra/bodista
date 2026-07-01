@@ -16,7 +16,7 @@ const SLIDE_EASE = 'power3.out'
 
 /**
  * Maat-keuze (bv. 10ml / 30ml) als dezelfde sliding-toggle als in de cart: een
- * charcoal randje dat met GSAP naar de actieve optie schuift. Hergebruikt
+ * hairline randje dat met GSAP naar de actieve optie schuift. Hergebruikt
  * SlidingToggle.module (randje + optie); de toevoeging t.o.v. de cart is dat
  * elke optie zélf óók een lichte pill-achtergrond krijgt. Commit op KLIK
  * (navigeert naar de variant) — niet op hover, dat zou bij elke beweging een

@@ -224,7 +224,7 @@ const SLIDE_DURATION = 0.45;
 const SLIDE_EASE = 'power3.out';
 
 /**
- * Size-keuze als sliding-toggle in de OurPhilosophy-stijl: een charcoal randje
+ * Size-keuze als sliding-toggle in de OurPhilosophy-stijl: een hairline randje
  * dat met GSAP naar de actieve maat schuift. Anders dan SlidingToggle commit
  * deze op KLIK (niet hover) via een CartForm — hover zou anders bij elke
  * beweging een variant-switch afvuren. Het randje volgt de échte cart-variant

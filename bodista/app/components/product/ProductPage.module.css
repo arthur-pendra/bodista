@@ -46,41 +46,25 @@
   display: block;
 }
 
-.thumbs {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--grid-gutter);
-}
-
-.thumb {
-  width: 5em;
-  aspect-ratio: 1 / 1;
-  overflow: hidden;
-  background-color: var(--color-warm);
-  cursor: pointer;
-  padding: 0;
-  outline: 1px solid transparent;
-  outline-offset: 2px;
-  transition: outline-color 0.2s ease, opacity 0.2s ease;
-}
-
-.thumb:hover {
-  opacity: 0.85;
-}
-
-.thumbActive {
-  outline-color: var(--color-charcoal);
-}
-
 /* ---- Info (kolom 15–24, sticky) ------------------------------------------ */
 
 .info {
   grid-column: 15 / 25;
-  align-self: start;
-  position: sticky;
-  top: calc(var(--header-height) + 2em);
+  /* Vult de volledige sectiehoogte (= de gestapelde galerij), zodat de
+     detail-dropdowns eronder sticky kunnen meescrollen langs de foto's en pas
+     aan het EINDE van de sectie loslaten. Het aankoopblok blijft bij foto 1. */
+  align-self: stretch;
   display: flex;
   flex-direction: column;
+}
+
+/* Aankoopblok even hoog als de EERSTE galerij-foto (+ één gutter), zodat de
+   detail-dropdowns eronder pas ter hoogte van de TWEEDE foto beginnen.
+   Galerij-kolom = 12 v/d 24 kolommen → breedte 50vw − 2.5em; foto 4/5 → hoogte
+   ×5/4 = 62.5vw − 3.125em. Plus één --grid-gutter = de rij-afstand tot foto 2.
+   Alleen op desktop; content dat hoger is dan de foto groeit gewoon mee. */
+.purchase {
+  min-height: calc(62.5vw - 3.125em + var(--grid-gutter));
 }
 
 /* Eyebrow — producttype in goud, boven de titel (title case, geen uppercase). */
@@ -122,11 +106,11 @@
   height: 0;
   margin: 1.5em 0;
   border: 0;
-  border-top: 1px solid var(--color-hairline);
+  border-top: var(--border-hairline);
 }
 
 /* ---- Variant-opties (maat) — hergebruikt de cart sliding-toggle ----------
-   Het schuivende charcoal randje komt uit SlidingToggle.module. Toevoeging hier:
+   Het schuivende hairline randje komt uit SlidingToggle.module. Toevoeging hier:
    elke optie krijgt zélf een lichte warm-witte pill-achtergrond. De dubbele
    class wint van .toggle / :global(.reset).option (die later laden). */
 
@@ -136,7 +120,7 @@
 }
 
 /* Het schuivende randje border-box (1px binnen de pill) en bóven de opties
-   tillen — anders dekt de warm-witte pill-achtergrond het charcoal randje af.
+   tillen — anders dekt de warm-witte pill-achtergrond het hairline randje af.
    pointer-events: none (uit SlidingToggle) houdt de klik op de opties. */
 .sizeToggle > span,
 .frequencyToggle > span {
@@ -179,7 +163,8 @@
 /* ---- Choose your plan (single purchase / auto-replenish) ----------------- */
 
 .plan {
-  margin-top: 2em;
+  /* Duidelijk lager plaatsen, los van de productbeschrijving erboven. */
+  margin-top: 10em;
 }
 
 .planLabel {
@@ -190,7 +175,7 @@
 }
 
 /* Buy once / subscribe — dezelfde sliding-toggle als de maat-keuze: twee gelijke
-   lichte pillen met een charcoal randje dat ertussen schuift. */
+   lichte pillen met een hairline randje dat ertussen schuift. */
 .planToggle.planToggle {
   display: flex;
   gap: 0.75em;
@@ -310,14 +295,14 @@
   text-align: center;
   color: var(--color-charcoal);
   background: color-mix(in srgb, var(--color-warm) 25%, transparent);
-  border: 0.75px solid transparent;
+  border: var(--border-hairline);
   border-radius: var(--radius-pill);
   cursor: pointer;
-  transition: border-color 0.2s ease;
+  transition: opacity 0.2s var(--ease-fade);
 }
 
 .buyRow .addToCart:hover {
-  border-color: var(--color-charcoal);
+  opacity: 0.6;
 }
 
 .buyRow .addToCart:disabled {
@@ -330,87 +315,6 @@
   font-size: var(--text-detail);
   line-height: var(--leading-detail);
   color: var(--color-body);
-}
-
-/* ---- Accordions (Description / Ingredients / How to use) ------------------ */
-
-.accordions {
-  margin-top: 2.5em;
-  border-top: 1px solid var(--color-hairline);
-}
-
-.accordion {
-  border-bottom: 1px solid var(--color-hairline);
-}
-
-.accordionSummary {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 1.25em 0;
-  font-size: var(--text-heading-sm);
-  line-height: var(--leading-heading-sm);
-  color: var(--color-charcoal);
-  list-style: none;
-  cursor: pointer;
-}
-
-.accordionSummary::-webkit-details-marker {
-  display: none;
-}
-
-/* Plus → kruis-toggle, opgebouwd uit twee hairlines. */
-.accordionIcon {
-  position: relative;
-  flex: none;
-  width: 0.85em;
-  height: 0.85em;
-}
-
-.accordionIcon::before,
-.accordionIcon::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 0.85em;
-  height: 1px;
-  background: var(--color-charcoal);
-  transform: translate(-50%, -50%);
-  transition: transform 0.25s var(--ease-osmo), opacity 0.25s var(--ease-osmo);
-}
-
-.accordionIcon::after {
-  transform: translate(-50%, -50%) rotate(90deg);
-}
-
-.accordion[open] .accordionIcon::after {
-  opacity: 0;
-  transform: translate(-50%, -50%) rotate(0deg);
-}
-
-.accordionBody {
-  padding: 0 0 1.5em;
-  font-size: var(--text-body);
-  line-height: var(--leading-body);
-  color: var(--color-body);
-}
-
-.richText p {
-  margin: 0 0 1em;
-  font-size: var(--text-body);
-  line-height: var(--leading-body);
-}
-
-.richText p:last-child {
-  margin-bottom: 0;
-}
-
-.plainText {
-  margin: 0;
-  white-space: pre-line;
-  font-size: var(--text-body);
-  line-height: var(--leading-body);
 }
 
 /* ---- Complete your routine ------------------------------------------------ */
@@ -442,7 +346,7 @@
   height: 0;
   margin: 0;
   border: 0;
-  border-top: 1px solid var(--color-hairline);
+  border-top: var(--border-hairline);
 }
 
 .routineGrid {
@@ -471,6 +375,11 @@
     grid-column: 1 / -1;
     position: static;
     margin-top: 2.5em;
+  }
+
+  /* Kolommen stapelen → geen gekoppelde foto-hoogte meer. */
+  .purchase {
+    min-height: 0;
   }
 
   .routineGrid {

@@ -24,7 +24,7 @@ const SLIDE_EASE = 'power3.out'
 
 /**
  * Collectie-filter als kleine sliding-pill toggle in de Our Philosophy-stijl:
- * lichte warm-witte pillen met een charcoal randje dat met GSAP meeschuift.
+ * lichte warm-witte pillen met een hairline randje dat met GSAP meeschuift.
  * Commit op KLIK (Link-navigatie) — hover zou anders bij elke beweging
  * navigeren. Het randje volgt de actieve filter en schuift mee onder de cursor;
  * verlaat je de rij dan keert het terug.

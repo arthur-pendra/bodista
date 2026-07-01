@@ -215,6 +215,20 @@ const PRODUCT_FRAGMENT = `#graphql
     howToUse: metafield(namespace: "custom", key: "how_to_use") {
       value
     }
+    detailSections: metafield(namespace: "custom", key: "detail_sections") {
+      references(first: 20) {
+        nodes {
+          ... on Metaobject {
+            heading: field(key: "heading") {
+              value
+            }
+            body: field(key: "body") {
+              value
+            }
+          }
+        }
+      }
+    }
     featuredImage {
       id
       url

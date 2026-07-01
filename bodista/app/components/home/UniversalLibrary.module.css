@@ -30,7 +30,7 @@
   height: 0;
   margin: 0;
   border: 0;
-  border-top: 1px solid var(--color-hairline);
+  border-top: var(--border-hairline);
 }
 
 /* ---- Tekst-kolom (links) -------------------------------------------------- */
@@ -89,7 +89,7 @@
   /* Zelfde ritme als de Protocols-stappen: lijn alleen onder de link, tekst
      strak op de lijn. */
   padding: 0.375em 0 0.5em;
-  border-bottom: 1px solid var(--color-hairline);
+  border-bottom: var(--border-hairline);
   cursor: pointer;
 }
 
